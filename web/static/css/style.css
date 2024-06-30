@@ -1,0 +1,262 @@
+
+.el-header, .el-footer {
+background-color: #B3C0D1;
+color: #333;
+text-align: center;
+
+}
+
+.el-aside {
+background-color: #D3DCE6;
+color: #333;
+text-align: center;
+line-height: 200px;
+}
+
+.el-main {
+background-color: #ffffff;
+color: #333;
+
+}
+
+body > .el-container {
+margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+line-height: 320px;
+}
+.el-form-item .el-form-item__label {
+    text-align: left;
+}
+
+.info .card-h1{
+    text-align: left;
+    padding: 5px;
+}
+
+.text-content {
+    line-height: 20px;
+}
+
+.person-info-card{
+    padding-left: 15px;
+}
+
+.person-info-collect{
+    width: 80%;
+    align-items: center;
+
+}
+.train-info-card {
+    display: flex;
+    justify-content: center;
+}
+.train-info{
+    width: 65%;
+}
+  
+.go-to-next-card{
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+.train-info{
+    margin-left: 50px;
+}
+
+
+.input-button-together{
+    display: flex;
+    align-items: center;
+}
+
+.input-button-together .input{
+    height: 50px;
+
+    line-height: 50px;
+}
+.input-button-together .delete-button{
+    margin-left: 10px;
+}
+
+.classfy-form-card .el-input-number{
+    float: left;
+}
+.form-edit-area{
+    padding: 5px;
+    margin-bottom: 20px;
+
+}
+
+.task-decription-area{
+    display: flex;
+    flex-direction: column;
+
+    width: 75%;
+    padding:10px;
+    text-align: left;
+    margin-left: 10px;
+    
+}
+
+.task-decription-area .task-decription-title{
+    align-items: center;
+    width: 100%;
+    height: 45px;
+}
+.form-scope .label{
+    padding-top: 6px;
+    font-size: 14px;
+    color: #606266;    
+}
+/* ============================ */
+/* .task-area{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+} */
+/* .task-area .task-title{
+    width: 100%;
+
+} */
+
+
+/* .task-area .task-content{
+    padding-top: 20px;
+    padding-bottom: 20px;
+} */
+
+/* .task-area .task-content-description{
+    font-size: 14px;
+    color:#606266
+} */
+/* .task-area .task-content-form{
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+} */
+/* .task-area .task-content-form .el-radio{
+    padding: 10px;
+} */
+
+/*.task-area .el-button{*/
+/*    width: 97.6px;*/
+/*    !*margin-top: 20px;*!*/
+/*    align-self: center;*/
+/*}*/
+
+/* .form-card {
+    border: 1px solid #d3d3d3; 
+    padding: 16px; 
+    border-radius: 4px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  } */
+  
+.result-card {
+    padding: 16px; /* 内边距 */
+    font-size: 18px;
+    color:#3c3d3f
+  }
+  
+.result-content {
+    display: flex; /* 使用flex布局 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    margin-top: 10px; /* 上下边距 */
+  }
+
+  /* =========task.css ===========*/
+  .task-area{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.task-area .task-title{
+    width: 100%;
+
+}
+
+.task-area .task-content{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+
+.task-area .task-content-description p{
+    font-size: 14px;
+    color:#606266
+}
+
+.task-content-form{
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+  .task-content-form .task-form-description p{    
+    font-size: 14px;
+    color:#606266
+}
+
+.task-content-form .task-form-area{
+    padding: 20px;
+
+}
+
+.task-result-area{
+    margin-top: 10px;
+
+}
+.result-content {
+    display: flex; 
+    justify-content: center;
+    align-items: center; /* 垂直居中 */
+    margin-top: 10px; /* 上下边距 */
+    font-size: 18px;
+    color:#606266;
+}
+
+.arrow-area{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+.arrow-area .arrow-description{
+    font-size: 16px;
+    color:#606266;
+    width: 60%;
+}
+.arrow-area .arrow-description p{
+    margin: 0;
+}
+.form-card {
+    border: 1px solid #d3d3d3; 
+    padding: 16px; 
+    border-radius: 4px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+
+.form-card p{
+    font-size: 16px;
+    color:#606266;
+}
+
+.form-card .card-text{
+    margin-left: 20px;
+    font-size: 18px;
+    color:#606266;
+}
+.button-area{
+    display: flex;
+    justify-content: center; 
+    padding: 20px; 
+}

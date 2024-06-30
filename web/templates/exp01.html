@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收入预测分类</title>
+
+  <!-- Mobile Specific Metas
+================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name=author content="Themefisher">
+    <meta name=generator content="Themefisher Constra HTML Template v1.0">
+
+
+    <!-- Template styles -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+        <!-- ============== js ================= -->
+    <!-- vue.js -->
+    <script src="../static/js/vue.js"></script>
+
+    <!-- axios.js -->
+    <script src="../static/plugins/axios/axios-0.18.0.js"></script>
+
+    <!-- element-ui 组件库 -->
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    
+</head>
+
+<body>
+<div class="body-inner" id="app">
+    
+    <el-container>
+        <!-- Header -->
+        <el-header>
+            <h4>欢迎进入公平性审计实验</h4>
+        </el-header>
+        
+        <!-- Main -->
+        <el-main>
+            <div class="info">
+                <h1>收入预测分类</h1>
+                <el-row :gutter="30">
+                    <!-- 信息显示 -->
+                    <el-col :span="12">
+                        <div class="train-info-card">
+                            <div class="train-info grid-content bg-purple">
+                                <el-descriptions title="用户信息" :column="1">
+                                    <el-descriptions-item label="训练数据集">本次实验默认Adult数据集</el-descriptions-item>
+                                    <el-descriptions-item label="特征">
+                                        <ul>
+                                             <li v-for="(range, feature) in features" :key="feature">
+                                                [[ getFeatureDescription(feature, range) ]]
+                                             </li>
+                                        </ul>
+                                    </el-descriptions-item>
+                                    <el-descriptions-item label="训练集准确率" >[[ train_accuracy ]]</el-descriptions-item>
+                                    <el-descriptions-item label="测试集准确率">[[ test_accuracy ]]</el-descriptions-item>
+                                </el-descriptions>
+    
+                            </div>
+                        </div>
+                        
+                    </el-col>
+                    <!-- 输入特征 -->
+                    <el-col :span="12">
+                        <div class="form-card">
+                            <el-form :model="form" :label-position="top" :rules="rules" ref="form" label-width="60px" hide-required-asterisk="true">
+                                <div class="form-edit-area">
+                                    <el-row :gutter="30">
+                                        <el-col :span="12">
+                                            <el-form-item label="年龄" prop="age">
+                                                <el-input-number :step="1" :min="1" :max="90" v-model="form['age']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="每周工作时长" prop="hours_per_week">
+                                                <el-input-number :step="1" :min="1" :max="99" v-model="form['hours-per-week']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="受教育时长" prop="education_num">
+                                                <el-input-number :step="1" :min="1" :max="16" v-model="form['education-num']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="资产收益" prop="capital_gain">
+                                                <el-input-number :step="1" :min="0" :max="99999" v-model="form['capital-gain']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="资产损失" prop="capital_loss">
+                                                <el-input-number :step="1" :min="1" :max="4356" v-model="form['capital-loss']"></el-input-number>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+
+                                            <el-form-item label="是否为白人" prop="race_White">
+                                                 <el-select v-model="form['race_White']" placeholder="是否为白人">
+                                                  <el-option label="白人" value="1"></el-option>
+                                                  <el-option label="非白人" value="0"></el-option>
+                                                </el-select>
+
+                                            </el-form-item>
+                                            <el-form-item label="性别" prop="sex_Male">
+                                                <el-select v-model="form['sex_Male']" placeholder="请选择性别">
+                                                  <el-option label="男" value="0"></el-option>
+                                                  <el-option label="女" value="1"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                            <el-form-item label="婚姻状况" prop="marital_status">
+                                                <el-select v-model="form['marital-status']" placeholder="请选择">
+                                                    <el-option
+                                                      v-for="item in marital_status"
+                                                      :key="item.value"
+                                                      :label="item.label"
+                                                      :value="item.value">
+                                                    </el-option>
+                                                  </el-select>
+
+                                            </el-form-item>
+                                            <el-form-item label="工作类型" prop="workclass">
+                                                 <el-select v-model="form['workclass']" placeholder="请选择">
+                                                    <el-option
+                                                      v-for="item in workclass"
+                                                      :key="item.value"
+                                                      :label="item.label"
+                                                      :value="item.value">
+                                                    </el-option>
+                                                  </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row> 
+                                </div>
+                                
+                                <div class="form-submit-area">
+                                    <el-row :gutter="10">
+                                        <el-col :span="12">
+                                            <el-form-item>
+                                                <el-button type="primary" @click="submitForm('form')">查询</el-button>
+                                                <el-button @click="resetForm('form')">重置</el-button>
+                                              </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <div style="float: left;">
+                                                <span>分类结果为：</span><span>[[ result ]]</span>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                                
+                                
+                              </el-form>
+                            
+                              
+                        </div>
+                    </el-col>
+
+                  </el-row>
+                         <!-- 实验入口 -->
+                 <div class="button-area">
+                    <a href="/page02/">
+                        <el-button type="primary"  @click="start">下一步</el-button>
+                    </a>
+                </div>
+            </div>
+
+            
+    
+        </el-main>
+    
+        <!-- Footer -->
+        <el-footer>Footer</el-footer>
+    </el-container>
+
+
+
+
+</div>
+
+    <!-- 创建Vue对象 -->
+     <script>
+         axios.get('/api/csrf/').then(response => {
+              axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
+            });
+        new Vue({
+            el:"#app",
+            delimiters:["[[", "]]"],
+            data() {
+                return {
+                    features: {},
+                    form: {
+                        "age":'',
+                        "capital-gain":'',
+                        "capital-loss":'',
+                        "education-num":'',
+                        "hours-per-week":'',
+                        "race_White":'',
+                        "sex_Male":'',
+                        "marital-status":'',
+                        "workclass":'',
+
+                    },
+                    {# 婚姻状况 #}
+                    marital_status:[
+                        { value: 'Divorced', label: '离异'},
+                        { value: 'Married-AF-spouse', label: '军人家属婚姻'},
+                        { value: 'Married-civ-spouse', label: '普通婚姻'},
+                        { value: 'Married-spouse-absent', label: '已婚但夫妻异地'},
+                        { value: 'Never-married', label: '未婚'},
+                        { value: 'Separated', label: '分居'},
+                        { value: 'Widowed', label: '丧偶'},],
+                    {# 工作类型 #}
+                    workclass:[
+                        { value: 'Federal-gov', label: '联邦政府雇员'},
+                        { value: 'Local-gov', label: '地方政府雇员'},
+                        { value: 'Private', label: '私营企业'},
+                        { value: 'Self-emp-inc', label: '自雇（收入较高）'},
+                        { value: 'Self-emp-not-inc', label: '自雇（收入一般）'},
+                        { value: 'State-gov', label: '州政府雇员'},
+                        { value: 'Without-pay', label: '无报酬'},
+
+                    ],
+                    {# 准确率 #}
+                    train_accuracy:'',
+                    test_accuracy:'',
+
+                    result:'',
+                    rules:{
+                        featrues01: [
+                            { required: true, message: '请按规定输入特征1', trigger: 'blur' },
+                        ],
+                        featrues02: [
+                            { required: true, message: '请按规定输入特征2', trigger: 'blur' },
+                        ],
+                        featrues03: [
+                            { required: true, message: '请按规定输入特征3', trigger: 'blur' },
+                        ],
+                        // featrues04: [
+                        //     { required: true, message: '请输入活动名称', trigger: 'blur' },
+                        // ],
+                        featrues05: [
+                            { required: true, message: '请按规定输入特征5', trigger: 'blur' },
+                        ],
+                        featrues06: [
+                            { required: true, message: '请按规定输入特征6', trigger: 'blur' },
+                        ],
+                        featrues07: [
+                            { required: true, message: '请按规定输入特征7', trigger: 'blur' },
+                        ],
+                    }
+                };
+                },
+            methods: {
+                {# 提交表单 #}
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let form = this.form;
+                        axios.post("/api/exp01/", form).then(response =>{
+                            this.result = response.data
+                        })
+                        {#console.log(JSON.stringify(this.form))#}
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                    });
+                },
+
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                },
+                {# 获取特征 #}
+                getFeature() {
+                    console.log()
+                  axios.get('/api/exp01/?type=get_features').then(response => {
+                      console.log(response.data)
+                      this.features = response.data;
+                    }).catch(error => {
+                      console.error("There was an error!", error);
+                    });
+                },
+                {# 获取文字说明 #}
+                getFeatureDescription(feature, range) {
+                  const descriptions = {
+                    'age': `年龄 - ${range[0]}~${range[1]}岁`,
+                    'capital-gain': `资产收益 - $${range[0]} ~ $${range[1]}`,
+                    'capital-loss': `资产损失 - $${range[0]} ~ $${range[1]}`,
+                    'education-num': `受教育时长 - ${range[0]}~${range[1]}年`,
+                    'hours-per-week': `每周工作时长 - ${range[0]}~${range[1]}小时`,
+                    'race_White': `是否为白人 `,
+                    'sex_Male': `是否为男性 `,
+                    'marital-status': `婚姻状况 - ${range.join('，')}`,
+                    'workclass': `工作类型 - ${range.join('，')}`
+                  };
+                  return descriptions[feature] || `${feature} - ${range}`;
+                },
+                getTrainAccuracy(){
+                    axios.get('/api/exp01/?type=get_train_accuracy').then(response => {
+                        this.train_accuracy = response.data;
+                    }).catch(error => {
+                      console.error("There was an error!", error);
+                    });
+                },
+                getTestAccuracy(){
+                    axios.get('/api/exp01/?type=get_test_accuracy').then(response => {
+                        this.test_accuracy = response.data;
+                    }).catch(error => {
+                      console.error("There was an error!", error);
+                    });
+                }
+            },
+            mounted() {
+                this.getFeature();
+                this.getTrainAccuracy();
+                this.getTestAccuracy();
+              }
+        })
+
+
+     </script>
+
+</body>
+
+</html>

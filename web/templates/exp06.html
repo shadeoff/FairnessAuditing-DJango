@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提交不公平样本</title>
+
+  <!-- Mobile Specific Metas
+================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name=author content="Themefisher">
+    <meta name=generator content="Themefisher Constra HTML Template v1.0">
+
+
+    <!-- Template styles -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+        <!-- ============== js ================= -->
+    <!-- vue.js -->
+    <script src="../static/js/vue.js"></script>
+
+    <!-- axios.js -->
+    <script src="../static/plugins/axios/axios-0.18.0.js"></script>
+
+    <!-- element-ui 组件库 -->
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    
+    
+</head>
+
+<body>
+<div class="body-inner" id="app">
+    
+    <el-container>
+        <!-- Header -->
+        <el-header>
+            <h4>欢迎进入公平性审计实验</h4>
+        </el-header>
+        
+        <!-- Main -->
+        <el-main>
+            <div class="task-area">
+                <div class="task-title">
+
+                </div>
+                <div class="task-content">
+                    <div class="task-content-form">
+                        <div class="task-form-area">
+                            <el-row>
+                                <el-col :span="18">
+                                    <div class="task-form-title">
+                                        <h2>审计报告</h2>
+                                    </div>
+                                    <div class="form-card">
+                                        <p>在xxx数据范围中，根据[[xxx]]的公平性准则，发现不公平样本对如下：</p>
+                                        <div class="card-text">
+{#                                            <div v-if="inFairnessPairs.length === 0">没有不公平的样本对</div>#}
+                                            <div>
+                                                <el-row>
+                                                    <el-col :span="12">
+                                                        <el-descriptions title="数据1" :column="2">
+                                                            <el-descriptions-item v-for="(value, key) in form1" :key="key" :label="getLabel(key)">
+                                                                [[ formatValue(key,value) ]]
+                                                            </el-descriptions-item>
+                                                        </el-descriptions>
+                                                    </el-col>
+                                                    <el-col :span="12">
+                                                        <el-descriptions title="数据2" :column="2">
+                                                            <el-descriptions-item v-for="(value, key) in form2" :key="key" :label="getLabel(key)">
+                                                                [[ formatValue(key,value) ]]
+                                                            </el-descriptions-item>
+                                                        </el-descriptions>
+                                                    </el-col>
+                                                </el-row>
+
+                                            </div>
+                                        </div>
+
+                                        
+                                        <br>
+                                        <p>
+                                            经进一步审计,该对样本附近,模型的个体公平性为[[ individual_fairness ]]，低于模型在总体数据上的公平性表现"先待定"
+                                        </p>
+
+                                        <p>模型优化建议：采用[[optimization]]的优化方法</p>
+                                        <br>
+                                        <p>优化完成后预计的公平性表现预计为：[[ perform ]]</p>
+
+                                    </div>
+                                </el-col>
+
+                                <el-col :span="6">
+
+                                </el-col>
+
+
+                            </el-row>
+
+
+
+
+                        </div>
+                        
+                    </div>
+
+
+
+                </div>
+
+                <div class="button-area">
+                    <el-button type="primary"  @click="exit">结束</el-button>  
+                </div>
+
+
+            </div>
+
+            
+    
+        </el-main>
+    
+        <!-- Footer -->
+        <el-footer>Footer</el-footer>
+    </el-container>
+
+·
+
+
+</div>
+
+    <!-- 创建Vue对象 -->
+     <script>
+          axios.get('/api/csrf/').then(response => {
+              axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
+            });
+        new Vue({
+            el:"#app",
+            delimiters:["[[", "]]"],
+            data(){
+                return{
+                    inFairnessPairs:[],
+                    fairness:'公平',
+                    optimization:'xxx',
+                    individual_fairness:'yyy',
+                    globalFairness:'zzz',
+                    perform:'',
+                    form1: {
+                        'age': 63,
+                        'capital-gain': 87,
+                        'capital-loss': 1787,
+                        'education-num': 1,
+                        'hours-per-week': 17,
+                        'race_White': 1,
+                        'sex_Male': 0,
+                        'marital-status': 'Widowed',
+                        'workclass': 'Private'
+
+                    },
+                    form2: {
+                        age: 45,
+                        'capital-gain': 500,
+                        'capital-loss': 0,
+                        'education-num': 10,
+                        'hours-per-week': 40,
+                        'race_White': 0,
+                        'sex_Male': 1,
+                        'marital-status': 'Married-civ-spouse',
+                        'workclass': 'Self-emp-inc'
+
+                    },
+                    labels: {
+                        'age': '年龄',
+                        'capital-gain': '资本收益',
+                        'capital-loss': '资本损失',
+                        'education-num': '受教育时间',
+                        'hours-per-week': '每周工作时间',
+                        'race_White': '种族',
+                        'sex_Male': '性别',
+                        'marital-status': '婚姻情况',
+                        'workclass': '工作场所'
+                    },
+                    maritalStatusOptions: [
+                        { value: 'Divorced', label: '离异' },
+                        { value: 'Married-AF-spouse', label: '军人家属婚姻' },
+                        { value: 'Married-civ-spouse', label: '普通婚姻' },
+                        { value: 'Married-spouse-absent', label: '已婚但夫妻异地' },
+                        { value: 'Never-married', label: '未婚' },
+                        { value: 'Separated', label: '分居' },
+                        { value: 'Widowed', label: '丧偶' }
+                    ],
+                    workclassOptions: [
+                        { value: 'Federal-gov', label: '联邦政府雇员' },
+                        { value: 'Local-gov', label: '地方政府雇员' },
+                        { value: 'Private', label: '私营企业' },
+                        { value: 'Self-emp-inc', label: '自雇（收入较高）' },
+                        { value: 'Self-emp-not-inc', label: '自雇（收入一般）' },
+                        { value: 'State-gov', label: '州政府雇员' },
+                        { value: 'Without-pay', label: '无报酬' }
+                      ]
+                };
+            },
+            computed:{
+
+            },
+            methods:{
+                getLabel(key){
+                    return this.labels[key] || key;
+                },
+                formatValue(key, value){
+                    if(key === "race_White"){
+                        return value === 1 ? '白人' : '非白人';
+                    }else if (key === 'sex_Male') {
+                        return value === 1 ? '男性' : '女性';
+                      } else if (key === 'marital-status') {
+                        return this.getOptionLabel(this.maritalStatusOptions, value);
+                      } else if (key === 'workclass') {
+                        return this.getOptionLabel(this.workclassOptions, value);
+                      } else {
+                        return value;
+                      }
+                },
+                getOptionLabel(options, value) {
+                    const option = options.find(option => option.value === value);
+                    return option ? option.label : value;
+                },
+
+                exit(){
+                    alert("结束！")
+                }
+            }
+        })
+
+
+     </script>
+</body>
+
+</html>

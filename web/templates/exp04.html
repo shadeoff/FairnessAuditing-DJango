@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>寻找系统中的不公平样本</title>
+
+  <!-- Mobile Specific Metas
+================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name=author content="Themefisher">
+    <meta name=generator content="Themefisher Constra HTML Template v1.0">
+
+
+    <!-- Template styles -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+        <!-- ============== js ================= -->
+    <!-- vue.js -->
+    <script src="../static/js/vue.js"></script>
+
+    <!-- axios.js -->
+    <script src="../static/plugins/axios/axios-0.18.0.js"></script>
+
+    <!-- element-ui 组件库 -->
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    
+</head>
+
+<body>
+<div class="body-inner" id="app">
+    
+    <el-container>
+        <!-- Header -->
+        <el-header>
+            <h4>欢迎进入公平性审计实验</h4>
+        </el-header>
+        
+        <!-- Main -->
+        <el-main>
+            <div class="task-area">
+                <div class="task-title">
+                    <h1>寻找系统中的不公平样本</h1>
+                </div>
+                <div class="task-content">
+                    <el-row :gutter="40">
+                        <el-col :span="12">
+                        <div class="form-card">
+                            <el-form :model="form1" :rules="rules" ref="form1" label-width="60px" hide-required-asterisk="true">
+                                <div class="form-edit-area">
+                                    <el-row :gutter="30">
+                                        <el-col :span="12">
+                                            <el-form-item label="年龄" prop="age">
+                                                <el-input-number :step="1" :min="1" :max="90" v-model="form1['age']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="每周工作时长" prop="hours_per_week">
+                                                <el-input-number :step="1" :min="1" :max="99" v-model="form1['hours-per-week']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="受教育时长" prop="education_num">
+                                                <el-input-number :step="1" :min="1" :max="16" v-model="form1['education-num']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="资产收益" prop="capital_gain">
+                                                <el-input-number :step="1" :min="0" :max="99999" v-model="form1['capital-gain']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="资产损失" prop="capital_loss">
+                                                <el-input-number :step="1" :min="1" :max="4356" v-model="form1['capital-loss']"></el-input-number>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+
+                                            <el-form-item label="是否为白人" prop="race_White">
+                                                 <el-select v-model="form1['race_White']" placeholder="是否为白人">
+                                                  <el-option label="白人" value="1"></el-option>
+                                                  <el-option label="非白人" value="0"></el-option>
+                                                </el-select>
+
+                                            </el-form-item>
+                                            <el-form-item label="性别" prop="sex_Male">
+                                                <el-select v-model="form1['sex_Male']" placeholder="请选择性别">
+                                                  <el-option label="男" value="0"></el-option>
+                                                  <el-option label="女" value="1"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                            <el-form-item label="婚姻状况" prop="marital_status">
+                                                <el-select v-model="form1['marital-status']" placeholder="请选择">
+                                                    <el-option
+                                                      v-for="item in marital_status"
+                                                      :key="item.value"
+                                                      :label="item.label"
+                                                      :value="item.value">
+                                                    </el-option>
+                                                  </el-select>
+
+                                            </el-form-item>
+                                            <el-form-item label="工作类型" prop="workclass">
+                                                 <el-select v-model="form1['workclass']" placeholder="请选择">
+                                                    <el-option
+                                                      v-for="item in workclass"
+                                                      :key="item.value"
+                                                      :label="item.label"
+                                                      :value="item.value">
+                                                    </el-option>
+                                                  </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+
+                                <div class="form-submit-area">
+                                    <el-row :gutter="10">
+                                        <el-col :span="12">
+                                            <el-form-item>
+                                                <el-button type="primary" @click="submitForm1('form1')">查询</el-button>
+                                                <el-button @click="resetForm('form1')">重置</el-button>
+                                              </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <div style="float: left;">
+                                                <span>分类结果为：</span><span>[[ result1 ]]</span>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                              </el-form>
+                        </div>
+                    </el-col>
+                        <el-col :span="12">
+                        <div class="form-card">
+                            <el-form :model="form2" :rules="rules" ref="form2" label-width="60px" hide-required-asterisk="true">
+                                <div class="form-edit-area">
+                                    <el-row :gutter="30">
+                                        <el-col :span="12">
+                                            <el-form-item label="年龄" prop="age">
+                                                <el-input-number :step="1" :min="1" :max="90" v-model="form2['age']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="每周工作时长" prop="hours_per_week">
+                                                <el-input-number :step="1" :min="1" :max="99" v-model="form2['hours-per-week']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="受教育时长" prop="education_num">
+                                                <el-input-number :step="1" :min="1" :max="16" v-model="form2['education-num']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="资产收益" prop="capital_gain">
+                                                <el-input-number :step="1" :min="0" :max="99999" v-model="form2['capital-gain']"></el-input-number>
+                                            </el-form-item>
+
+                                            <el-form-item label="资产损失" prop="capital_loss">
+                                                <el-input-number :step="1" :min="1" :max="4356" v-model="form2['capital-loss']"></el-input-number>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+
+                                            <el-form-item label="是否为白人" prop="race_White">
+                                                 <el-select v-model="form2['race_White']" placeholder="是否为白人">
+                                                  <el-option label="白人" value="1"></el-option>
+                                                  <el-option label="非白人" value="0"></el-option>
+                                                </el-select>
+
+                                            </el-form-item>
+                                            <el-form-item label="性别" prop="sex_Male">
+                                                <el-select v-model="form2['sex_Male']" placeholder="请选择性别">
+                                                  <el-option label="男" value="0"></el-option>
+                                                  <el-option label="女" value="1"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                            <el-form-item label="婚姻状况" prop="marital_status">
+                                                <el-select v-model="form2['marital-status']" placeholder="请选择">
+                                                    <el-option
+                                                      v-for="item in marital_status"
+                                                      :key="item.value"
+                                                      :label="item.label"
+                                                      :value="item.value">
+                                                    </el-option>
+                                                  </el-select>
+
+                                            </el-form-item>
+                                            <el-form-item label="工作类型" prop="workclass">
+                                                 <el-select v-model="form2['workclass']" placeholder="请选择">
+                                                    <el-option
+                                                      v-for="item in workclass"
+                                                      :key="item.value"
+                                                      :label="item.label"
+                                                      :value="item.value">
+                                                    </el-option>
+                                                  </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+
+                                <div class="form-submit-area">
+                                    <el-row :gutter="10">
+                                        <el-col :span="12">
+                                            <el-form-item>
+                                                <el-button type="primary" @click="submitForm2('form1')">查询</el-button>
+                                                <el-button @click="resetForm('form1')">重置</el-button>
+                                              </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <div style="float: left;">
+                                                <span>分类结果为：</span><span>[[ result2 ]]</span>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                              </el-form>
+                        </div>
+                    </el-col>
+
+                    </el-row>
+                    
+                    
+
+                </div>
+                <el-row>
+                    <el-col :span="8">
+                        <div class="button-area" >
+                            <el-button type="primary"  @click="showInfo">查询当前信息</el-button>
+                        </div>
+
+                    </el-col>
+                    <el-col :span="16">
+                        <div class="result-card">
+                            <div class="result-content">
+                                <span>公平性判别指标：</span><span>xxx</span>
+                            </div>
+                            <div class="result-content">
+                                <span>dx = </span><span>[[ dx ]]</span>
+                                <span>,dy = </span><span>[[ dy ]]</span>
+                                <span>,结果为</span><span>[[ fairness ]]</span>
+                            </div>
+
+                        </div>
+                    </el-col>
+
+                </el-row>
+                         <!-- 实验入口 -->
+                 <div class="button-area">
+                    <a href="/page05/">
+                        <el-button type="warning"  @click="goNext">下一步</el-button>
+                    </a>
+                </div>
+                
+            </div>
+        </el-main>
+    
+        <!-- Footer -->
+        <el-footer>Footer</el-footer>
+    </el-container>
+
+
+
+
+</div>
+    <!-- 创建Vue对象 -->
+     <script>
+          axios.get('/api/csrf/').then(response => {
+              axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
+            });
+        new Vue({
+            el:"#app",
+            delimiters:["[[", "]]"],
+            data() {
+                return {
+                    action1:'check_result',
+                    action2:'check_fair',
+
+
+                    submit1_flag:0,
+                    submit2_flag:0,
+                    form1: {
+                        "age":'',
+                        "capital-gain":'',
+                        "capital-loss":'',
+                        "education-num":'',
+                        "hours-per-week":'',
+                        "race_White":'',
+                        "sex_Male":'',
+                        "marital-status":'',
+                        "workclass":'',
+                    },
+                    form2: {
+                        "age":'',
+                        "capital-gain":'',
+                        "capital-loss":'',
+                        "education-num":'',
+                        "hours-per-week":'',
+                        "race_White":'',
+                        "sex_Male":'',
+                        "marital-status":'',
+                        "workclass":'',
+
+                    },
+                    {# 婚姻状况 #}
+                    marital_status:[
+                        { value: 'Divorced', label: '离异'},
+                        { value: 'Married-AF-spouse', label: '军人家属婚姻'},
+                        { value: 'Married-civ-spouse', label: '普通婚姻'},
+                        { value: 'Married-spouse-absent', label: '已婚但夫妻异地'},
+                        { value: 'Never-married', label: '未婚'},
+                        { value: 'Separated', label: '分居'},
+                        { value: 'Widowed', label: '丧偶'},],
+                    {# 工作类型 #}
+                    workclass:[
+                        { value: 'Federal-gov', label: '联邦政府雇员'},
+                        { value: 'Local-gov', label: '地方政府雇员'},
+                        { value: 'Private', label: '私营企业'},
+                        { value: 'Self-emp-inc', label: '自雇（收入较高）'},
+                        { value: 'Self-emp-not-inc', label: '自雇（收入一般）'},
+                        { value: 'State-gov', label: '州政府雇员'},
+                        { value: 'Without-pay', label: '无报酬'},
+
+                    ],
+                    result1:'',
+                    result2:'',
+                    dx:'',
+                    dy:'',
+                    fairness: '',
+                    rules:{
+
+                    }
+                };
+                },
+                methods: {
+                    submitForm1(formName) {
+                        this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            let form = this.form1;
+                            axios.post("/api/exp04/", {action:this.action1, data:form} ).then(response =>{
+                                this.result1 = response.data;
+                                this.submit1_flag = 1;
+                            }).catch(error =>{console.log(error)});
+
+                            {#alert('submit!');#}
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                        });
+                    },
+                    submitForm2(formName) {
+                        this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            let form = this.form2;
+                            axios.post("/api/exp04/",{action:this.action1, data:form} ).then(response =>{
+                                this.result2 = response.data;
+                                this.submit2_flag = 1;
+                            }).catch(error =>{console.log(error)});
+
+                            {#alert('submit!');#}
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                        });
+                    },
+                    resetForm(formName) {
+                        this.$refs[formName].resetFields();
+                    },
+                    {# 展示公平信息 #}
+                    showInfo() {
+                      if (this.submit1_flag === 1 && this.submit2_flag === 1) {
+                          let action_attr = this.action2
+                          let data1 = this.form1
+                          let data2 = this.form2
+                          let _this = this
+                          axios.post("/api/exp04/",{action: action_attr, data1: data1,data2:data2})
+                              .then(response => {
+                                  console.log(response.data)
+                                  _this.dx = response.data.dx
+                                  _this.dy = response.data.dy
+                                  if(response.data.fair_or_not){
+                                      _this.fairness = "公平"
+                                  }else {
+                                      _this.fairness = "不公平"
+                                  }
+                              })
+                        {#alert("开始查询");#}
+                      } else {
+                        alert("请先填写并提交上述表单信息！");
+                      }
+                    },
+
+
+                    goNext(){
+
+                    }
+
+
+                }
+        })
+
+
+     </script>
+</body>
+
+</html>

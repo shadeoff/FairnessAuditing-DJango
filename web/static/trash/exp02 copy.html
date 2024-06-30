@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+
+  <!-- Mobile Specific Metas
+================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name=author content="Themefisher">
+    <meta name=generator content="Themefisher Constra HTML Template v1.0">
+
+
+    <!-- Template styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    
+</head>
+
+<body>
+<div class="body-inner" id="app">
+    
+    <el-container>
+        <!-- Header -->
+        <el-header>
+            <h4>欢迎进入公平性审计实验</h4>
+        </el-header>
+        
+        <!-- Main -->
+        <el-main>
+            <el-row :gutter="30">
+                <el-col :span="12">
+                    <div class="task-decription-area">
+                        <div class="task-decription-title">
+                            <h1>任务描述</h1>
+                        </div>
+                        <div class="task-decription-content">
+                            <p>
+                                上述分类模型中可能存在不公平现象，即：两个非常相似的人，模型可能会给出截然不同的分类结果。尤其是当两个人可能仅仅是由于
+                            一些敏感属性不同而导致分类结果不同时，分类器会对部分群体造成歧视。
+                            </p>
+                            <p>
+                                出于审计的目的，我们希望能够找到模型分类不同的一对样本，定位系统中存在的歧视现象，作为模型存在歧视的证据。
+                            </p>
+                        </div>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div class="task-area">
+                        <div class="task-title">
+                            <h1>选择寻找不公平样本的范围</h1>
+                        </div>
+                        <div class="task-form">
+                            <el-form :model="form" :rules="rules" ref="form" labelclass="demo-form">
+                                <p style="text-align: left; font-size: 14px; color: #606200;">
+                                  选择您关注的人群，您将在该人群范围内寻找不公平的样本
+                                </p>
+                                <div v-for="(feature, index) in features" :key="index" class="form-scope">
+                                  <el-row>
+                                    <el-col class="label" :span="2">{{ feature.label }}</el-col>
+                                    <el-col :span="10">
+                                      <el-form-item :prop="`feature${index * 2 + 1}`">
+                                        <el-input
+                                          placeholder="最低"
+                                          v-model="form[`scope${index + 1}`][0]"
+                                        ></el-input>
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col
+                                      class="line"
+                                      style="text-align: center; align-items: center;"
+                                      :span="2"
+                                      >-</el-col
+                                    >
+                                    <el-col :span="10">
+                                      <el-form-item :prop="`feature${index * 2 + 2}`">
+                                        <el-input
+                                          placeholder="最高"
+                                          v-model="form[`scope${index + 1}`][1]"
+                                        ></el-input>
+                                      </el-form-item>
+                                    </el-col>
+                                  </el-row>
+                                </div>
+                                <el-form-item>
+                                  <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
+                                  <el-button @click="resetForm('form')">重置</el-button>
+                                </el-form-item>
+                              </el-form>
+                        </div>
+                            
+                    </div>
+                </el-col>
+            </el-row>
+           
+            
+            
+    
+        </el-main>
+    
+        <!-- Footer -->
+        <el-footer>Footer</el-footer>
+    </el-container>
+
+
+    <!-- ============== js ================= -->
+    <!-- vue.js -->
+    <script src="js/vue.js"></script>
+
+    <!-- axios.js -->
+    <script src="plugins/axios/axios-0.18.0.js"></script>
+
+    <!-- element-ui 组件库 -->
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 创建Vue对象 -->
+     <script>
+        new Vue({
+            el:"#app",
+            data() {
+                return {
+                form: {
+                    sensitive: '',
+                    scope1: [12, 30],
+                    scope2: [],
+                    scope3: [],
+                    scope4: [],
+                },
+                features: [
+                    { label: '特征1' },
+                    { label: '特征2' },
+                    { label: '特征3' },
+                    { label: '特征4' },
+                ],
+                rules: {},
+                };
+            },
+            created() {
+                this.generateRules();
+            },
+            methods: {
+                    generateRules() {
+                        const ruleTemplate = { required: true, message: '请输入', trigger: 'blur' };
+                        const featuresCount = this.features.length * 2; // 每个特征有两个输入框
+                        for (let i = 1; i <= featuresCount; i++) {
+                            this.rules[`feature${i}`] = [ruleTemplate];
+                        }
+                    },
+                    submitForm(formName) {
+                        this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            alert('submit!');
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                        });
+                    },
+                    resetForm(formName) {
+                        this.$refs[formName].resetFields();
+                    }
+                
+                
+                }
+        })
+
+
+     </script>
+</div>
+</body>
+
+</html>

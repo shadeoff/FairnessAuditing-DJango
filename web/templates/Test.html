@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/plugins/axios/axios-0.18.0.js"></script>
+</head>
+<body>
+    <h1>DJango Test</h1>
+    <div id="app">
+        <table>
+        <tr>
+            <th>#</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+        </tr>
+        <tr v-for="user in users">
+            <td>[[ user.id ]]</td>
+            <td>[[ user.age]]</td>
+            <td>[[ user.name]]</td>
+            <td>[[ user.sex]]</td>
+        </tr>
+
+    </table>
+    </div>
+
+
+<script>
+    var app = new Vue({
+        el:"#app",
+        delimiters:["[[", "]]"],
+        data(){
+            return{
+                users:[],
+        }
+        },
+        mounted:function (){
+            this.fetchData();
+        },
+        methods:{
+            fetchData(){
+                axios.get("/users/").then(response=>{
+                    this.users=response.data;
+                }),err=>{
+                    console.log(err)
+                };
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

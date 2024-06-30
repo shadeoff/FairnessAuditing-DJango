@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+
+  <!-- Mobile Specific Metas
+================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name=author content="Themefisher">
+    <meta name=generator content="Themefisher Constra HTML Template v1.0">
+
+    <!-- ============== css ================= -->
+    <!-- Template styles -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+
+        <!-- ============== js ================= -->
+    <!-- vue.js -->
+    <script src="../static/js/vue.js"></script>
+
+    <!-- axios.js -->
+    <script src="../static/plugins/axios/axios-0.18.0.js"></script>
+
+    <!-- element-ui 组件库 -->
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+
+</head>
+<body>
+  <div class="body-inner" id="app">
+<el-container>
+    <!-- Header -->
+    <el-header>
+        <h4>欢迎进入公平性审计实验</h4>
+    </el-header>
+    
+    <!-- Main -->
+    <el-main>
+        <div class="info">
+            <el-row :gutter="40">
+                <el-col :span="12">
+                    <div class="grid-content bg-purple">
+                        <div class="exp-info">
+                             <!-- 实验基本信息告知 -->
+                            <el-tabs v-model="expInfoActiveNum" @tab-click="handleClick">
+                                <el-tab-pane label="实验目的" name="first">
+                                    <div class="text-content">目的详细说明......</div>
+                                </el-tab-pane>
+                                <el-tab-pane label="伦理声明" name="second">
+                                    <div class="text-content">伦理声明详细说明</div>
+                                </el-tab-pane>
+                                <el-tab-pane label="实验入门介绍" name="third">
+                                    <div class="text-content"> 算法公平性是什么</div>
+                                    <div class="text-content"> 个人公平的定义</div>
+                                    <div class="text-content"> 个体公平审计：目的、难点</div>
+                                </el-tab-pane>
+                            </el-tabs>
+        
+                        </div>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div class="person-info-card grid-content bg-purple-light">
+                        <!-- 个人信息采集 -->
+                         <h1 class="card-h1">个人信息采集</h1>
+                        <div class="person-info-collect">
+                            <el-form  :model="form" :rules="rules" ref="form"   >
+                                   <el-row :gutter="30">
+                                      <el-col :span="12">
+                                        <el-form-item label="姓名" prop="name">
+                                            <el-input v-model="form.name"></el-input>
+                                            </el-form-item>
+                                      </el-col>
+                                      <el-col :span="12">
+                                        <el-form-item label="年龄" prop="age">
+                                            <el-input v-model.number="form.age" autocomplete="off"></el-input>
+                                        </el-form-item>
+
+                                      </el-col>
+
+                                   </el-row> 
+
+
+                                <el-form-item label="性别" prop="gender">
+                                    <el-radio-group v-model="form.gender">
+                                    <el-radio :label="0">男</el-radio>
+                                    <el-radio :label="1">女</el-radio>
+                                    <el-radio :label="2">未知</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+
+                                <el-form-item label="单位" prop="company">
+                                            <el-input v-model="form.company" autocomplete="off"></el-input>
+                                </el-form-item>
+
+
+                                <el-form-item label="是否接触过人工智能系统（推荐、检索等）" prop="isKnowAI">
+                                    <el-radio-group v-model="form.isKnowAI">
+                                    <el-radio label="1" :value="1">是</el-radio>
+                                    <el-radio label="0" :value="0">否</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+
+                                <el-form-item label="是否接触过公平性概念" prop="isKnowFairness">
+                                    <el-radio-group v-model="form.isKnowFairness">
+                                    <el-radio :label="1">是</el-radio>
+                                    <el-radio :label="0">否</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+
+                                <el-form-item label="是否是审计相关行业" prop="career">
+                                    <el-radio-group v-model="form.career">
+                                    <el-radio label="0" :value="0">审计工作者</el-radio>
+                                    <el-radio label="1" :value="1">模型开发/研究人员</el-radio>
+                                    <el-radio label="2" :value="2">非技术人员</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                                <br>
+                                <el-form-item>
+                                <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+                                <el-button>取消</el-button>
+                                </el-form-item>
+                            </el-form>
+
+
+
+                        </div>
+                    </div>
+                </el-col>
+            </el-row>
+
+
+        </div>
+        <!-- 实验入口 -->
+         <div class="button-area">
+            <a href="/page01/">
+                <el-button type="primary"  @click="start">信息已提交，开始实验！</el-button>
+            </a>
+        </div>
+        
+
+    </el-main>
+
+    <!-- Footer -->
+    <el-footer>Footer</el-footer>
+</el-container>
+
+
+
+</div>
+
+
+</body>
+
+    <!-- 创建Vue对象 -->
+    <script>
+
+        axios.get('/api/csrf/').then(response => {
+          axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
+        });
+        new Vue({
+            el:"#app",
+            data(){
+                return {
+                    expInfoActiveNum:"first",
+                    form: {
+                        name: '',
+                        gender:'',
+                        age:'',
+                        company:'',
+                        isKnowAI:'',
+                        isKnowFairness:'',
+                        career:''
+
+                    },
+                    rules:{
+                        name: [
+                            { required: true, message: '请输入你的名称', trigger: 'blur' },
+                            { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
+                        ],
+                        age:[
+                            { required: true, message: '年龄不能为空'},
+                            { type: 'number', message: '年龄必须为数字值'}
+                        ],
+                        gender: [
+                            { required: true, message: '请选择性别', trigger: 'change' }
+                        ],
+                        isKnowAI: [
+                            { required: true, message: '请选择你的情况', trigger: 'change' }
+                        ],
+                        isKnowFairness: [
+                            { required: true, message: '请选择你的情况', trigger: 'change' }
+                        ],
+                        career: [
+                            { required: true, message: '请选择你的情况', trigger: 'change' }
+                        ],
+
+                    },
+                };
+            },
+
+            methods:{
+
+
+                // 提交个人信息
+                onSubmit(formName) {
+                    // 注意检测判定
+                    this.$refs[formName].validate((valid)=>{
+                        if(valid){  // 当判定成功时，进行提交操作
+                            {#alert('submit!');#}
+                            console.log(this.form);
+                            axios.post('http://localhost:8000/api/users/',this.form).then(response =>{
+
+                                this.$message.success('用户创建成功')
+                            }).catch(error=>{
+                                console.log(error)
+                                this.$message.error('用户创建失败')
+                            })
+                        }else{
+                            console.log('error submit!');
+                            return false;
+                        }
+                    });
+
+                },
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                }
+            }
+
+        })
+
+
+    </script>
+</html>

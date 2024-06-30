@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+
+  <!-- Mobile Specific Metas
+================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name=author content="Themefisher">
+    <meta name=generator content="Themefisher Constra HTML Template v1.0">
+
+
+    <!-- Template styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    
+</head>
+
+<body>
+<div class="body-inner" id="app">
+    
+    <el-container>
+        <!-- Header -->
+        <el-header>
+            <h4>欢迎进入公平性审计实验</h4>
+        </el-header>
+        
+        <!-- Main -->
+        <el-main>
+            <div class="info">
+                <h1>收入预测分类</h1>
+                <el-row :gutter="30">
+                    <!-- 信息显示 -->
+                    <el-col :span="12">
+                        <div class="train-info-card">
+                            <div class="train-info grid-content bg-purple">
+                                <el-descriptions title="用户信息" :column="1">
+                                    <el-descriptions-item label="训练数据集">本次实验默认Adult数据集</el-descriptions-item>
+                                    <el-descriptions-item label="特征">
+                                        <ul>
+                                            <li>xxx</li>
+                                            <li>xxx</li>
+                                            <li>xxx</li>
+                                        </ul>
+                                    </el-descriptions-item>
+                                    <el-descriptions-item label="训练集准确率">xxx</el-descriptions-item>
+                                    <el-descriptions-item label="测试集准确率">xxx</el-descriptions-item>
+                                </el-descriptions>
+    
+                            </div>
+                        </div>
+                        
+                    </el-col>
+                    <!-- 输入特征 -->
+                    <el-col :span="12">
+                        <div class="classfy-form-card grid-content bg-purple">
+                            <el-form :model="form" :rules="rules" ref="form" label-width="80px">
+                            
+
+                                <el-form-item
+                                  v-for="(featrue, index) in form.featrues"
+                                  :label="'特征' + index"
+                                  :key="featrue.key"
+                                  :prop="'featrues.' + index + '.value'"
+                                  :rules="{
+                                    required: true, message: '域名不能为空', trigger: 'blur'
+                                  }"
+                                  >
+                                  <div class="input-button-together">
+                                    <el-input v-model="featrue.value" class="input"></el-input>
+                                    <el-button @click.prevent="removefeatrue(featrue)" class="delete-button">删除</el-button>
+                                   
+                                  </div>
+                                    
+                                </el-form-item>
+                                <el-form-item
+                                  v-for="(featrue, index) in form.featrues"
+                                  :label="'特征' + index"
+                                  :key="featrue.key"
+                                  :prop="'featrues.' + index + '.value'"
+                                  :rules="{
+                                    required: true, message: '域名不能为空', trigger: 'blur'
+                                  }"
+                                  >
+                                  <div class="input-button-together">
+                                    <el-input v-model="featrue.value" class="input"></el-input>
+                                    <el-button @click.prevent="removefeatrue(featrue)" class="delete-button">删除</el-button>
+                                   
+                                  </div>
+                                    
+                                </el-form-item>
+                                <el-form-item>
+                                  <el-button type="primary" @click="submitForm('form')">提交</el-button>
+                                  <el-button @click="addfeatrue">新增特征</el-button>
+                                  <el-button @click="resetForm('form')">重置</el-button>
+                                </el-form-item>
+                              </el-form>
+                        </div>
+                    </el-col>
+
+                  </el-row>
+            </div>
+
+            
+    
+        </el-main>
+    
+        <!-- Footer -->
+        <el-footer>Footer</el-footer>
+    </el-container>
+
+
+    <!-- ============== js ================= -->
+    <!-- vue.js -->
+    <script src="js/vue.js"></script>
+
+    <!-- axios.js -->
+    <script src="plugins/axios/axios-0.18.0.js"></script>
+
+    <!-- element-ui 组件库 -->
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 创建Vue对象 -->
+     <script>
+        new Vue({
+            el:"#app",
+            data() {
+                return {
+                    form: {
+                    featrues: [{
+                        value: ''
+                    }],
+                    email: ''
+                    },
+                    rules:{
+
+                    }
+                };
+                },
+                methods: {
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        alert('submit!');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                    });
+                },
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                },
+                removefeatrue(item) {
+                    var index = this.form.featrues.indexOf(item)
+                    if (index !== -1) {
+                    this.form.featrues.splice(index, 1)
+                    }
+                },
+                addfeatrue() {
+                    this.form.featrues.push({
+                    value: '',
+                    key: Date.now()
+                    });
+                }
+                }
+        })
+
+
+     </script>
+</div>
+</body>
+
+</html>

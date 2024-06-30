@@ -1,0 +1,30 @@
+.arrow-right {
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    height: 20px;
+    background-color: white;
+    border: 2px solid lightgray;
+  }
+
+  .arrow-right::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -27px; /* 50px/2 (half the triangle width) + 2px (border width) - 25px (half the triangle width) */
+    transform: translateY(-50%);
+    border-width: 10px 0 10px 25px;
+    border-style: solid;
+    border-color: transparent transparent transparent lightgray;
+  }
+
+  .arrow-right::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%);
+    border-width: 10px 0 10px 25px;
+    border-style: solid;
+    border-color: transparent transparent transparent white;
+  }

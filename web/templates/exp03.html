@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定义准则</title>
+
+  <!-- Mobile Specific Metas
+================================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name=author content="Themefisher">
+    <meta name=generator content="Themefisher Constra HTML Template v1.0">
+
+
+    <!-- Template styles -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- element-ui 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+
+
+        <!-- ============== js ================= -->
+    <!-- vue.js -->
+    <script src="../static/js/vue.js"></script>
+
+    <!-- axios.js -->
+    <script src="../static/plugins/axios/axios-0.18.0.js"></script>
+
+    <!-- element-ui 组件库 -->
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    
+</head>
+
+<body>
+<div class="body-inner" id="app">
+    
+    <el-container>
+        <!-- Header -->
+        <el-header>
+            <h4>欢迎进入公平性审计实验</h4>
+        </el-header>
+        
+        <!-- Main -->
+        <el-main>
+            <el-row :gutter="30">
+                <el-col :span="12">
+                    <div class="task-area">
+                <div class="task-title">
+                    <h1>选择衡量样本公平性的指标</h1>
+                </div>
+
+                <div class="task-content">
+                    <div class="task-content-description">
+                        <p>一些描述......</p>
+                        <p>请选择一个衡量样本间相似度的指标：</p>
+                    </div>
+                    <div class="task-content-form">
+                        <el-radio v-model="rigorRadio" label="Eu">欧氏距离：样本的各个特征具有相同的权重</el-radio>
+                        <el-radio v-model="rigorRadio" label="LR">LR距离：与敏感属性相关的特征将会有更大的权重</el-radio>
+                    </div>
+                </div>
+            </div>
+                </el-col>
+                <el-col :span="12">
+                    <div class="task-area">
+                <div class="task-title">
+                    <h1>选择审计的严格程度</h1>
+                </div>
+                <div class="task-content">
+                    <div class="task-content-description">
+                        <p>一些描述</p>
+                    </div>
+                    <div class="task-content-form">
+                            <span>直接指定epsilon：
+                                <el-input-number :precision="2" :step="1" :min="0" :max="20" v-model="epsilon"></el-input-number>
+                            </span>
+
+                        </el-radio-group>
+
+
+                    </div>
+                </div>
+
+            </div>
+                </el-col>
+            </el-row>
+
+
+
+            <div class="button-area">
+
+                <el-button type="primary"  @click="onSubmit">下一步</el-button>
+
+            </div>
+    
+        </el-main>
+    
+        <!-- Footer -->
+        <el-footer>Footer</el-footer>
+    </el-container>
+
+
+
+
+</div>
+
+
+ <!-- 创建Vue对象 -->
+     <script>
+          axios.get('/api/csrf/').then(response => {
+              axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
+            });
+        new Vue({
+            el:"#app",
+            data(){
+                return{
+                    rigorRadio:'Eu',
+                    epsilon:''
+                };
+            },
+            methods:{
+
+
+                onSubmit(){
+                    console.log(this.rigorRadio)
+                    axios.post("/api/exp03/",{dx: this.rigorRadio, eps: this.epsilon}).then(resp =>{
+                        console.log(resp.data);
+                        window.location.href = '/page04/';
+                    }).error(err =>{
+                        alert("发生错误")
+                    })
+                    alert("submit!")
+                }
+            }
+        })
+
+
+     </script>
+</body>
+
+</html>
