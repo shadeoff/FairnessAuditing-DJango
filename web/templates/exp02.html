@@ -76,13 +76,13 @@
                                 <div class="task-form-area">
                                     <el-row :gutter="30">
                                         <el-col :span="12">
-                                            <el-select v-model="sensitive" :disabled="isDisabled" placeholder="请选择属性">
+                                            <el-select v-model="sensitive" :disabled="is_ensure_sensitive" placeholder="请选择属性">
                                               <el-option label="种族" value="race_White"></el-option>
                                               <el-option label="性别" value="sex_Male"></el-option>
                                             </el-select>
                                         </el-col>
                                         <el-col :span="12">
-                                            <el-button type="warning" @click="confirmSelection">确定 </el-button>
+                                            <el-button v-if="!is_ensure_sensitive" type="warning" @click="confirmSelection">确定 </el-button>
                                         </el-col>
                                     </el-row>
 
@@ -99,19 +99,19 @@
                                 选择您关注的人群，您将在该人群范围内寻找不公平的样本
                               </p>
 
-                                <div class="form-scope">
+                                <div class="form-scope" >
                                      <!-- 年龄 -->
                                     <el-row>
                                       <el-col class="label" :span="3">年龄</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="age.scope[0]">
-                                          <el-input placeholder="最低" v-model.number="form['age'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['age'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="age.scope[1]">
-                                          <el-input placeholder="最高" v-model.number="form['age'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['age'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -121,13 +121,13 @@
                                       <el-col class="label" :span="3">资产收益</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-gain.scope[0]">
-                                          <el-input placeholder="最低" v-model="form['capital-gain'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['capital-gain'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-gain.scope[1]">
-                                          <el-input placeholder="最高" v-model="form['capital-gain'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['capital-gain'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -137,13 +137,13 @@
                                       <el-col class="label" :span="3">资产损失</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-loss.scope[0]">
-                                          <el-input placeholder="最低" v-model="form['capital-loss'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['capital-loss'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-loss.scope[1]">
-                                          <el-input placeholder="最高" v-model="form['capital-loss'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['capital-loss'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -153,13 +153,13 @@
                                       <el-col class="label" :span="3">受教育时长</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="education-num.scope[0]">
-                                          <el-input placeholder="最低" v-model="form['education-num'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['education-num'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="education-num.scope[1]">
-                                          <el-input placeholder="最高" v-model="form['education-num'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['education-num'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -169,13 +169,13 @@
                                       <el-col class="label" :span="3">每周工作时长</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="hours-per-week.scope[0]">
-                                          <el-input placeholder="最低" v-model="form['hours-per-week'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['hours-per-week'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="hours-per-week.scope[1]">
-                                          <el-input placeholder="最高" v-model="form['hours-per-week'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['hours-per-week'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -185,7 +185,7 @@
                                       <el-col class="label" :span="3">婚姻状况</el-col>
                                       <el-col :span="21">
                                         <el-form-item prop="marital-status.scope">
-                                          <el-checkbox-group v-model="form['marital-status'].scope">
+                                          <el-checkbox-group v-model="form['marital-status'].scope" :disabled="is_submit">
                                               <el-checkbox
                                                    v-for="item in marital_status"
                                                   :key="item.value"
@@ -202,7 +202,7 @@
                                       <el-col class="label" :span="3">工作类型</el-col>
                                       <el-col :span="21">
                                         <el-form-item prop="workclass.scope">
-                                          <el-checkbox-group v-model="form['workclass'].scope">
+                                          <el-checkbox-group v-model="form['workclass'].scope" :disabled="is_submit">
                                               <el-checkbox v-for="item in workclass" :key="item.value" :label="item.value">[[ item.label ]]</el-checkbox>
 
                                           </el-checkbox-group>
@@ -213,31 +213,25 @@
                                     <!-- 性别 -->
                                     <el-row v-if="sensitive !== 'sex_Male'">
                                       <el-col class="label" :span="3">性别</el-col>
-                                      <el-col :span="10">
-                                        <el-form-item prop="sex_Male.scope[0]">
-                                          <el-input placeholder="最低" v-model="form['sex_Male'].scope[0]"></el-input>
+                                        <el-col :span="21">
+                                        <el-form-item prop="sex_Male.scope">
+                                          <el-checkbox-group v-model="form['sex_Male'].scope" :disabled="is_submit">
+                                              <el-checkbox v-for="item in sex_Male" :key="item.value" :label="item.value">[[ item.label ]]</el-checkbox>
+                                          </el-checkbox-group>
                                         </el-form-item>
                                       </el-col>
-                                      <el-col class="line" style="text-align: center;" :span="1">-</el-col>
-                                      <el-col :span="10">
-                                        <el-form-item prop="sex_Male.scope[1]">
-                                          <el-input placeholder="最高" v-model="form['sex_Male'].scope[1]"></el-input>
-                                        </el-form-item>
-                                      </el-col>
+
                                     </el-row>
 
                                     <!-- 种族 -->
                                     <el-row v-if="sensitive !== 'race_White'">
                                       <el-col class="label" :span="3">种族</el-col>
-                                      <el-col :span="10">
-                                        <el-form-item prop="race_White.scope[0]">
-                                          <el-input placeholder="最低" v-model="form['race_White'].scope[0]"></el-input>
-                                        </el-form-item>
-                                      </el-col>
-                                      <el-col class="line" style="text-align: center;" :span="1">-</el-col>
-                                      <el-col :span="10">
-                                        <el-form-item prop="race_White.scope[1]">
-                                          <el-input placeholder="最高" v-model="form['race_White'].scope[1]"></el-input>
+                                        <el-col :span="21">
+                                        <el-form-item prop="race_White.scope">
+                                          <el-checkbox-group v-model="form['race_White'].scope" :disabled="is_submit">
+                                              <el-checkbox v-for="item in race_White" :key="item.value" :label="item.value">[[ item.label ]]
+                                          </el-checkbox>
+                                          </el-checkbox-group>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -247,7 +241,7 @@
                                     <a href="page03/">
 
                                     </a>
-                                    <el-button type="primary"  @click="submitForm('form')">提交</el-button>
+                                    <el-button v-if="!is_submit" type="primary"  @click="submitForm('form')">提交</el-button>
 
                                 </div>
                             </el-form>
@@ -262,14 +256,12 @@
 
             <div class="button-area">
                     <a href="/page03/">
-                        <el-button type="warning" @click="next">下一步</el-button>
+                        <el-button :disabled="!(is_submit && is_ensure_sensitive)" type="warning" @click="next">下一步</el-button>
                     </a>
                 </div>
     
         </el-main>
-    
-        <!-- Footer -->
-        <el-footer>Footer</el-footer>
+
     </el-container>
 
 
@@ -286,7 +278,8 @@
             data() {
                 return {
                     sensitive: '',
-                    isDisabled:false,
+                    is_ensure_sensitive:false,
+                    is_submit:false,
                     form: {
                          "age": {
                              label: "年龄",
@@ -310,19 +303,21 @@
                         },
                         "marital-status": {
                           label: "婚姻状况",
-                          scope: [], // default value as array for multiple selection
+                          scope: ['Divorced', 'Married-AF-spouse','Married-civ-spouse','Married-spouse-absent',
+                          'Never-married','Separated', 'Widowed'], // default value as array for multiple selection
                         },
                         "workclass": {
                           label: "工作类型",
-                          scope: [], // default value as array for multiple selection
+                          scope: ['Federal-gov', 'Local-gov', 'Private', 'Self-emp-inc', 'Self-emp-not-inc',
+                          'State-gov', 'Without-pay'], // default value as array for multiple selection
                         },
                         "sex_Male": {
                           label: "性别",
-                            scope:[0, 1],
+                            scope:['0', '1'],
                         },
                         "race_White": {
                           label: "种族",
-                            scope:[0, 1],
+                            scope:['0', '1'],
                         },
                     },
                     default_scope:{
@@ -350,11 +345,13 @@
                           scope: [], // default value as array for multiple selection
                         },
                         "sex_Male": {
-                            min:0, max:1,
+                            label: "性别",
+                            scope: [],
 
                         },
                         "race_White": {
-                            min:0, max:1,
+                            label: "种族",
+                            scope: [],
                         },
 
                     },
@@ -379,6 +376,14 @@
                         { value: 'Without-pay', label: '无报酬'},
 
                     ],
+                    sex_Male:[
+                        { value: '0', label: '女性'},
+                        { value: '1', label: '男性'},
+                    ],
+                    race_White:[
+                        { value: '0', label: '非白人'},
+                        { value: '1', label: '白人'},
+                    ],
                     rules: {},
 
 
@@ -392,8 +397,8 @@
                     ...this.generateRules('capital-loss'),
                     ...this.generateRules('education-num'),
                     ...this.generateRules('hours-per-week'),
-                    ...this.generateRules('sex_Male'),
-                    ...this.generateRules('race_White'),
+                    {#...this.generateRules('sex_Male'),#}
+                    {#...this.generateRules('race_White'),#}
                     'marital-status': [
                         { type: 'array', required: true, message: '请选择婚姻状况', trigger: 'change' }
                       ],
@@ -416,18 +421,20 @@
                           .then(response =>{
                               console.log(response.data)
                           })
-                        this.form.sex_Male.scope[0] = 0;
-                        this.form.sex_Male.scope[1] = 1;
+                          this.form.sex_Male.scope = ['0', '1'];
+                        {#this.form.sex_Male.scope[0] = 0;#}
+                        {#this.form.sex_Male.scope[1] = 1;#}
                       } else if (this.sensitive === "race_White") {
                         axios.post("/api/exp02/",{ action: 'set_sensitive_attr', data: "race" })
                           .then(response =>{
                               console.log(response.data)
                           })
-                        this.form.race_White.scope[0] = 0;
-                        this.form.race_White.scope[1] = 1;
+                          this.form.race_White.scope = ['0', '1'];
+                        {#this.form.race_White.scope[0] = 0;#}
+                        {#this.form.race_White.scope[1] = 1;#}
                       }
 
-                      this.isDisabled = true;
+                      this.is_ensure_sensitive = true;
                       console.log(this.sensitive)
                       this.$message({
                           type:'success',
@@ -441,17 +448,32 @@
                   })
                 },
                 submitForm(formName) {
+                    // 转换 sex_Male 和 race_White 的 scope 为整型
+                    let _form = this.form;
+                    console.log(this.form.race_Male)
+
+                    _form.sex_Male.scope = _form.sex_Male.scope.map(value => parseInt(value));
+                    _form.race_White.scope = _form.race_White.scope.map(value => parseInt(value));
                     console.log(formName);
-                    console.log(this.form.age)
+                    console.log(this.form.race_Male)
                     this.$refs[formName].validate((valid) => {
                         if (valid) {
-                            axios.post("/api/exp02/",{ action: 'set_range', data: this.form })
+                            axios.post("/api/exp02/",{ action: 'set_range', data: _form })
                                 .then(response =>{
-                                    console.log(response.data)
-                                })
-                            alert('submit!');
+                                    this.is_submit = true;
+                                    console.log(this.form.sex_Male);
+                                    console.log(_form.sex_Male);
+                                    console.log(response.data);
+                                    this.$message({
+                                      message: '提交信息成功！',
+                                      type: 'success'
+                                     });
+                                });
+
+
                             {#window.location.href = 'page03/';#}
                         } else {
+                            this.$message.error('提交失败！');
                         console.log('error submit!!');
                         return false;
                         }

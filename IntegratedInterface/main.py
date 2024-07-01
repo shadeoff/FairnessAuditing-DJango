@@ -18,7 +18,9 @@ class AuditingFramework:
         # data: data class, dataset, data loader, data generator, etc.
         self.data = adult_short
         # initialize by calling set_sensitive_attr
-        self.dataset, self.train_dl, self.test_dl, self.data_gen = None, None, None, None
+        self.dataset, self.train_dl, self.test_dl = None, None, None
+        self.data_gen = self.data.Generator(include_sensitive_feature=True, sensitive_vars=['sex_Male'],
+                                            device='cpu')
         self.sensitive_attr = None
 
         # model

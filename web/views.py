@@ -130,8 +130,8 @@ class Exp01View(APIView):
         singleton_instance = SingletonModel()
         fw = singleton_instance.auditing_framework
 
-        fw.set_sensitive_attr('race')
-        fw.set_individual_fairness_metric(dx='LR', eps=fw.get_default_eps())
+        # fw.set_sensitive_attr('race')
+        # fw.set_individual_fairness_metric(dx='LR', eps=fw.get_default_eps())
         result = ''
         probability = fw.query_model(data_sample)
         if probability >= 0.5:

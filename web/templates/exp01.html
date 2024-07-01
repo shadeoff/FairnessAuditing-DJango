@@ -69,29 +69,30 @@
                     </el-col>
                     <!-- 输入特征 -->
                     <el-col :span="12">
+                        <h4 style="margin-top: 0">输入待分类的样本信息</h4>
                         <div class="form-card">
-                            <el-form :model="form" :label-position="top" :rules="rules" ref="form" label-width="60px" hide-required-asterisk="true">
+                            <el-form :model="form" :label-position="top" :rules="rules" ref="form" label-width="142px" hide-required-asterisk="true">
                                 <div class="form-edit-area">
                                     <el-row :gutter="30">
                                         <el-col :span="12">
-                                            <el-form-item label="年龄" prop="age">
-                                                <el-input-number :step="1" :min="1" :max="90" v-model="form['age']"></el-input-number>
+                                            <el-form-item :label="'年龄 (' + default_scope.age[0] + ',' + default_scope.age[1] + ')'" prop="age">
+                                                <el-input v-model.number="form['age']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item label="每周工作时长" prop="hours_per_week">
-                                                <el-input-number :step="1" :min="1" :max="99" v-model="form['hours-per-week']"></el-input-number>
+                                            <el-form-item :label="'每周工作时长 (' + default_scope['hours-per-week'][0] + ',' + default_scope['hours-per-week'][1] + ')'" prop="hours-per-week">
+                                                <el-input  v-model.number="form['hours-per-week']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item label="受教育时长" prop="education_num">
-                                                <el-input-number :step="1" :min="1" :max="16" v-model="form['education-num']"></el-input-number>
+                                            <el-form-item :label="'受教育时长 (' + default_scope['education-num'][0] + ',' + default_scope['education-num'][1] + ')'" prop="education-num">
+                                                <el-input v-model.number="form['education-num']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item label="资产收益" prop="capital_gain">
-                                                <el-input-number :step="1" :min="0" :max="99999" v-model="form['capital-gain']"></el-input-number>
+                                            <el-form-item :label="'资产收益 (' + default_scope['capital-gain'][0] + ',' + default_scope['capital-gain'][1] + ')'" prop="capital-gain">
+                                                <el-input v-model.number="form['capital-gain']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item label="资产损失" prop="capital_loss">
-                                                <el-input-number :step="1" :min="1" :max="4356" v-model="form['capital-loss']"></el-input-number>
+                                            <el-form-item :label="'资产损失 (' + default_scope['capital-loss'][0] + ',' + default_scope['capital-loss'][1] + ')'" prop="capital-loss">
+                                                <el-input v-model.number="form['capital-loss']"></el-input>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="12">
@@ -109,7 +110,7 @@
                                                   <el-option label="女" value="1"></el-option>
                                                 </el-select>
                                             </el-form-item>
-                                            <el-form-item label="婚姻状况" prop="marital_status">
+                                            <el-form-item label="婚姻状况" prop="marital-status">
                                                 <el-select v-model="form['marital-status']" placeholder="请选择">
                                                     <el-option
                                                       v-for="item in marital_status"
@@ -170,8 +171,7 @@
     
         </el-main>
     
-        <!-- Footer -->
-        <el-footer>Footer</el-footer>
+
     </el-container>
 
 
@@ -202,6 +202,18 @@
                         "workclass":'',
 
                     },
+                    default_scope:{
+                         "age": [1, 90],
+                        "capital-gain":[0, 99999],
+                        "capital-loss": [0, 4356],
+                        "education-num":[1, 16],
+                        "hours-per-week":[1, 99],
+                        "marital-status": [],
+                        "workclass":[],
+                        "sex_Male": [0, 1],
+                        "race_White":[0, 1],
+
+                    },
                     {# 婚姻状况 #}
                     marital_status:[
                         { value: 'Divorced', label: '离异'},
@@ -223,35 +235,15 @@
 
                     ],
                     {# 准确率 #}
-                    train_accuracy:'',
-                    test_accuracy:'',
+                    train_accuracy:'0.8440',
+                    test_accuracy:'0.8387',
 
                     result:'',
-                    rules:{
-                        featrues01: [
-                            { required: true, message: '请按规定输入特征1', trigger: 'blur' },
-                        ],
-                        featrues02: [
-                            { required: true, message: '请按规定输入特征2', trigger: 'blur' },
-                        ],
-                        featrues03: [
-                            { required: true, message: '请按规定输入特征3', trigger: 'blur' },
-                        ],
-                        // featrues04: [
-                        //     { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        // ],
-                        featrues05: [
-                            { required: true, message: '请按规定输入特征5', trigger: 'blur' },
-                        ],
-                        featrues06: [
-                            { required: true, message: '请按规定输入特征6', trigger: 'blur' },
-                        ],
-                        featrues07: [
-                            { required: true, message: '请按规定输入特征7', trigger: 'blur' },
-                        ],
-                    }
+                    rules: {
+
+                    },
                 };
-                },
+            },
             methods: {
                 {# 提交表单 #}
                 submitForm(formName) {
@@ -297,25 +289,72 @@
                   };
                   return descriptions[feature] || `${feature} - ${range}`;
                 },
-                getTrainAccuracy(){
-                    axios.get('/api/exp01/?type=get_train_accuracy').then(response => {
-                        this.train_accuracy = response.data;
-                    }).catch(error => {
-                      console.error("There was an error!", error);
-                    });
-                },
-                getTestAccuracy(){
-                    axios.get('/api/exp01/?type=get_test_accuracy').then(response => {
-                        this.test_accuracy = response.data;
-                    }).catch(error => {
-                      console.error("There was an error!", error);
-                    });
-                }
+                generateRules() {
+                      const scope = this.default_scope;
+                      this.rules = {
+                        age: [
+                          { required: true, message: '请输入年龄', trigger: 'blur' },
+                          { type: 'number', message: '年龄必须是数字值', trigger: 'blur' },
+                          { type: 'number', min: scope.age[0], max: scope.age[1], message: `年龄必须在${scope.age[0]}到${scope.age[1]}之间`, trigger: 'blur' }
+                        ],
+                        'hours-per-week': [
+                          { required: true, message: '请输入每周工作时长', trigger: 'blur' },
+                          { type: 'number', message: '工作时长必须是数字值', trigger: 'blur' },
+                          { type: 'number', min: scope['hours-per-week'][0], max: scope['hours-per-week'][1], message: `工作时长必须在${scope['hours-per-week'][0]}到${scope['hours-per-week'][1]}之间`, trigger: 'blur' }
+                        ],
+                        'education-num': [
+                          { required: true, message: '请输入受教育时长', trigger: 'blur' },
+                          { type: 'number', message: '受教育时长必须是数字值', trigger: 'blur' },
+                          { type: 'number', min: scope['education-num'][0], max: scope['education-num'][1], message: `受教育时长必须在${scope['education-num'][0]}到${scope['education-num'][1]}之间`, trigger: 'blur' }
+                        ],
+                        'capital-gain': [
+                          { required: true, message: '请输入资产收益', trigger: 'blur' },
+                          { type: 'number', message: '资产收益必须是数字值', trigger: 'blur' },
+                          { type: 'number', min: scope['capital-gain'][0], max: scope['capital-gain'][1], message: `资产收益必须在${scope['capital-gain'][0]}到${scope['capital-gain'][1]}之间`, trigger: 'blur' }
+                        ],
+                        'capital-loss': [
+                          { required: true, message: '请输入资产损失', trigger: 'blur' },
+                          { type: 'number', message: '资产损失必须是数字值', trigger: 'blur' },
+                          { type: 'number', min: scope['capital-loss'][0], max: scope['capital-loss'][1], message: `资产损失必须在${scope['capital-loss'][0]}到${scope['capital-loss'][1]}之间`, trigger: 'blur' }
+                        ],
+                        'race_White': [
+                          { required: true, message: '请选择是否为白人', trigger: 'change' }
+                        ],
+                        'sex_Male': [
+                          { required: true, message: '请选择性别', trigger: 'change' }
+                        ],
+                        'marital-status': [
+                          { required: true, message: '请选择婚姻状况', trigger: 'change' }
+                        ],
+                        'workclass': [
+                          { required: true, message: '请选择工作类型', trigger: 'change' }
+                        ]
+                      };
+                    }
+                // getTrainAccuracy(){
+                //     axios.get('/api/exp01/?type=get_train_accuracy').then(response => {
+                //         this.train_accuracy = response.data;
+                //     }).catch(error => {
+                //       console.error("There was an error!", error);
+                //     });
+                // },
+                // getTestAccuracy(){
+                //     axios.get('/api/exp01/?type=get_test_accuracy').then(response => {
+                //         this.test_accuracy = response.data;
+                //     }).catch(error => {
+                //       console.error("There was an error!", error);
+                //     });
+                // }
+            },
+            created(){
+              this.generateRules();
+              this.getFeature();
             },
             mounted() {
-                this.getFeature();
-                this.getTrainAccuracy();
-                this.getTestAccuracy();
+
+
+                // this.getTrainAccuracy();
+                // this.getTestAccuracy();
               }
         })
 
