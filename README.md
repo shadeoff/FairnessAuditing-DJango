@@ -1,6 +1,1 @@
-最后一步还未完成，
- File "D:\workspace\prePostgraduate\DJango-Learning\FairnessAuditing\models\metrics.py", line 38, in individual_unfairness
-    all_pred = model.get_prediction(samples)
-               ^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'AuditingFramework' object has no attribute 'get_prediction'
-metrics.py显示main函数缺少get_prediction方法
+可运行的，但在page02确定范围之后，在page03提交确定参数的动作可能失败，比较玄学，还得改
