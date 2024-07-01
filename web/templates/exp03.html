@@ -75,7 +75,7 @@
                     </div>
                     <div class="task-content-form">
                             <span>直接指定epsilon：
-                                <el-input-number :precision="2" :step="1" :min="0" :max="20" v-model="epsilon"></el-input-number>
+                                <el-input-number :step="1" :min="0"  v-model="epsilon"></el-input-number>
                             </span>
 
                         </el-radio-group>
@@ -118,7 +118,7 @@
             data(){
                 return{
                     rigorRadio:'Eu',
-                    epsilon:''
+                    epsilon:'1e8'
                 };
             },
             methods:{

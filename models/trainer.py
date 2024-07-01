@@ -25,8 +25,10 @@ class STDTrainer():
             for x, y in self.train_dl:
                 # print(x, y, sep='\n')
                 x, y = x.to(self.device), y.to(self.device)
+                y = y.long()  # 将y转换成long方法
                 self.optimizer.zero_grad()
                 y_pred = self.model(x).squeeze()
+                # print(f"type(y_pred) = {type(y_pred)} and y_pred = {y_pred} ")
                 loss = self.loss_fn(y_pred, y)
                 loss.backward()
                 self.optimizer.step()

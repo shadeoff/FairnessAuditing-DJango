@@ -324,20 +324,23 @@ class Exp05View(APIView):
 
 class Exp06View(APIView):
     def get(self, request, *args, **kwargs):
+        # 初始化了一个main中AuditingFramework的单例
         singleton_instance = SingletonModel()
         fw = singleton_instance.auditing_framework
 
         # 获取不公平数据对
         unfair_pair = fw.get_unfair_pair()
-        individual_fairness = (fw.local_individual_fairmess_metric(fw, unfair_pair[0]) +
-                               fw.local_individual_fairmess_metric(fw, unfair_pair[1])) / 2
+        individual_fairness = (fw.local_individual_fairmess_metric(fw.model, unfair_pair[0]) +
+                               fw.local_individual_fairmess_metric(fw.model, unfair_pair[1])) / 2
 
         # global_fairness = '' 待定
         # 得到新模型
-        new_model = fw.optimize(fw, unfair_pair)
+        new_model = fw.optimize(fw.model, unfair_pair)
 
         new_individual_fairness = (fw.local_individual_fairmess_metric(new_model, unfair_pair[0]) +
-                                   new_model.local_individual_fairmess_metric(fw, unfair_pair[1])) / 2
+                                   fw.local_individual_fairmess_metric(new_model, unfair_pair[1])) / 2
+        print(f"individual_fairness is {individual_fairness}")
+        print(f"new_individual_fairness is {new_individual_fairness}")
         # 汇总
         result = {
             "unfair_pair": unfair_pair,
@@ -345,7 +348,8 @@ class Exp06View(APIView):
             "new_individual_fairness": new_individual_fairness
         }
 
-        return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(result, status=status.HTTP_200_OK)
 
 
     def post(self, request, *args, **kwargs):

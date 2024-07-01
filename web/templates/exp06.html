@@ -83,13 +83,13 @@
 
                                         
                                         <br>
-                                        <p>
-                                            经进一步审计,该对样本附近,模型的个体公平性为[[ individual_fairness ]]，低于模型在总体数据上的公平性表现"先待定"
-                                        </p>
+                                        <p></p>
+                                            经进一步审计,该对样本附近,模型的个体公平性为[[ old_individual_fairness ]]，低于模型在总体数据上的公平性表现"先待定"
+                                        <p></p>
 
                                         <p>模型优化建议：采用[[optimization]]的优化方法</p>
                                         <br>
-                                        <p>优化完成后预计的公平性表现预计为：[[ perform ]]</p>
+                                        <p>优化完成后预计的公平性表现预计为：[[ new_individual_fairness ]]</p>
 
                                     </div>
                                 </el-col>
@@ -145,9 +145,9 @@
                     inFairnessPairs:[],
                     fairness:'公平',
                     optimization:'xxx',
-                    individual_fairness:'yyy',
-                    globalFairness:'zzz',
-                    perform:'',
+                    old_individual_fairness:'be loading...',
+                    new_individual_fairness:'be loading...',
+                    globalFairness:'0.6773',
                     form1: {
                         'age': 63,
                         'capital-gain': 87,
@@ -203,6 +203,9 @@
                       ]
                 };
             },
+            created() {
+                this.fetchData();
+            },
             computed:{
 
             },
@@ -227,7 +230,18 @@
                     const option = options.find(option => option.value === value);
                     return option ? option.label : value;
                 },
+                fetchData(){
+                    axios.get("/api/exp06/").then(response => {
+                        this.form1 = response.data.unfair_pair[0];
+                        this.form2 = response.data.unfair_pair[1];
+                        this.old_individual_fairness = response.data.individual_fairness.toFixed(4);
+                        this.new_individual_fairness = response.data.new_individual_fairness.toFixed(4);
+                        console.log(old_individual_fairness)
+                        console.log(new_individual_fairness)
 
+
+                    })
+                },
                 exit(){
                     alert("结束！")
                 }

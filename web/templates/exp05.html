@@ -527,8 +527,8 @@
                                     }).then(response => {
                                         _this.result1 = response.data.result[0];
                                         _this.result2 = response.data.result[1];
-                                        _this.dx = response.data.fair_data.dx;
-                                        _this.dy = response.data.fair_data.dy;
+                                        _this.dx = response.data.fair_data.dx.toFixed(10);
+                                        _this.dy = response.data.fair_data.dy.toFixed(10);
                                         let flag = response.data.fair_data.fair_or_not;
                                         if(flag){
                                             _this.fairness = "公平";

@@ -184,6 +184,8 @@ class AuditingFramework:
         assert self.dataset != None
         assert self.range_dict != None
 
+        print(f"type(dx) is {type(dx)}")
+        print(f"type(eps) is {type(eps)}")
         if dx == 'LR':
             distance_x = LogisticRegSensitiveSubspace()
             distance_x.fit(self.dataset.get_all_data(), data_gen=self.data_gen,
