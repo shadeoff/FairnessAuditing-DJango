@@ -392,6 +392,8 @@
                     ...this.generateRules('capital-loss'),
                     ...this.generateRules('education-num'),
                     ...this.generateRules('hours-per-week'),
+                    ...this.generateRules('sex_Male'),
+                    ...this.generateRules('race_White'),
                     'marital-status': [
                         { type: 'array', required: true, message: '请选择婚姻状况', trigger: 'change' }
                       ],

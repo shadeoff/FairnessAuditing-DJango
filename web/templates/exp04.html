@@ -233,7 +233,7 @@
                     <el-col :span="16">
                         <div class="result-card">
                             <div class="result-content">
-                                <span>公平性判别指标：</span><span>xxx</span>
+                                <span>公平性判别指标：</span><span>[[ target ]]</span>
                             </div>
                             <div class="result-content">
                                 <span>dx = </span><span>[[ dx ]]</span>
@@ -322,8 +322,9 @@
                         { value: 'Without-pay', label: '无报酬'},
 
                     ],
+                    target:'待填写',
                     result1:'',
-                    result2:'',
+                    result2:' ',
                     dx:'',
                     dy:'',
                     fairness: '',
