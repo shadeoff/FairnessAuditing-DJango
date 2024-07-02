@@ -192,6 +192,18 @@ class Exp03View(APIView):
 
 
 class Exp04View(APIView):
+    def get(self, request, *args, **kwargs):
+        singleton_instance = SingletonModel()
+        fw = singleton_instance.auditing_framework
+        range_dict = fw.get_data_range()
+        sensitive_attr = fw.sensitive_attr
+        print(sensitive_attr, range_dict)
+        result = {
+            "range": range_dict,
+            "sensitive_attr": sensitive_attr
+        }
+        return Response(result, status=status.HTTP_200_OK)
+
     def post(self, request, *args, **kwargs):
         """
         注意：同获取准确率，也需要先设置敏感属性
@@ -225,10 +237,12 @@ class Exp04View(APIView):
             data_sample2 = request.data['data2']
             sample_pair = [data_sample1, data_sample2]
             fair_or_not, dx, dy = fw.fair(fw.model, sample_pair)
+            difference = 1/fw.unfair_metric.epsilon
             result = {
                 "fair_or_not": fair_or_not,
                 "dx": dx,
-                "dy": dy
+                "dy": dy,
+                "difference": difference
             }
             return Response(result, status=status.HTTP_200_OK)
         return Response("error", status=status.HTTP_400_BAD_REQUEST)
@@ -283,11 +297,12 @@ class Exp05View(APIView):
             # 获取评测数据
             sample_pair = [data_sample1, data_sample2]
             fair_or_not, dx, dy = fw.fair(fw.model, sample_pair)
-
+            difference = 1 / fw.unfair_metric.epsilon
             fair_data = {
                 "fair_or_not": fair_or_not,
                 "dx": dx,
-                "dy": dy
+                "dy": dy,
+                "difference": difference
             }
             data = {
                 "result": result,

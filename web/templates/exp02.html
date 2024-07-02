@@ -121,13 +121,13 @@
                                       <el-col class="label" :span="3">资产收益</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-gain.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['capital-gain'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['capital-gain'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-gain.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['capital-gain'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['capital-gain'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -137,13 +137,13 @@
                                       <el-col class="label" :span="3">资产损失</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-loss.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['capital-loss'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['capital-loss'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-loss.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['capital-loss'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['capital-loss'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -153,13 +153,13 @@
                                       <el-col class="label" :span="3">受教育时长</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="education-num.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['education-num'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['education-num'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="education-num.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['education-num'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['education-num'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -169,13 +169,13 @@
                                       <el-col class="label" :span="3">每周工作时长</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="hours-per-week.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model="form['hours-per-week'].scope[0]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['hours-per-week'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="hours-per-week.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model="form['hours-per-week'].scope[1]"></el-input>
+                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['hours-per-week'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -241,8 +241,9 @@
                                     <a href="page03/">
 
                                     </a>
-                                    <el-button v-if="!is_submit" type="primary"  @click="submitForm('form')">提交</el-button>
-
+                                    <el-button v-if="(!is_submit && is_ensure_sensitive)" type="primary"  @click="submitForm('form')">提交</el-button>
+                                    <p v-else-if="(is_submit && is_ensure_sensitive)"></p>
+                                    <p v-else>请先选择敏感属性</p>
                                 </div>
                             </el-form>
                           </div>
@@ -277,13 +278,14 @@
             delimiters:["[[", "]]"],
             data() {
                 return {
+                    is_not_null:false,
                     sensitive: '',
                     is_ensure_sensitive:false,
                     is_submit:false,
                     form: {
                          "age": {
                              label: "年龄",
-                             scope:[1,90],
+                             scope:[17,90],
                          },
                         "capital-gain": {
                           label: "资产收益",
@@ -322,7 +324,7 @@
                     },
                     default_scope:{
                          "age": {
-                             min:1, max:90,
+                             min:17, max:90,
                          },
                         "capital-gain": {
                              min:0, max:99999,
@@ -408,7 +410,26 @@
 
                 };
             },
+            watch: {
+                form:{
+                    handler(){
+                        this.checkScopes();
+                    },
+                  deep: true,
+                },
+            },
             methods: {
+                // 检查提交的表单数据是否有空
+                checkScopes() {
+                      const fieldsToCheck = ["marital-status", "workclass", "sex_Male", "race_White"];
+                      for (const field of fieldsToCheck) {
+                        if (this.form[field].scope.length === 0) {
+                          this.is_not_null = false;
+                          return; // 提前返回，避免多余的检查
+                        }
+                      }
+                      this.is_not_null = true; // 如果没有发现长度为0的情况，设置flag为true
+                    },
                 {# 确认表单 #}
                 confirmSelection(){
                   this.$confirm('您确定选择此属性吗？一旦确认不可更改', '确认',{
@@ -458,7 +479,11 @@
                     console.log(this.form.race_Male)
                     this.$refs[formName].validate((valid) => {
                         if (valid) {
-                            axios.post("/api/exp02/",{ action: 'set_range', data: _form })
+                            if(!this.is_not_null){
+                                console.log(this.is_not_null);
+                                alert('每个字段至少选择一项！')
+                            }else {
+                                axios.post("/api/exp02/",{ action: 'set_range', data: _form })
                                 .then(response =>{
                                     this.is_submit = true;
                                     console.log(this.form.sex_Male);
@@ -469,7 +494,7 @@
                                       type: 'success'
                                      });
                                 });
-
+                            }
 
                             {#window.location.href = 'page03/';#}
                         } else {

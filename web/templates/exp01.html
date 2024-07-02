@@ -71,7 +71,7 @@
                     <el-col :span="12">
                         <h4 style="margin-top: 0">输入待分类的样本信息</h4>
                         <div class="form-card">
-                            <el-form :model="form" :label-position="top" :rules="rules" ref="form" label-width="142px" hide-required-asterisk="true">
+                            <el-form :model="form" :rules="rules" ref="form" label-width="142px" hide-required-asterisk="true">
                                 <div class="form-edit-area">
                                     <el-row :gutter="30">
                                         <el-col :span="12">
@@ -140,7 +140,6 @@
                                         <el-col :span="12">
                                             <el-form-item>
                                                 <el-button type="primary" @click="submitForm('form')">查询</el-button>
-                                                <el-button @click="resetForm('form')">重置</el-button>
                                               </el-form-item>
                                         </el-col>
                                         <el-col :span="12">
@@ -203,7 +202,7 @@
 
                     },
                     default_scope:{
-                         "age": [1, 90],
+                         "age": [17, 90],
                         "capital-gain":[0, 99999],
                         "capital-loss": [0, 4356],
                         "education-num":[1, 16],
@@ -234,6 +233,25 @@
                         { value: 'Without-pay', label: '无报酬'},
 
                     ],
+                    // 用于映射字段
+                    marital_status_map: {
+                      'Divorced': '离异',
+                      'Married-AF-spouse': '军人家属婚姻',
+                      'Married-civ-spouse': '普通婚姻',
+                      'Married-spouse-absent': '已婚但夫妻异地',
+                      'Never-married': '未婚',
+                      'Separated': '分居',
+                      'Widowed': '丧偶'
+                    },
+                    workclass_map: {
+                      'Federal-gov': '联邦政府雇员',
+                      'Local-gov': '地方政府雇员',
+                      'Private': '私营企业',
+                      'Self-emp-inc': '自雇（收入较高）',
+                      'Self-emp-not-inc': '自雇（收入一般）',
+                      'State-gov': '州政府雇员',
+                      'Without-pay': '无报酬'
+                    },
                     {# 准确率 #}
                     train_accuracy:'0.8440',
                     test_accuracy:'0.8387',
@@ -261,9 +279,6 @@
                     });
                 },
 
-                resetForm(formName) {
-                    this.$refs[formName].resetFields();
-                },
                 {# 获取特征 #}
                 getFeature() {
                     console.log()
@@ -284,8 +299,10 @@
                     'hours-per-week': `每周工作时长 - ${range[0]}~${range[1]}小时`,
                     'race_White': `是否为白人 `,
                     'sex_Male': `是否为男性 `,
-                    'marital-status': `婚姻状况 - ${range.join('，')}`,
-                    'workclass': `工作类型 - ${range.join('，')}`
+                    //'marital-status': `婚姻状况 - ${range.join('，')}`,
+                    //'workclass': `工作类型 - ${range.join('，')}`
+                    'marital-status': `婚姻状况 - ${range.map(status => this.marital_status_map[status] || status).join('，')}`,
+                    'workclass': `工作类型 - ${range.map(classType => this.workclass_map[classType] || classType).join('，')}`
                   };
                   return descriptions[feature] || `${feature} - ${range}`;
                 },
@@ -330,7 +347,7 @@
                           { required: true, message: '请选择工作类型', trigger: 'change' }
                         ]
                       };
-                    }
+                    },
                 // getTrainAccuracy(){
                 //     axios.get('/api/exp01/?type=get_train_accuracy').then(response => {
                 //         this.train_accuracy = response.data;

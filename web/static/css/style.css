@@ -163,12 +163,21 @@ line-height: 320px;
     color:#3c3d3f
   }
   
+/*.result-content {*/
+/*    display: flex; !* 使用flex布局 *!*/
+/*    justify-content: left; !* 水平居中 *!*/
+/*    align-items: center; !* 垂直居中 *!*/
+/*    margin-top: 10px; !* 上下边距 *!*/
+/*  }*/
+
 .result-content {
-    display: flex; /* 使用flex布局 */
-    justify-content: center; /* 水平居中 */
+    display: flex;
+    justify-content: left;
     align-items: center; /* 垂直居中 */
     margin-top: 10px; /* 上下边距 */
-  }
+    font-size: 18px;
+    color:#606266;
+}
 
   /* =========task.css ===========*/
   .task-area{
@@ -214,14 +223,7 @@ line-height: 320px;
     margin-top: 10px;
 
 }
-.result-content {
-    display: flex; 
-    justify-content: center;
-    align-items: center; /* 垂直居中 */
-    margin-top: 10px; /* 上下边距 */
-    font-size: 18px;
-    color:#606266;
-}
+
 
 .arrow-area{
     display: flex;

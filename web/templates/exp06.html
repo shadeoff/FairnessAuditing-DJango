@@ -80,16 +80,17 @@
 
                                             </div>
                                         </div>
+                                        <div v-loading="loading"
+                                            element-loading-text="正在计算结果，大概需要一分钟~"
+                                            element-loading-spinner="el-icon-loading"
+                                            element-loading-background="rgba(255, 255, 255, 0.4)"
+                                        >
+                                            <p>经进一步审计,该对样本附近,模型的个体公平性为[[ old_individual_fairness ]]，低于模型在总体数据上的公平性表现"先待定"</p>
 
-                                        
-                                        <br>
-                                        <p></p>
-                                            经进一步审计,该对样本附近,模型的个体公平性为[[ old_individual_fairness ]]，低于模型在总体数据上的公平性表现"先待定"
-                                        <p></p>
-
-                                        <p>模型优化建议：采用[[optimization]]的优化方法</p>
-                                        <br>
-                                        <p>优化完成后预计的公平性表现预计为：[[ new_individual_fairness ]]</p>
+                                            <p>模型优化建议：采用[[optimization]]的优化方法</p>
+                                            <br>
+                                            <p>优化完成后预计的公平性表现预计为：[[ new_individual_fairness ]]</p>
+                                        </div>
 
                                     </div>
                                 </el-col>
@@ -97,39 +98,20 @@
                                 <el-col :span="6">
 
                                 </el-col>
-
-
                             </el-row>
-
-
-
-
                         </div>
-                        
                     </div>
-
-
-
                 </div>
 
                 <div class="button-area">
                     <a href="/">
                         <el-button type="warning"  @click="exit">结束</el-button>
                     </a>
-
                 </div>
-
-
             </div>
-
-            
-    
         </el-main>
 
     </el-container>
-
-·
-
 
 </div>
 
@@ -138,11 +120,13 @@
           axios.get('/api/csrf/').then(response => {
               axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
             });
+
         new Vue({
             el:"#app",
             delimiters:["[[", "]]"],
             data(){
                 return{
+                    loading: false,
                     inFairnessPairs:[],
                     fairness:'公平',
                     optimization:'xxx',
@@ -232,16 +216,22 @@
                     return option ? option.label : value;
                 },
                 fetchData(){
+                    this.loading=true;
+                    console.log('进入前，loading = ' + this.loading);
                     axios.get("/api/exp06/").then(response => {
                         this.form1 = response.data.unfair_pair[0];
                         this.form2 = response.data.unfair_pair[1];
                         this.old_individual_fairness = response.data.individual_fairness.toFixed(4);
                         this.new_individual_fairness = response.data.new_individual_fairness.toFixed(4);
-                        console.log(old_individual_fairness)
-                        console.log(new_individual_fairness)
+                        console.log(this.old_individual_fairness);
+                        console.log(this.new_individual_fairness);
+                        this.loading = false;
+                        console.log('加载完成，loading = ' + this.loading);
 
-
-                    })
+                    }) .catch(error => {
+                        console.error("There was an error fetching the data:", error);
+                        this.loading = false;  // 即使发生错误，也需要设置 loading 为 false
+                    });
                 },
                 exit(){
                     alert("结束！")
