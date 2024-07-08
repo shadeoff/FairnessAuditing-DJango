@@ -40,7 +40,7 @@
     <el-container>
         <!-- Header -->
         <el-header>
-            <h4>欢迎进入公平性审计实验</h4>
+            <h4>审计步骤2：设定审计指标</h4>
         </el-header>
         
         <!-- Main -->
@@ -49,17 +49,24 @@
                 <el-col :span="12">
                     <div class="task-area">
                 <div class="task-title">
-                    <h1>选择衡量样本公平性的指标</h1>
+                    <h1>设定审计使用的公平性的指标</h1>
                 </div>
 
                 <div class="task-content">
-                    <div class="task-content-description">
-                        <p>一些描述......</p>
-                        <p>请选择一个衡量样本间相似度的指标：</p>
+                    <div class="task-form-description">
+                        <p>当 ① <b>两个样本特征非常相似</b>，且 ② <b>模型对他们的分类结果不同</b>时，</p>
+                        <p>我们认为模型的分类结果不公平。因此，为了判断模型分类结果是否公平，我们需要一个指标来<b>量化两个样本间的特征相似程度</b>。</p>
+                        <p>衡量样本相似程度的指标应该满足如下特点：仅有敏感属性不同的一对样本<b>非常相似</b>。据此，我们提供了两类常用的衡量样本相似程度的指标：</p>
                     </div>
-                    <div class="task-content-form">
-                        <el-radio v-model="rigorRadio" label="Eu">欧氏距离：样本的各个特征具有相同的权重</el-radio>
-                        <el-radio v-model="rigorRadio" label="LR">LR距离：与敏感属性相关的特征将会有更大的权重</el-radio>
+                    <div class="task-form-description">
+                        <el-radio v-model="metric" label="Eu">基于欧氏距离的相似度：两个样本的相似度平等地由敏感属性以外的所有其他特征决定。</el-radio>
+                        <el-radio v-model="metric" label="LR">基于LR距离
+                            <el-tooltip class="item" effect="light" content="Yurochkin M, Bower A, Sun Y. Training individually fair ML models with sensitive subspace robustness[J]. 2020." placement="right-start"><i class="el-icon-question"/></i></el-tooltip>
+                            的相似度：两个样本的相似度主要由那些与敏感属性相关性更弱的其他特征决定。
+                        </el-radio>
+                    </div>
+                    <div class="task-form-description">
+                        <p>具体来说，样本间的相似度为其距离的倒数。对同样的一对样本，基于两种距离的相似度运算结果会有细微差别。作为审计人员，若您对二者无偏好，则<b>建议选择LR距离</b>，因为它能够更好地刻画与敏感属性相关的特征给样本带来的变化。</p>
                     </div>
                 </div>
             </div>
@@ -67,14 +74,17 @@
                 <el-col :span="12">
                     <div class="task-area">
                 <div class="task-title">
-                    <h1>选择审计的严格程度</h1>
+                    <h1>设定审计的严格程度</h1>
                 </div>
                 <div class="task-content">
-                    <div class="task-content-description">
-                        <p>一些描述</p>
+                    <div class="task-form-description">
+                        <p>基于前面选择的样本相似度指标，我们可以对两个样本分类结果是否公平做出如下判断：</p>
+                        <p>如果两个样本得到的分类结果不同，当这两个样本<b>相似程度达到某种水平</b>（相似度≥c）时，我们可以判定模型分类结果不公平。</p>
+                        <p>这里的参数c决定了审计的严格程度，c的值越大，审计对于不公平分类结果的界定越严格，即：越难以找到模型的不公平分类结果。</p>
+                        <p>为了使审计结果更具有说服力，审计人员应当设置一个较大的c值。</p>
                     </div>
                     <div class="task-content-form">
-                            <span>直接指定epsilon：
+                            <span>请您设定c的值（默认为100000000）：
                                 <el-input-number :step="1" :min="0"  v-model="epsilon"></el-input-number>
                             </span>
 
@@ -115,7 +125,7 @@
             el:"#app",
             data(){
                 return{
-                    rigorRadio:'Eu',
+                    metric:'LR',
                     epsilon:'1e8'
                 };
             },
@@ -123,8 +133,8 @@
 
 
                 onSubmit(){
-                    console.log(this.rigorRadio)
-                    axios.post("/api/exp03/",{dx: this.rigorRadio, eps: this.epsilon}).then(resp =>{
+                    console.log(this.metric)
+                    axios.post("/api/exp03/",{dx: this.metric, eps: this.epsilon}).then(resp =>{
                         console.log(resp.data);
                         window.location.href = '/page04/';
                     }).error(err =>{
