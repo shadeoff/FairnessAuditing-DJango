@@ -105,13 +105,13 @@
                                       <el-col class="label" :span="3">年龄</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="age.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['age'].scope[0]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最低" v-model.number="form['age'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="age.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['age'].scope[1]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最高" v-model.number="form['age'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -121,13 +121,13 @@
                                       <el-col class="label" :span="3">资产收益</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-gain.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['capital-gain'].scope[0]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最低" v-model.number="form['capital-gain'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-gain.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['capital-gain'].scope[1]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最高" v-model.number="form['capital-gain'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -137,13 +137,13 @@
                                       <el-col class="label" :span="3">资产损失</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-loss.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['capital-loss'].scope[0]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最低" v-model.number="form['capital-loss'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="capital-loss.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['capital-loss'].scope[1]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最高" v-model.number="form['capital-loss'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -153,13 +153,13 @@
                                       <el-col class="label" :span="3">受教育时长</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="education-num.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['education-num'].scope[0]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最低" v-model.number="form['education-num'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="education-num.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['education-num'].scope[1]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最高" v-model.number="form['education-num'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -169,13 +169,13 @@
                                       <el-col class="label" :span="3">每周工作时长</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="hours-per-week.scope[0]">
-                                          <el-input :disabled="is_submit" placeholder="最低" v-model.number="form['hours-per-week'].scope[0]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最低" v-model.number="form['hours-per-week'].scope[0]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                       <el-col class="line" style="text-align: center;" :span="1">-</el-col>
                                       <el-col :span="10">
                                         <el-form-item prop="hours-per-week.scope[1]">
-                                          <el-input :disabled="is_submit" placeholder="最高" v-model.number="form['hours-per-week'].scope[1]"></el-input>
+                                          <el-input :disabled="(is_submit || !is_ensure_sensitive)" placeholder="最高" v-model.number="form['hours-per-week'].scope[1]"></el-input>
                                         </el-form-item>
                                       </el-col>
                                     </el-row>
@@ -185,7 +185,7 @@
                                       <el-col class="label" :span="3">婚姻状况</el-col>
                                       <el-col :span="21">
                                         <el-form-item prop="marital-status.scope">
-                                          <el-checkbox-group v-model="form['marital-status'].scope" :disabled="is_submit">
+                                          <el-checkbox-group v-model="form['marital-status'].scope" :disabled="(is_submit || !is_ensure_sensitive)">
                                               <el-checkbox
                                                    v-for="item in marital_status"
                                                   :key="item.value"
@@ -202,7 +202,7 @@
                                       <el-col class="label" :span="3">工作类型</el-col>
                                       <el-col :span="21">
                                         <el-form-item prop="workclass.scope">
-                                          <el-checkbox-group v-model="form['workclass'].scope" :disabled="is_submit">
+                                          <el-checkbox-group v-model="form['workclass'].scope" :disabled="(is_submit || !is_ensure_sensitive)">
                                               <el-checkbox v-for="item in workclass" :key="item.value" :label="item.value">[[ item.label ]]</el-checkbox>
 
                                           </el-checkbox-group>
@@ -215,7 +215,7 @@
                                       <el-col class="label" :span="3">性别</el-col>
                                         <el-col :span="21">
                                         <el-form-item prop="sex_Male.scope">
-                                          <el-checkbox-group v-model="form['sex_Male'].scope" :disabled="is_submit">
+                                          <el-checkbox-group v-model="form['sex_Male'].scope" :disabled="(is_submit || !is_ensure_sensitive)">
                                               <el-checkbox v-for="item in sex_Male" :key="item.value" :label="item.value">[[ item.label ]]</el-checkbox>
                                           </el-checkbox-group>
                                         </el-form-item>
@@ -228,7 +228,7 @@
                                       <el-col class="label" :span="3">种族</el-col>
                                         <el-col :span="21">
                                         <el-form-item prop="race_White.scope">
-                                          <el-checkbox-group v-model="form['race_White'].scope" :disabled="is_submit">
+                                          <el-checkbox-group v-model="form['race_White'].scope" :disabled="(is_submit || !is_ensure_sensitive)">
                                               <el-checkbox v-for="item in race_White" :key="item.value" :label="item.value">[[ item.label ]]
                                           </el-checkbox>
                                           </el-checkbox-group>
