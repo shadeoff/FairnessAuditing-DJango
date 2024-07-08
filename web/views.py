@@ -235,14 +235,17 @@ class Exp04View(APIView):
         elif action == 'check_fair':
             data_sample1 = request.data['data1']
             data_sample2 = request.data['data2']
+            print(data_sample1)
+            print(data_sample2)
             sample_pair = [data_sample1, data_sample2]
             fair_or_not, dx, dy = fw.fair(fw.model, sample_pair)
-            difference = 1/fw.unfair_metric.epsilon
+            print(dx)
+            eps = fw.unfair_metric.epsilon
             result = {
                 "fair_or_not": fair_or_not,
-                "dx": dx,
+                "dx": '∞' if dx==0 else 1/dx,
                 "dy": dy,
-                "difference": difference
+                "eps": eps
             }
             return Response(result, status=status.HTTP_200_OK)
         return Response("error", status=status.HTTP_400_BAD_REQUEST)
