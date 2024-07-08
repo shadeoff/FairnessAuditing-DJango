@@ -40,7 +40,7 @@
     <el-container>
         <!-- Header -->
         <el-header>
-            <h4>欢迎进入公平性审计实验</h4>
+            <h4>审计步骤1：明确审计目标与范围</h4>
         </el-header>
         
         <!-- Main -->
@@ -49,15 +49,18 @@
                 <el-col :span="12">
                     <div class="task-area">
                         <div class="task-title">
-                            <h1>任务描述</h1>
+                            <h1>审计任务目标描述</h1>
                         </div>
                         <div class="task-content">
                             <p>
-                                上述分类模型中可能存在不公平现象，即：两个非常相似的人，模型可能会给出截然不同的分类结果。尤其是当两个人可能仅仅是由于
-                            一些敏感属性不同而导致分类结果不同时，分类器会对部分群体造成歧视。
+                                作为审计人员，我们的目标是<b>在一定的数据范围内</b>找到<b>一对样本</b>，他们的<b>特征是极其相似的</b>，但模型对他们的<b>分类结果却截然不同</b>.
                             </p>
                             <p>
-                                出于审计的目的，我们希望能够找到模型分类不同的一对样本，定位系统中存在的歧视现象，作为模型存在歧视的证据。
+                                比如，当我们关注“性别”方面的公平性时，两个人仅仅<b>性别</b>不同，其他特征几乎相同，则可以认为两个人特征极其相似。那么当模型对两人的分类结果不同时，可以认为模型对于两人的分类结果不公平。
+                            </p>
+                            <div class="block"><el-image src="../static/images/task.jpg"></el-image></div>
+                            <p>
+                                在上述的例子中，“性别”被称为<b>“敏感属性”</b>。敏感属性通常是与人相关的、可以用于划分社会群体的某种固有属性。<b>在一次公平性审计中，我们往往仅关注一个敏感属性。</b>
                             </p>
                         </div>
                     </div>
@@ -65,14 +68,15 @@
                 <el-col :span="12">
                     <div class="task-area">
                         <div class="task-title">
-                            <h1>选择寻找不公平样本的范围</h1>
+                            <h1>设定本次审计的范围</h1>
                         </div>
 
                         <div class="task-content">
+                          <div class="task-form-description">
+                              <p>在本次被审计的模型中，可选的敏感属性包括：<b>性别</b>、<b>种族</b>。</p>
+                              <p>请选择一个作为您本次审计关注的敏感属性。</p>
+                          </div>
                             <div class="task-content-form">
-                                <div class="task-form-description">
-                                    <p>请在“性别”和“种族”之间选择，确定之后无法更改，之后请选择样本范围</p>
-                                </div>
                                 <div class="task-form-area">
                                     <el-row :gutter="30">
                                         <el-col :span="12">
@@ -85,20 +89,21 @@
                                             <el-button v-if="!is_ensure_sensitive" type="warning" @click="confirmSelection">确定 </el-button>
                                         </el-col>
                                     </el-row>
-
                                 </div>
                             </div>
                         </div>
 
+                        <div class="task-content">
+                          <div class="task-form-description">
+                          <p>您需要选择一个寻找不公平样本的范围，一般来说，这个范围是<b>模型面向的实际人群</b>的特征分布范围。</p>
+                          <p><b>然而您也可以选择缩小这个范围，选择一个您更关注的人群范围</b>，例如：如果您更关注的是模型是否会在老年人群体内部产生歧视，您便可以将年龄限制在60~90。</p>
+                          </div>
+                        </div>
+
                         <div class="form-card">
                            <div class="task-form">
-
-
+                            
                             <el-form :model="form" :rules="rules" ref="form" labelclass="demo-form">
-                              <p style="text-align: left; font-size: 14px; color: #606200;">
-                                选择您关注的人群，您将在该人群范围内寻找不公平的样本
-                              </p>
-
                                 <div class="form-scope" >
                                      <!-- 年龄 -->
                                     <el-row>
@@ -204,7 +209,6 @@
                                         <el-form-item prop="workclass.scope">
                                           <el-checkbox-group v-model="form['workclass'].scope" :disabled="(is_submit || !is_ensure_sensitive)">
                                               <el-checkbox v-for="item in workclass" :key="item.value" :label="item.value">[[ item.label ]]</el-checkbox>
-
                                           </el-checkbox-group>
                                         </el-form-item>
                                       </el-col>
@@ -432,6 +436,7 @@
                     },
                 {# 确认表单 #}
                 confirmSelection(){
+
                   this.$confirm('您确定选择此属性吗？一旦确认不可更改', '确认',{
                       confirmButtonText: '确定',
                       cancelButtonText: '取消',
@@ -453,13 +458,19 @@
                           this.form.race_White.scope = ['0', '1'];
                         {#this.form.race_White.scope[0] = 0;#}
                         {#this.form.race_White.scope[1] = 1;#}
+                      } else {
+                        this.$message({
+                          type: 'error',
+                          message: '请选择一个敏感属性！'
+                        });
+                        return false
                       }
 
                       this.is_ensure_sensitive = true;
                       console.log(this.sensitive)
                       this.$message({
                           type:'success',
-                          message: '已确认，选择已禁用！'
+                          message: '已确认！'
                       });
                   }).catch(()=>{
                       this.$message({
@@ -470,13 +481,11 @@
                 },
                 submitForm(formName) {
                     // 转换 sex_Male 和 race_White 的 scope 为整型
-                    let _form = this.form;
-                    console.log(this.form.race_Male)
+                    // 这里需要深层拷贝，否则_form.sex_Male和this.form.sex_Male还是同一个对象
+                    let _form = _.cloneDeep(this.form);
 
                     _form.sex_Male.scope = _form.sex_Male.scope.map(value => parseInt(value));
                     _form.race_White.scope = _form.race_White.scope.map(value => parseInt(value));
-                    console.log(formName);
-                    console.log(this.form.race_Male)
                     this.$refs[formName].validate((valid) => {
                         if (valid) {
                             if(!this.is_not_null){
