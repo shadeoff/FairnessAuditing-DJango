@@ -235,11 +235,8 @@ class Exp04View(APIView):
         elif action == 'check_fair':
             data_sample1 = request.data['data1']
             data_sample2 = request.data['data2']
-            print(data_sample1)
-            print(data_sample2)
             sample_pair = [data_sample1, data_sample2]
             fair_or_not, dx, dy = fw.fair(fw.model, sample_pair)
-            print(dx)
             eps = fw.unfair_metric.epsilon
             result = {
                 "fair_or_not": fair_or_not,
@@ -282,8 +279,6 @@ class Exp05View(APIView):
         elif action == 'check_unfair_pair':
             data_sample1 = request.data['data1']
             data_sample2 = request.data['data2']
-            print(data_sample1)
-            print(data_sample2)
             # 获取各个表的收入预测
             probability1 = fw.query_model(data_sample1)
             probability2 = fw.query_model(data_sample2)
@@ -300,12 +295,12 @@ class Exp05View(APIView):
             # 获取评测数据
             sample_pair = [data_sample1, data_sample2]
             fair_or_not, dx, dy = fw.fair(fw.model, sample_pair)
-            difference = 1 / fw.unfair_metric.epsilon
+            eps = fw.unfair_metric.epsilon
             fair_data = {
                 "fair_or_not": fair_or_not,
-                "dx": dx,
+                "dx": '∞' if dx==0 else 1/dx,
                 "dy": dy,
-                "difference": difference
+                "eps": eps
             }
             data = {
                 "result": result,

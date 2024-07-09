@@ -38,7 +38,7 @@
     <el-container>
         <!-- Header -->
         <el-header>
-            <h4>审计步骤3：寻找系统中的不公平样本</h4>
+            <h4>审计步骤3：寻找系统中的不公平样本 （1/2）</h4>
         </el-header>
 
         <!-- Main -->
@@ -283,7 +283,7 @@
                 {#结果#}
                 <div class="result-card" v-if="show_result && isFormSubmitted">
                     <div class="result-content">
-                        <span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度大于等于[[ eps ]]</span>
+                        <span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度≥[[ eps ]]</span>
                     </div>
                     <div class="result-content">
                         <span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2相似度为[[ dx ]]</span><span>[[  ]]</span>
