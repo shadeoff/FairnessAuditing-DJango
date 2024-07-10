@@ -38,7 +38,7 @@
     <el-container>
         <!-- Header -->
         <el-header>
-            <h4>欢迎进入公平性审计实验</h4>
+            <h4>审计步骤3：寻找系统中的不公平样本 （2/2）</h4>
         </el-header>
 
         <!-- Main -->
@@ -48,16 +48,18 @@
                     <h1>自动化寻找系统中的不公平样本</h1>
                 </div>
                 <div class="task-content">
-                    <div class="task-content-description">
-                        <p>一些说明</p>
+                    <div class="task-form-description">
+                        <p>作为审计人员，您或许感到难以找到被模型不公平分类的样本。</p>
+                        <p>这是因为样本特征的分布空间太大，当审计人员面临特征更多更复杂的实际待审计系统时，寻找不公平样本将会面临更大的困难。</p>
+                        <p>为此，我们设计了一种<b>自动化寻找不公平样本</b>的方法，只需要审计人员指定一个随机的起始样本，自动化程序便可以通过与模型的交互估计不公平样本分布的位置，并最终找到一对不公平的样本。</p>
                     </div>
 
                     <div class="task-content-form">
 
                         <div class="task-form-area">
-                            <div class="task-form-description">
+                            <!-- <div class="task-form-description">
                                 <p>为寻找不公平样本的算法设定起始样本</p>
-                            </div>
+                            </div> -->
 
                             {#     ==================== form ======================                         #}
 
@@ -66,7 +68,7 @@
                                 <el-col :span="20" :offset="2" >
                                     <div class="task-form">
 
-                                    <h4 style="margin-top: 0">请输入信息</h4>
+                                    <h4 style="margin-top: 0">请任意输入一个起始样本</h4>
                             <div class="form-card">
                                 <el-form :model="form" :rules="rules" ref="form" label-width="148px"
                                          hide-required-asterisk="true">
@@ -156,15 +158,15 @@
                                         <el-row :gutter="10">
                                             <el-col :span="12">
                                                 <el-form-item>
-                                                    <el-button type="primary" @click="seekUnfairPair('form')">查询
+                                                    <el-button type="primary" @click="seekUnfairPair('form')">开始自动化寻找不公平样本
                                                     </el-button>
                                                 </el-form-item>
                                             </el-col>
-                                            <el-col :span="12">
+                                            <!-- <el-col :span="12">
                                                 <div style="float: left;">
                                                     <span>分类结果为：</span><span>[[ result2 ]]</span>
                                                 </div>
-                                            </el-col>
+                                            </el-col> -->
                                         </el-row>
                                     </div>
                                 </el-form>
@@ -179,9 +181,9 @@
                         </div>
 {#                        v-if="isShow"  #}
 {# =================== form1 和 form2  ========================   #}
-                        <div class="task-form-area" v-if="isShow">
+                        <div class="task-form-area" v-if="isShow" v-loading="loading">
                             <el-row :gutter="40">
-                                {#           ---------------------- 表2 ---------------------    #}
+                                {#---------------------- 表1 ---------------------    #}
                                 <el-col :span="12">
                                     <h4>样本1</h4>
                                     <div class="form-card" >
@@ -212,38 +214,38 @@
                                                     <el-col :span="12">
 
                                                         <el-form-item label="是否为白人" prop="race_White">
-                                                             <el-select v-model="form1['race_White']" placeholder="是否为白人">
-                                                              <el-option label="白人" value="White"></el-option>
-                                                              <el-option label="非白人" value="Others"></el-option>
+                                                                <el-select v-model="form1['race_White']" placeholder="是否为白人">
+                                                                <el-option label="白人" value="White"></el-option>
+                                                                <el-option label="非白人" value="Others"></el-option>
                                                             </el-select>
 
                                                         </el-form-item>
                                                         <el-form-item label="性别" prop="sex_Male">
                                                             <el-select v-model="form1['sex_Male']" placeholder="请选择性别">
-                                                              <el-option label="男" value="Male"></el-option>
-                                                              <el-option label="女" value="Female"></el-option>
+                                                                <el-option label="男" value="Male"></el-option>
+                                                                <el-option label="女" value="Female"></el-option>
                                                             </el-select>
                                                         </el-form-item>
                                                         <el-form-item label="婚姻状况" prop="marital-status">
                                                             <el-select v-model="form1['marital-status']" placeholder="请选择">
                                                                 <el-option
-                                                                  v-for="item in filteredMaritalStatus"
-                                                                  :key="item.value"
-                                                                  :label="item.label"
-                                                                  :value="item.value">
+                                                                    v-for="item in filteredMaritalStatus"
+                                                                    :key="item.value"
+                                                                    :label="item.label"
+                                                                    :value="item.value">
                                                                 </el-option>
-                                                              </el-select>
+                                                                </el-select>
 
                                                         </el-form-item>
                                                         <el-form-item label="工作类型" prop="workclass">
-                                                             <el-select v-model="form1['workclass']" placeholder="请选择">
+                                                                <el-select v-model="form1['workclass']" placeholder="请选择">
                                                                 <el-option
-                                                                  v-for="item in filteredWorkclass"
-                                                                  :key="item.value"
-                                                                  :label="item.label"
-                                                                  :value="item.value">
+                                                                    v-for="item in filteredWorkclass"
+                                                                    :key="item.value"
+                                                                    :label="item.label"
+                                                                    :value="item.value">
                                                                 </el-option>
-                                                              </el-select>
+                                                                </el-select>
                                                         </el-form-item>
                                                     </el-col>
                                                 </el-row>
@@ -251,18 +253,17 @@
 
                                             <div class="form-submit-area">
                                                 <el-row justify="center" >
-
                                                     <el-col :span="14" :offset="10">
                                                         <div style="float: left;">
-                                                            <span>分类结果为：</span><span>[[ result1 ]]</span>
+                                                            <span>分类结果为：</span><span :class="result_color1">[[ result1 ]]</span>
                                                         </div>
                                                     </el-col>
                                                 </el-row>
                                             </div>
-                                          </el-form>
+                                            </el-form>
                                     </div>
                                 </el-col>
-                        {#           ---------------------- 表2 ---------------------    #}
+                                {#---------------------- 表2 ---------------------    #}
                                 <el-col  :span="12">
                                     <h4>样本2</h4>
                                     <div class="form-card" >
@@ -293,38 +294,38 @@
                                         <el-col :span="12">
 
                                             <el-form-item label="是否为白人" prop="race_White">
-                                                 <el-select v-model="form2['race_White']" placeholder="是否为白人">
-                                                  <el-option label="白人" value="White"></el-option>
-                                                  <el-option label="非白人" value="Others"></el-option>
+                                                    <el-select v-model="form2['race_White']" placeholder="是否为白人">
+                                                    <el-option label="白人" value="White"></el-option>
+                                                    <el-option label="非白人" value="Others"></el-option>
                                                 </el-select>
 
                                             </el-form-item>
                                             <el-form-item label="性别" prop="sex_Male">
                                                 <el-select v-model="form2['sex_Male']" placeholder="请选择性别">
-                                                  <el-option label="男" value="Male"></el-option>
-                                                  <el-option label="女" value="Female"></el-option>
+                                                    <el-option label="男" value="Male"></el-option>
+                                                    <el-option label="女" value="Female"></el-option>
                                                 </el-select>
                                             </el-form-item>
                                             <el-form-item label="婚姻状况" prop="marital-status">
                                                 <el-select v-model="form2['marital-status']" placeholder="请选择">
                                                     <el-option
-                                                      v-for="item in filteredMaritalStatus"
-                                                      :key="item.value"
-                                                      :label="item.label"
-                                                      :value="item.value">
+                                                        v-for="item in filteredMaritalStatus"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value">
                                                     </el-option>
-                                                  </el-select>
+                                                    </el-select>
 
                                             </el-form-item>
                                             <el-form-item label="工作类型" prop="workclass">
-                                                 <el-select v-model="form2['workclass']" placeholder="请选择">
+                                                    <el-select v-model="form2['workclass']" placeholder="请选择">
                                                     <el-option
-                                                      v-for="item in filteredWorkclass"
-                                                      :key="item.value"
-                                                      :label="item.label"
-                                                      :value="item.value">
+                                                        v-for="item in filteredWorkclass"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value">
                                                     </el-option>
-                                                  </el-select>
+                                                    </el-select>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -335,30 +336,28 @@
 
                                         <el-col :span="14" :offset="10">
                                             <div style="float: left;">
-                                                <span>分类结果为：</span><span>[[ result2 ]]</span>
+                                                <span>分类结果为：</span><span :class="result_color2">[[ result2 ]]</span>
                                             </div>
                                         </el-col>
                                     </el-row>
                                 </div>
-                              </el-form>
+                                </el-form>
                         </div>
-                                 </el-col>
-
+                                </el-col>
                             </el-row>
-                        </div>
+                        
+                            <div class="result-card">
+                                <div class="result-content">
+                                    <span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度≥[[ eps ]]</span>
+                                </div>
+                                <div class="result-content">
+                                    <span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2相似度为[[ dx ]]</span><span>[[  ]]</span>
+                                </div>
+                                <div class="result-content">
+                                    <span>判断结果为</span><span>[[ fairness_info ]]</span>
+                                </div>
 
-
-                        <div class="result-card">
-                            <div class="result-content">
-                                <span>①.分类结果1≠分类结果2；</span><span>②.样本1与样本2差异度≤[[ difference ]]</span>
                             </div>
-                            <div class="result-content">
-                                <span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2差异度为[[ dx ]]</span><span>[[  ]]</span>
-                            </div>
-                            <div class="result-content">
-                                <span>判断结果为</span><span>[[ fairness_info ]]</span>
-                            </div>
-
                         </div>
 
                         <div class="button-area">
@@ -480,10 +479,13 @@
                     dy:'yyy',
                     fairness_info: '',
                     // 差异度
-                    difference: '',
+                    eps: '',
                     initialValue:'',
                     rules: {},
-                    rules2:{}
+                    rules2:{},
+                    result_color1: 'red',
+                    result_color2: 'red',
+                    loading: false
                 };
             },
              computed: {
@@ -605,6 +607,7 @@
 
                 {#form提交，得到不公平对#}
                 seekUnfairPair(formName){
+                    this.loading = true;
                     this.$refs[formName].validate((valid) => {
                         if(valid){
                             console.log(this.form)
@@ -619,9 +622,19 @@
                                     }).then(response => {
                                         _this.result1 = response.data.result[0];
                                         _this.result2 = response.data.result[1];
+                                        if (this.result1 == '年收入低于50K') {
+                                            this.result_color1 = 'red'
+                                        } else {
+                                            this.result_color1 = 'green'
+                                        }
+                                        if (this.result2 == '年收入低于50K') {
+                                            this.result_color2 = 'red'
+                                        } else {
+                                            this.result_color2 = 'green'
+                                        }
                                         _this.dx = response.data.fair_data.dx;
                                         _this.dy = response.data.fair_data.dy;
-                                        _this.difference = response.data.fair_data.difference.toFixed(4);
+                                        _this.eps = response.data.fair_data.eps;
                                         let flag = response.data.fair_data.fair_or_not;
                                         if(flag){
                                             _this.fairness_info = "公平";
@@ -630,6 +643,7 @@
                                         }
 
                                         console.log(response);
+                                        this.loading = false;
                                     });
                                     console.log(resp.data);
                                     console.log(_this.form1);
@@ -691,6 +705,14 @@
 
 
      </script>
+    <style>
+    .red {
+        color: red;
+    }
+    .green {
+        color: green;
+    }
+    </style>
 </body>
 
 </html>

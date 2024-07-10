@@ -36,6 +36,7 @@ class AuditingFramework:
         # fairness metric
         # initialize by calling set_individual_fairness_metric
         self.unfair_metric = None
+        self.dx_measure = None
 
         # seeker to automatically find the unfair sample pairs
         # initialize by calling set_individual_fairness_metric
@@ -188,6 +189,7 @@ class AuditingFramework:
 
         print(f"type(dx) is {type(dx)}")
         print(f"type(eps) is {type(eps)}")
+        self.dx_measure = dx
         if dx == 'LR':
             distance_x = LogisticRegSensitiveSubspace()
             distance_x.fit(self.dataset.get_all_data(), data_gen=self.data_gen,
