@@ -1,10 +1,26 @@
 
 .el-header, .el-footer {
-background-color: #B3C0D1;
+background-color: #ffffff;
 color: #333;
 text-align: center;
 
 }
+
+.fixed-header {
+    color: #333;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影使分割线更加明显 */
+    padding: 20px; /* 根据需要调整内边距 */
+}
+.fixed-header h1, .fixed-header h2{
+    margin: 0;
+}
+
 
 .el-aside {
 background-color: #D3DCE6;
@@ -14,8 +30,10 @@ line-height: 200px;
 }
 
 .el-main {
-background-color: #ffffff;
-color: #333;
+    margin: 80px 0px;
+    padding: 0;
+    background-color: #ffffff;
+    color: #333;
 
 }
 
@@ -35,13 +53,20 @@ line-height: 320px;
     text-align: left;
 }
 
+.main-contanier{
+    width: 1240px;
+    margin:0 auto;
+}
+
+
+
 .info .card-h1{
     text-align: left;
     padding: 5px;
 }
 
 .text-content {
-    line-height: 20px;
+    padding: 0px 20px;
 }
 
 .person-info-card{
@@ -55,12 +80,12 @@ line-height: 320px;
 }
 .train-info-card {
     display: flex;
-    justify-content: center;
+
 }
-.train-info{
-    width: 65%;
-}
-  
+/* .train-info{
+    width: 80%;
+} */
+
 .go-to-next-card{
     margin-top: 20px;
     margin-bottom: 25px;
@@ -101,7 +126,7 @@ line-height: 320px;
     padding:10px;
     text-align: left;
     margin-left: 10px;
-    
+
 }
 
 .task-decription-area .task-decription-title{
@@ -112,75 +137,22 @@ line-height: 320px;
 .form-scope .label{
     padding-top: 6px;
     font-size: 14px;
-    color: #606266;    
+    color: #606266;
 }
-/* ============================ */
-/* .task-area{
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-} */
-/* .task-area .task-title{
-    width: 100%;
 
-} */
-
-
-/* .task-area .task-content{
-    padding-top: 20px;
-    padding-bottom: 20px;
-} */
-
-/* .task-area .task-content-description{
-    font-size: 14px;
-    color:#606266
-} */
-/* .task-area .task-content-form{
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-} */
-/* .task-area .task-content-form .el-radio{
-    padding: 10px;
-} */
-
-/*.task-area .el-button{*/
-/*    width: 97.6px;*/
-/*    !*margin-top: 20px;*!*/
-/*    align-self: center;*/
-/*}*/
-
-/* .form-card {
-    border: 1px solid #d3d3d3; 
-    padding: 16px; 
-    border-radius: 4px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  } */
-  
 .result-card {
+    margin-top: 10px; /* 上下边距 */
     padding: 16px; /* 内边距 */
-    font-size: 18px;
     color:#3c3d3f
   }
-  
-/*.result-content {*/
-/*    display: flex; !* 使用flex布局 *!*/
-/*    justify-content: left; !* 水平居中 *!*/
-/*    align-items: center; !* 垂直居中 *!*/
-/*    margin-top: 10px; !* 上下边距 *!*/
-/*  }*/
 
 .result-content {
-    display: flex;
-    justify-content: left;
-    align-items: center; /* 垂直居中 */
-    margin-top: 10px; /* 上下边距 */
-    font-size: 18px;
+    font-size: 16px;
     color:#606266;
 }
 
   /* =========task.css ===========*/
-  .task-area{
+.task-area{
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
@@ -190,15 +162,19 @@ line-height: 320px;
     width: 100%;
 
 }
+/* .task-title h1{
+    margin-top: 0;
+} */
 
 .task-area .task-content{
-    padding-top: 20px;
     padding-bottom: 20px;
-    padding-left: 20px;
 }
-
-.task-area .task-content-description p{
-    font-size: 14px;
+.task-content .task-content-description{
+    width: 95%;
+}
+.task-content .task-content-description p{
+    line-height: 26px;
+    font-size: 16px;
     color:#606266
 }
 
@@ -208,8 +184,18 @@ line-height: 320px;
 
 }
 
+.task-form-description{
+    word-wrap: break-word; /*自动换行 */
+    overflow-wrap: break-word;
+}
+.task-form-description .el-radio{
+    line-height: 24px;
+    display: block;
+    white-space: normal;
+    margin: 8px 0;
+}
 
-  .task-content-form .task-form-description p{    
+  .task-content-form .task-form-description p{
     font-size: 14px;
     color:#606266
 }
@@ -217,6 +203,10 @@ line-height: 320px;
 .task-content-form .task-form-area{
     padding: 20px;
 
+}
+.form-submit-area{
+
+    margin-bottom: 20px;
 }
 
 .task-result-area{
@@ -241,10 +231,10 @@ line-height: 320px;
     margin: 0;
 }
 .form-card {
-    border: 1px solid #d3d3d3; 
-    padding: 16px; 
-    border-radius: 4px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    border: 1px solid #d3d3d3;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
 .form-card p{
@@ -259,6 +249,11 @@ line-height: 320px;
 }
 .button-area{
     display: flex;
-    justify-content: center; 
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.jump-area{
+    margin: 20px 0;
     padding: 20px; 
 }

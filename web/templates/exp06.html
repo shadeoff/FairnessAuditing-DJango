@@ -39,78 +39,86 @@
 
         <el-container>
             <!-- Header -->
-            <el-header>
-                <h4>欢迎进入公平性审计实验</h4>
-            </el-header>
+            <header class="fixed-header">
+                <h2>欢迎进入公平性审计实验</h2>
+            </header>
 
             <!-- Main -->
             <el-main>
-                <div class="task-area">
-                    <div class="task-title">
+                <div class="main-contanier">
+                    <div class="task-area">
+                        <div class="task-title">
 
-                    </div>
-                    <div class="task-content">
-                        <div class="task-content-form">
-                            <div class="task-form-area">
-                                <el-row>
-                                    <el-col :span="18">
-                                        <div class="task-form-title">
-                                            <h2>审计报告</h2>
-                                        </div>
-                                        <div class="form-card" v-loading="loading" element-loading-text="正在生成审计报告，大概需要一分钟~"
-                                        element-loading-spinner="el-icon-loading"
-                                        element-loading-background="rgba(255, 255, 255, 0.4)">
-                                            <p>在xxx数据范围中，根据[[xxx]]的公平性准则，发现不公平样本如下：</p>
-                                            <div class="card-text">
-                                                {# <div v-if="inFairnessPairs.length === 0">没有不公平的样本对</div>#}
-                                                <div>
-                                                    <el-row>
-                                                        <el-col :span="12">
-                                                            <el-descriptions title="数据1" :column="2">
-                                                                <el-descriptions-item v-for="(value, key) in form1"
-                                                                    :key="key" :label="getLabel(key)">
-                                                                    [[ formatValue(key,value) ]]
-                                                                </el-descriptions-item>
-                                                            </el-descriptions>
-                                                        </el-col>
-                                                        <el-col :span="12">
-                                                            <el-descriptions title="数据2" :column="2">
-                                                                <el-descriptions-item v-for="(value, key) in form2"
-                                                                    :key="key" :label="getLabel(key)">
-                                                                    [[ formatValue(key,value) ]]
-                                                                </el-descriptions-item>
-                                                            </el-descriptions>
-                                                        </el-col>
-                                                    </el-row>
+                        </div>
+                        <div class="task-content">
+                            <div class="task-content-form">
+                                <div class="task-form-area">
+                                    <el-row>
+                                        <el-col :span="18">
+                                            <div class="task-form-title">
+                                                <h2 style="margin-top: 0;">审计报告</h2>
+                                            </div>
+                                            <div class="form-card" v-loading="loading" element-loading-text="正在生成审计报告，大概需要一分钟~"
+                                            element-loading-spinner="el-icon-loading"
+                                            element-loading-background="rgba(255, 255, 255, 0.4)">
+                                                <p>在xxx数据范围中，根据[[xxx]]的公平性准则，发现不公平样本如下：</p>
+                                                <div class="card-text">
+                                                     <!-- <div v-if="inFairnessPairs.length === 0">没有不公平的样本对</div> -->
+                                                    <div>
+                                                        <el-row>
+                                                            <el-col :span="12">
+                                                                <el-descriptions title="数据1" :column="2">
+                                                                    <el-descriptions-item v-for="(value, key) in form1"
+                                                                        :key="key" :label="getLabel(key)">
+                                                                        [[ formatValue(key,value) ]]
+                                                                    </el-descriptions-item>
+                                                                </el-descriptions>
+                                                            </el-col>
+                                                            <el-col :span="12">
+                                                                <el-descriptions title="数据2" :column="2">
+                                                                    <el-descriptions-item v-for="(value, key) in form2"
+                                                                        :key="key" :label="getLabel(key)">
+                                                                        [[ formatValue(key,value) ]]
+                                                                    </el-descriptions-item>
+                                                                </el-descriptions>
+                                                            </el-col>
+                                                        </el-row>
 
+                                                    </div>
                                                 </div>
+                                                <div class="task-content">
+                                                    <div class="task-content-description">
+                                                        <p>经进一步审计,该对样本附近,模型的个体公平性为[[ old_individual_fairness
+                                                            ]]，低于模型在总体数据上的公平性表现[[ globalFairness ]]</p>
+
+                                                        <p>模型优化建议：采用[[optimization]]的优化方法</p>
+                                                        <br>
+                                                        <p>优化完成后预计的公平性表现预计为：[[ new_individual_fairness ]]</p>
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                            <div>
-                                                <p>经进一步审计,该对样本附近,模型的个体公平性为[[ old_individual_fairness
-                                                    ]]，低于模型在总体数据上的公平性表现[[ globalFairness ]]</p>
+                                        </el-col>
 
-                                                <p>模型优化建议：采用[[optimization]]的优化方法</p>
-                                                <br>
-                                                <p>优化完成后预计的公平性表现预计为：[[ new_individual_fairness ]]</p>
-                                            </div>
+                                        <el-col :span="6">
 
-                                        </div>
-                                    </el-col>
-
-                                    <el-col :span="6">
-
-                                    </el-col>
-                                </el-row>
+                                        </el-col>
+                                    </el-row>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="button-area">
-                        <a href="/">
-                            <el-button type="warning" @click="exit">结束</el-button>
-                        </a>
+                        <div class="jump-area">
+                            <div class="button-area">
+                                <a href="/">
+                                    <el-button type="warning" @click="exit">结束</el-button>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
             </el-main>
 
         </el-container>

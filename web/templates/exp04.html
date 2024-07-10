@@ -37,9 +37,9 @@
 
     <el-container>
         <!-- Header -->
-        <el-header>
-            <h4>审计步骤3：寻找系统中的不公平样本 （1/2）</h4>
-        </el-header>
+        <header class="fixed-header">
+            <h2>审计步骤3：寻找系统中的不公平样本 （1/2）</h2>
+        </header>
 
         <!-- Main -->
         <el-main>
@@ -49,12 +49,12 @@
                 </div>
                 <div class="task-content">
                     <el-row :gutter="40">
-                        {#---------form1-----------------#}
+                        <!-- ---------form1----------------- -->
                         <el-col :span="12">
                             <h4 style="margin-top: 0">样本1</h4>
                             <div class="form-card">
                                 <el-form :model="form1" :rules="rules" ref="form1" label-width="148px"
-                                         hide-required-asterisk="true">
+                                         :hide-required-asterisk="true">
                                     <div class="form-edit-area">
                                         <el-row :gutter="30">
                                             <el-col :span="12">
@@ -157,13 +157,13 @@
                         </el-col>
 
 
-                        {#----------form2-------------#}
+                        <!-- ----------form2------------- -->
 
                         <el-col :span="12">
                             <h4 style="margin-top: 0">样本2</h4>
                             <div class="form-card">
                                 <el-form :model="form2" :rules="rules" ref="form2" label-width="148px"
-                                         hide-required-asterisk="true">
+                                         :hide-required-asterisk="true">
                                     <div class="form-edit-area">
                                         <el-row :gutter="30">
                                             <el-col :span="12">
@@ -271,7 +271,7 @@
                 </div>
 
 
-                <div class="button-area">
+                <div class="button-area" style="margin: 25px 0;">
                     <el-button
                             type="primary"
                             :disabled="!isFormSubmitted"
@@ -280,26 +280,27 @@
                 </div>
 
 
-                {#结果#}
-                <div class="result-card" v-if="show_result && isFormSubmitted">
+                <!-- 结果 -->
+                <div v-if="!(show_result && isFormSubmitted)">
+                    <el-empty :image-size="100"  description="查询两个样本并点击判断按钮显示结果" ></el-empty>
+                </div>
+                <div class="result-card" v-if="show_result && isFormSubmitted" style="margin: 0 auto;">
                     <div class="result-content">
-                        <span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度≥[[ eps ]]</span>
+                        <p><span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度≥[[ eps ]]</span></p>
+                        <p><span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2相似度为[[ dx ]]</span><span>[[  ]]</span></p>
+                        <p><span>判断结果为</span><span><b>[[ fairness_info ]]</b></span></p>
                     </div>
-                    <div class="result-content">
-                        <span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2相似度为[[ dx ]]</span><span>[[  ]]</span>
-                    </div>
-                    <div class="result-content">
-                        <span>判断结果为</span><span>[[ fairness_info ]]</span>
-                    </div>
-
                 </div>
 
                 <!-- 实验入口 -->
-                <div class="button-area">
-                    <a href="/page05/">
-                        <el-button type="warning" @click="goNext">下一步</el-button>
-                    </a>
+                <div class="jump-area">
+                    <div class="button-area">
+                        <a href="/page05/">
+                            <el-button type="warning">下一步</el-button>
+                        </a>
+                    </div>
                 </div>
+
 
             </div>
         </el-main>
@@ -364,7 +365,7 @@
                     "race_White": [0, 1],
 
                 },
-                {# 婚姻状况 #}
+                //  婚姻状况
                 marital_status: [
                     {value: 'Divorced', label: '离异'},
                     {value: 'Married-AF-spouse', label: '军人家属婚姻'},
@@ -373,7 +374,7 @@
                     {value: 'Never-married', label: '未婚'},
                     {value: 'Separated', label: '分居'},
                     {value: 'Widowed', label: '丧偶'},],
-                {# 工作类型 #}
+                //  工作类型
                 workclass: [
                     {value: 'Federal-gov', label: '联邦政府雇员'},
                     {value: 'Local-gov', label: '地方政府雇员'},
@@ -408,7 +409,7 @@
                 result_color1: 'red',
                 loading2: false,
                 result_color2: 'red',
-                show_result: false
+                show_result: false,
             };
         },
         computed: {
@@ -424,7 +425,7 @@
             filteredRace() {
                 return this.race_White.filter(item => this.default_scope.race_White.includes(item.value));
             },
-            {#检测表单是否均提交#}
+            // 检测表单是否均提交
             isFormSubmitted() {
                 return this.submit1_flag === 1 && this.submit2_flag === 1;
             },
@@ -591,7 +592,7 @@
                             this.$message.error('查询失败');
                         });
 
-                        {#alert('submit!');#}
+                        // alert('submit!');
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -599,13 +600,17 @@
                 });
             },
 
-            {# 展示公平信息 #}
+            //  展示公平信息
             showInfo() {
                 if (this.isFormSubmitted) {
                     let action_attr = this.action2
                     let data1 = this.form1
                     let data2 = this.form2
                     let _this = this;
+                    this.loading_fair = true;
+                      setTimeout(() => {
+                        this.loading_fair = false;
+                      }, 1000);
                     axios.post("/api/exp04/", {action: action_attr, data1: data1, data2: data2})
                         .then(response => {
                             console.log(response.data)
@@ -632,9 +637,6 @@
             },
 
 
-            goNext() {
-
-            }
 
 
         }

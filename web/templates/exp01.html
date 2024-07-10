@@ -37,20 +37,26 @@
     
     <el-container>
         <!-- Header -->
-        <el-header>
-            <h4>待审计模型介绍</h4>
-        </el-header>
-        
+        <header class="fixed-header">
+            <h2>待审计模型介绍</h2>
+        </header>
+
         <!-- Main -->
         <el-main>
-            <div class="info">
+            <div class="main-contanier">
+              <div class="task-title">
                 <h1>待审计模型：美国成年人收入预测分类</h1>
-                <el-row :gutter="30">
+              </div>
+
+                <el-row :gutter="60">
                     <!-- 信息显示 -->
-                    <el-col :span="12">
+                    <el-col :span="10">
                         <div class="train-info-card">
                             <div class="train-info grid-content bg-purple">
-                                <el-descriptions title="模型信息" :column="1">
+
+                                <h3>模型信息</h3>
+
+                                <el-descriptions :column="1">
                                     <el-descriptions-item label="模型介绍">待审计模型为基于美国1994年人口普查数据训练的收入预测分类模型。预测任务为分类一个人的年收入是否达到$50,000。</el-descriptions-item>
                                     <el-descriptions-item label="训练数据集">训练数据由巴里·贝克尔从1994年美国人口普查数据库中提取。（https://archive.ics.uci.edu/dataset/2/adult）。</el-descriptions-item>
                                     <el-descriptions-item label="特征取值范围">
@@ -70,14 +76,14 @@
                                     <el-descriptions-item label="训练集准确率" >[[ train_accuracy ]]</el-descriptions-item>
                                     <el-descriptions-item label="测试集准确率">[[ test_accuracy ]]</el-descriptions-item>
                                 </el-descriptions>
-    
+
                             </div>
                         </div>
-                        
+
                     </el-col>
                     <!-- 输入特征 -->
-                    <el-col :span="12">
-                        <h4 style="margin-top: 0">输入待分类的样本信息，获得模型分类结果</h4>
+                    <el-col :span="14">
+                        <h3>输入待分类的样本信息，获得模型分类结果</h3>
                         <div class="task-content">
                           <div class="task-content-description">
                               <p>您可以通过下方的输入框尝试访问待审计的模型。</p>
@@ -86,7 +92,7 @@
                           </div>
                         </div>
                         <div class="form-card">
-                            <el-form :model="form" :rules="rules" ref="form" label-width="145px" hide-required-asterisk="true">
+                            <el-form :model="form" :rules="rules" ref="form" label-width="145px" :hide-required-asterisk="true">
                                 <div class="form-edit-area">
                                     <el-row :gutter="30">
                                         <el-col :span="12">
@@ -147,44 +153,48 @@
                                                   </el-select>
                                             </el-form-item>
                                         </el-col>
-                                    </el-row> 
+                                    </el-row>
                                 </div>
-                                
+
                                 <div class="form-submit-area">
                                     <el-row :gutter="10">
                                         <el-col :span="12">
-                                            <el-form-item>
-                                                <el-button type="primary" @click="submitForm('form')" >查询</el-button>
-                                              </el-form-item>
+                                          <div class="button-area">
+                                            <el-button type="primary" @click="submitForm('form')" >查询</el-button>
+                                          </div>
                                         </el-col>
+
                                         <el-col :span="12">
-                                            <div style="float: left;">
+                                            <div>
                                                 <span>分类结果为：</span><span v-loading="loading" :class="result_color">[[ result ]]</span>
                                             </div>
                                         </el-col>
                                     </el-row>
                                 </div>
-                                
-                                
+
+
                               </el-form>
-                            
-                              
+
+
                         </div>
                     </el-col>
 
                   </el-row>
                          <!-- 实验入口 -->
-                 <div class="button-area">
-                    <a href="/page02/">
-                        <el-button type="warning"  @click="start">下一步</el-button>
-                    </a>
-                </div>
+                          <div class="jump-area">
+                            <div class="button-area">
+                              <a href="/page02/">
+                                  <el-button type="warning">下一步</el-button>
+                              </a>
+                          </div>
+                          </div>
+
             </div>
 
-            
-    
+
+
         </el-main>
-    
+
 
     </el-container>
 
@@ -228,7 +238,7 @@
                         "race_White":[0, 1],
 
                     },
-                    {# 婚姻状况 #}
+                    // 婚姻状况
                     marital_status:[
                         { value: 'Divorced', label: '离异'},
                         { value: 'Married-AF-spouse', label: '军人家属婚姻'},
@@ -237,7 +247,7 @@
                         { value: 'Never-married', label: '未婚'},
                         { value: 'Separated', label: '分居'},
                         { value: 'Widowed', label: '丧偶'},],
-                    {# 工作类型 #}
+                    // 工作类型
                     workclass:[
                         { value: 'Federal-gov', label: '联邦政府雇员'},
                         { value: 'Local-gov', label: '地方政府雇员'},
@@ -267,7 +277,7 @@
                       'State-gov': '州政府雇员',
                       'Without-pay': '无报酬'
                     },
-                    {# 准确率 #}
+                    // 准确率
                     train_accuracy:'0.8440',
                     test_accuracy:'0.8387',
                     result:'',
@@ -277,7 +287,7 @@
                 };
             },
             methods: {
-                {# 提交表单 #}
+                //  提交表单
                 submitForm(formName) {
                   this.loading = true;
                   setTimeout(() => {
@@ -294,7 +304,7 @@
                               this.result_color = 'green'
                             }
                         })
-                        {#console.log(JSON.stringify(this.form))#}
+                        // console.log(JSON.stringify(this.form))
                     } else {
                         this.result = ''
                         console.log('error submit!!');
@@ -303,7 +313,7 @@
                     });
                 },
 
-                {# 获取特征 #}
+                // 获取特征
                 getFeature() {
                     console.log()
                   axios.get('/api/exp01/?type=get_features').then(response => {
@@ -313,7 +323,7 @@
                       console.error("There was an error!", error);
                     });
                 },
-                {# 获取文字说明 #}
+                //  获取文字说明
                 getFeatureDescription(feature, range) {
                   const descriptions = {
                     'age': `年龄 - ${range[0]}~${range[1]}岁`,
