@@ -286,9 +286,9 @@
                 </div>
                 <div class="result-card" v-if="show_result && isFormSubmitted" style="margin: 0 auto;">
                     <div class="result-content">
-                        <p><span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度≥[[ eps ]]</span></p>
-                        <p><span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2相似度为[[ dx ]]</span><span>[[  ]]</span></p>
-                        <p><span>判断结果为</span><span><b>[[ fairness_info ]]</b></span></p>
+                        <p><span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2差异≤[[ parameter_c ]]</span></p>
+                        <p><span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2差异为[[ dx ]]</span></p>
+                        <p><span>判断模型对两个样本的分类结果为</span><span><b>[[ fairness_info ]]</b></span></p>
                     </div>
                 </div>
 
@@ -403,7 +403,7 @@
                 dy: ' ',
                 fairness_info: ' ',
                 // 差异度
-                eps: ' ',
+                parameter_c: ' ',
                 rules: {},
                 loading1: false,
                 result_color1: 'red',
@@ -613,19 +613,15 @@
                       }, 1000);
                     axios.post("/api/exp04/", {action: action_attr, data1: data1, data2: data2})
                         .then(response => {
-                            console.log(response.data)
-                            _this.dx = response.data.dx;
+                            _this.dx = response.data.dx === 0 ? 0 : (response.data.dx).toExponential(4);
                             _this.dy = response.data.dy;
-                            _this.eps = response.data.eps;
+                            _this.parameter_c = (1/response.data.eps).toExponential(4);
                             if (response.data.fair_or_not) {
                                 _this.fairness_info = "公平";
                             } else {
                                 _this.fairness_info = "不公平";
                             }
                         });
-                    console.log(_this.fairness_info)
-                    console.log('dx is' + _this.dx)
-                    console.log(_this.eps)
                     // this.$message({
                     //     type: 'success',
                     //     message: '查询完成！'

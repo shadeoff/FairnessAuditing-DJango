@@ -186,12 +186,11 @@ class AuditingFramework:
         return self.range_dict
 
     def set_individual_fairness_metric(self, dx, eps):
+        print(f'set individual fairness metric: dx={dx}, eps={eps}')
         assert dx in ['LR', 'Eu']
         assert self.dataset != None
         assert self.range_dict != None
 
-        print(f"type(dx) is {type(dx)}")
-        print(f"type(eps) is {type(eps)}")
         self.dx_measure = dx
         if dx == 'LR':
             distance_x = LogisticRegSensitiveSubspace()

@@ -237,7 +237,7 @@ class Exp04View(APIView):
             eps = fw.unfair_metric.epsilon
             result = {
                 "fair_or_not": fair_or_not,
-                "dx": '∞' if dx==0 else 1/dx,
+                "dx": dx,
                 "dy": dy,
                 "eps": eps
             }
@@ -295,7 +295,7 @@ class Exp05View(APIView):
             eps = fw.unfair_metric.epsilon
             fair_data = {
                 "fair_or_not": fair_or_not,
-                "dx": '∞' if dx==0 else 1/dx,
+                "dx": dx,
                 "dy": dy,
                 "eps": eps
             }
@@ -363,7 +363,7 @@ class Exp06View(APIView):
         # {   "result": [result1, result2],
         #     "fair_data": {
         #         "fair_or_not": fair_or_not,
-        #         "dx": '∞' if dx==0 else 1/dx,
+        #         "dx": dx,
         #         "dy": dy,
         #         "eps": eps
         #      }

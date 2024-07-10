@@ -67,7 +67,7 @@
                                                 <div>
                                                     <el-row>
                                                         <el-col>
-                                                            <el-descriptions :column="2">
+                                                            <el-descriptions :column="1">
                                                                 <el-descriptions-item v-for="(value, key) in data_range"
                                                                     :key="key" :label="getLabel(key)">
                                                                     [[ rangeFormat(key, value) ]]
@@ -107,7 +107,7 @@
                                                     </el-row>
                                                 </div>
                                             </div>
-                                            <p>按照个体公平性要求，相似样本（基于[[ dx_measure ]]距离的相似度大于[[ eps ]]）的分类结果应当相同。而上述两样本相似度为[[ unfair_pair_judge.fair_data.dx ]]，但模型对其分类结果不同。因而认定模型对这对样本的分类结果不公平。</p>
+                                            <p>按照个体公平性要求，相似样本（基于[[ dx_measure ]]距离的差异≤[[ parameter_c ]]）的分类结果应当相同。而上述两样本差异为[[ unfair_pair_judge.fair_data.dx ]]，且模型对其分类结果不同。因而认定模型对这对样本的分类结果不公平。</p>
                                             <!-- <p>经进一步审计,该对样本附近,模型的个体公平性为[[ old_individual_fairness
                                                 ]]，低于模型在总体数据上的公平性表现[[ globalFairness ]]</p>
 
@@ -213,7 +213,7 @@
                     ],
                     sensitive_attr: '',
                     data_range: '',
-                    eps: '',
+                    parameter_c: '',
                     dx_measure: '',
                     unfair_pair_judge: {
                         result: ['', ''],
@@ -254,24 +254,24 @@
                         value = value.map(item => {
                             return item === 0 ? '非白人' : '白人';
                         })
-                        return value.join(',');
+                        return value.join(', ');
                     } else if (key === 'sex_Male') {
                         value = value.map(item => {
                             return item === 1 ? '男性' : '女性';
                         })
-                        return value.join(',');
+                        return value.join(', ');
                     } else if (key === 'marital-status') {
                         value = value.map(item => {
                             return this.getOptionLabel(this.maritalStatusOptions, item);
                         })
-                        return value.join(',');
+                        return value.join(', ');
                     } else if (key === 'workclass') {
                         value = value.map(item => {
                             return this.getOptionLabel(this.workclassOptions, item);
                         })
-                        return value.join(',')
+                        return value.join(', ')
                     } else {
-                        return value.join('~');
+                        return value.join(' ~ ');
                     }
                     
                 },
@@ -291,9 +291,10 @@
                         this.new_individual_fairness = response.data.new_individual_fairness.toFixed(4);
                         this.sensitive_attr = response.data.sensitive_attr;
                         this.data_range = response.data.data_range;
-                        this.eps = response.data.eps;
+                        this.parameter_c = (1/response.data.eps).toExponential(4);
                         this.dx_measure = response.data.dx_measure
                         this.unfair_pair_judge = response.data.unfair_pair_judge
+                        this.unfair_pair_judge.fair_data.dx = this.unfair_pair_judge.fair_data.dx === 0 ? 0 : (this.unfair_pair_judge.fair_data.dx).toExponential(4)
                         this.globalFairness = 0.6773
                         this.loading = false;
                         console.log('加载完成，loading = ' + this.loading);
