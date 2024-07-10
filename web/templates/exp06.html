@@ -39,14 +39,15 @@
 
         <el-container>
             <!-- Header -->
-            <el-header>
-                <h4>欢迎进入公平性审计实验</h4>
-            </el-header>
+            <header class="fixed-header">
+                <h2>欢迎进入公平性审计实验</h2>
+            </header>
 
             <!-- Main -->
             <el-main>
-                <div class="task-area">
-                    <div class="task-title">
+                <div class="main-contanier">
+                    <div class="task-area">
+                        <div class="task-title">
 
                     </div>
                     <div class="task-content">
@@ -116,20 +117,25 @@
                                         </div>
                                     </el-col>
 
-                                    <el-col :span="6">
+                                        <el-col :span="6">
 
-                                    </el-col>
-                                </el-row>
+                                        </el-col>
+                                    </el-row>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="button-area">
-                        <a href="/">
-                            <el-button type="warning" @click="exit">结束</el-button>
-                        </a>
+                        <div class="jump-area">
+                            <div class="button-area">
+                                <a href="/">
+                                    <el-button type="warning" @click="exit">结束</el-button>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
             </el-main>
 
         </el-container>

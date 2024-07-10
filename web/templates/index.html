@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <title>欢迎进入公平性审计实验</title>
 
   <!-- Mobile Specific Metas
 ================================================== -->
@@ -37,13 +37,13 @@
   <div class="body-inner" id="app">
 <el-container>
     <!-- Header -->
-    <el-header>
-        <h4>欢迎进入公平性审计实验</h4>
-    </el-header>
-    
+    <header class="fixed-header">
+        <h2>欢迎进入公平性审计实验</h2>
+    </header>
+
     <!-- Main -->
     <el-main>
-        <div class="info">
+        <div class="main-contanier">
             <el-row :gutter="40">
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
@@ -51,26 +51,44 @@
                              <!-- 实验基本信息告知 -->
                             <el-tabs v-model="expInfoActiveNum" @tab-click="handleClick">
                                 <el-tab-pane label="实验目的" name="first">
-                                    <div class="text-content">背景：人工智能系统决定人类权益，且存在公平性问题，有危害
-                                        <br><br>目的：本研究设计了一种审计人工智能个体公平的框架，能够xxx</div>
+                                    <div class="text-content">
+                                        <p>背景：人工智能系统决定人类权益，且存在公平性问题，有危害</p>
+                                        <p>目的：本研究设计了一种审计人工智能个体公平的框架，能够xxx</p>
+
+                                    </div>
                                 </el-tab-pane>
                                 <el-tab-pane label="伦理声明" name="second">
-                                    <div class="text-content">尊敬的志愿者，感谢您参与我们的用户研究。<br><br>在本研究中，我们将使用您的数据来评估我们设计的审计框架的有效性。<br>您的参与对我们的研究至关重要，但请您放心，您的个人身份信息将被严格保密，并且在研究结果中将进行匿名处理。我们将尽最大努力确保您的隐私和数据安全。<br>您有权随时退出研究，而不会受到任何负面影响。如果您有任何疑问或担忧，请随时与我们联系。<br><br>再次感谢您的参与，您的支持对我们的研究具有重要意义。</div>
+                                    <div class="text-content">
+                                        <p>尊敬的志愿者，感谢您参与我们的用户研究。</p>
+                                        <p>在本研究中，我们将使用您的数据来评估我们设计的审计框架的有效性。</p>
+                                        <p>您的参与对我们的研究至关重要，但请您放心，您的个人身份信息将被严格保密，并且在研究结果中将进行匿名处理。我们将尽最大努力确保您的隐私和数据安全。</p>
+                                        <p>您有权随时退出研究，而不会受到任何负面影响。如果您有任何疑问或担忧，请随时与我们联系。</p>
+                                        <p>再次感谢您的参与，您的支持对我们的研究具有重要意义。</p>
+
+                                    </div>
+
                                 </el-tab-pane>
                                 <el-tab-pane label="实验入门介绍" name="third">
-                                    <div class="text-content"> 算法公平性是什么</div>
-                                    <div class="text-content"> 个人公平的定义</div>
-                                    <div class="text-content"> 个体公平审计：目的、难点</div>
+                                    <div class="text-content">
+                                        <p>算法公平性是什么</p>
+                                        <p>个人公平的定义</p>
+                                        <p>个体公平审计：目的、难点</p>
+
+                                    </div>
+
                                 </el-tab-pane>
                             </el-tabs>
-        
+
                         </div>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div class="person-info-card grid-content bg-purple-light">
                         <!-- 个人信息采集 -->
-                         <h1 class="card-h1">个人信息采集</h1>
+                        <div class="task-title">
+                            <h1 >个人信息采集</h1>
+                          </div>
+
                         <div class="person-info-collect">
                             <el-form  :model="form" :rules="rules" ref="form"   >
                                    <el-row :gutter="30">
@@ -86,7 +104,7 @@
 
                                       </el-col>
 
-                                   </el-row> 
+                                   </el-row>
 
 
                                 <el-form-item label="性别" prop="gender">
@@ -140,12 +158,15 @@
 
         </div>
         <!-- 实验入口 -->
-         <div class="button-area">
-            <a href="/page01/">
-                <el-button type="primary"  @click="start">信息已提交，开始实验！</el-button>
-            </a>
-        </div>
-        
+         <div class="jump-area">
+            <div class="button-area">
+                <a href="/page01/">
+                    <el-button type="primary">信息已提交，开始实验！</el-button>
+                </a>
+            </div>
+         </div>
+
+
 
     </el-main>
 
@@ -214,7 +235,7 @@
                     // 注意检测判定
                     this.$refs[formName].validate((valid)=>{
                         if(valid){  // 当判定成功时，进行提交操作
-                            {#alert('submit!');#}
+                            // alert('submit!');
                             console.log(this.form);
                             axios.post('http://localhost:8000/api/users/',this.form).then(response =>{
 

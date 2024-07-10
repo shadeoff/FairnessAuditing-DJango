@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>自动化寻找系统中的不公平样本</title>
 
-  <!-- Mobile Specific Metas
+    <!-- Mobile Specific Metas
 ================================================== -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Construction Html5 Template">
@@ -19,7 +20,7 @@
     <!-- element-ui 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
-        <!-- ============== js ================= -->
+    <!-- ============== js ================= -->
     <!-- vue.js -->
     <script src="../static/js/vue.js"></script>
 
@@ -33,467 +34,487 @@
 </head>
 
 <body>
-<div class="body-inner" id="app">
+    <div class="body-inner" id="app">
 
-    <el-container>
-        <!-- Header -->
-        <el-header>
-            <h4>审计步骤3：寻找系统中的不公平样本 （2/2）</h4>
-        </el-header>
+        <el-container>
+            <!-- Header -->
+            <header class="fixed-header">
+                <h2>审计步骤3：寻找系统中的不公平样本 （2/2）</h2>
+            </header>
 
-        <!-- Main -->
-        <el-main>
-            <div class="task-area">
-                <div class="task-title">
-                    <h1>自动化寻找系统中的不公平样本</h1>
-                </div>
-                <div class="task-content">
-                    <div class="task-form-description">
-                        <p>作为审计人员，您或许感到难以找到被模型不公平分类的样本。</p>
-                        <p>这是因为样本特征的分布空间太大，当审计人员面临特征更多更复杂的实际待审计系统时，寻找不公平样本将会面临更大的困难。</p>
-                        <p>为此，我们设计了一种<b>自动化寻找不公平样本</b>的方法，只需要审计人员指定一个随机的起始样本，自动化程序便可以通过与模型的交互估计不公平样本分布的位置，并最终找到一对不公平的样本。</p>
-                    </div>
-
-                    <div class="task-content-form">
-
-                        <div class="task-form-area">
-                            <!-- <div class="task-form-description">
-                                <p>为寻找不公平样本的算法设定起始样本</p>
-                            </div> -->
-
-                            {#     ==================== form ======================                         #}
-
-{#                            加些格式  #}
-                            <el-row justify="center">
-                                <el-col :span="20" :offset="2" >
-                                    <div class="task-form">
-
-                                    <h4 style="margin-top: 0">请任意输入一个起始样本</h4>
-                            <div class="form-card">
-                                <el-form :model="form" :rules="rules" ref="form" label-width="148px"
-                                         hide-required-asterisk="true">
-                                    <div class="form-edit-area">
-                                        <el-row :gutter="30">
-                                            <el-col :span="12">
-                                                <el-form-item
-                                                        :label="'年龄 (' + default_scope.age[0] + ',' + default_scope.age[1] + ')'"
-                                                        prop="age">
-                                                    <el-input v-model.number="form['age']"></el-input>
-                                                </el-form-item>
-
-                                                <el-form-item
-                                                        :label="'每周工作时长 (' + default_scope['hours-per-week'][0] + ',' + default_scope['hours-per-week'][1] + ')'"
-                                                        prop="hours-per-week">
-                                                    <el-input v-model.number="form['hours-per-week']"></el-input>
-                                                </el-form-item>
-
-                                                <el-form-item
-                                                        :label="'受教育时长 (' + default_scope['education-num'][0] + ',' + default_scope['education-num'][1] + ')'"
-                                                        prop="education-num">
-                                                    <el-input v-model.number="form['education-num']"></el-input>
-                                                </el-form-item>
-
-                                                <el-form-item
-                                                        :label="'资产收益 (' + default_scope['capital-gain'][0] + ',' + default_scope['capital-gain'][1] + ')'"
-                                                        prop="capital-gain">
-                                                    <el-input v-model.number="form['capital-gain']"></el-input>
-                                                </el-form-item>
-
-                                                <el-form-item
-                                                        :label="'资产损失 (' + default_scope['capital-loss'][0] + ',' + default_scope['capital-loss'][1] + ')'"
-                                                        prop="capital-loss">
-                                                    <el-input v-model.number="form['capital-loss']"></el-input>
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :span="12">
-
-                                                <el-form-item label="是否为白人" prop="race_White">
-                                                    <el-select v-model="form['race_White']" placeholder="请选择">
-                                                        <el-option
-                                                                v-for="item in filteredRace"
-                                                                :key="item.value"
-                                                                :label="item.label"
-                                                                :value="item.value">
-                                                        </el-option>
-                                                    </el-select>
-                                                </el-form-item>
-
-                                                <el-form-item label="性别" prop="sex_Male">
-                                                    <el-select v-model="form['sex_Male']" placeholder="请选择性别">
-                                                        <el-option
-                                                                v-for="item in filteredSex"
-                                                                :key="item.value"
-                                                                :label="item.label"
-                                                                :value="item.value">
-                                                        </el-option>
-                                                    </el-select>
-                                                </el-form-item>
-
-                                                <el-form-item label="婚姻状况" prop="marital-status">
-                                                    <el-select v-model="form['marital-status']" placeholder="请选择">
-                                                        <el-option
-                                                                v-for="item in filteredMaritalStatus"
-                                                                :key="item.value"
-                                                                :label="item.label"
-                                                                :value="item.value">
-                                                        </el-option>
-                                                    </el-select>
-                                                </el-form-item>
-
-                                                <el-form-item label="工作类型" prop="workclass">
-                                                    <el-select v-model="form['workclass']" placeholder="请选择">
-                                                        <el-option
-                                                                v-for="item in filteredWorkclass"
-                                                                :key="item.value"
-                                                                :label="item.label"
-                                                                :value="item.value">
-                                                        </el-option>
-                                                    </el-select>
-                                                </el-form-item>
-                                            </el-col>
-                                        </el-row>
-                                    </div>
-
-                                    <div class="form-submit-area">
-                                        <el-row :gutter="10">
-                                            <el-col :span="12">
-                                                <el-form-item>
-                                                    <el-button type="primary" @click="seekUnfairPair('form')">开始自动化寻找不公平样本
-                                                    </el-button>
-                                                </el-form-item>
-                                            </el-col>
-                                            <!-- <el-col :span="12">
-                                                <div style="float: left;">
-                                                    <span>分类结果为：</span><span>[[ result2 ]]</span>
-                                                </div>
-                                            </el-col> -->
-                                        </el-row>
-                                    </div>
-                                </el-form>
-                            </div>
-                                </div>
-                                </el-col>
-
-                            </el-row>
-
-
-
+            <!-- Main -->
+            <el-main>
+                <div class="main-contanier">
+                    <div class="task-area">
+                        <div class="task-title">
+                            <h1>自动化寻找系统中的不公平样本</h1>
                         </div>
-{#                        v-if="isShow"  #}
-{# =================== form1 和 form2  ========================   #}
-                        <div class="task-form-area" v-if="isShow" v-loading="loading">
-                            <el-row :gutter="40">
-                                {#---------------------- 表1 ---------------------    #}
-                                <el-col :span="12">
-                                    <h4>样本1</h4>
-                                    <div class="form-card" >
-                                        <el-form :model="form1" :disabled="true" :rules="rules2" ref="form1" label-width="120px" hide-required-asterisk="true">
-                                            <div class="form-edit-area">
-                                                <el-row :gutter="30">
-                                                    <el-col :span="12">
-                                                        <el-form-item label="年龄" prop="age">
-                                                            <el-input :max="90" v-model.number="form1['age']"></el-input>
-                                                        </el-form-item>
+                        <div class="task-content">
+                            <div class="task-content-description">
+                                <p>作为审计人员，您或许感到难以找到被模型不公平分类的样本。</p>
+                                <p>这是因为样本特征的分布空间太大，当审计人员面临特征更多更复杂的实际待审计系统时，寻找不公平样本将会面临更大的困难。</p>
+                                <p>为此，我们设计了一种<b>自动化寻找不公平样本</b>的方法，只需要审计人员指定一个随机的起始样本，自动化程序便可以通过与模型的交互估计不公平样本分布的位置，并最终找到一对不公平的样本。
+                                </p>
+                            </div>
 
-                                                        <el-form-item label="每周工作时长" prop="hours-per-week">
-                                                            <el-input v-model.number="form1['hours-per-week']"></el-input>
-                                                        </el-form-item>
+                            <div class="task-content-form">
 
-                                                        <el-form-item label="受教育时长" prop="education-num">
-                                                            <el-input  v-model.number="form1['education-num']"></el-input>
-                                                        </el-form-item>
+                                <div class="task-form-area">
+                                    <!-- <div class="task-form-description">
+                                    <p>为寻找不公平样本的算法设定起始样本</p>
+                                </div> -->
 
-                                                        <el-form-item label="资产收益" prop="capital-gain">
-                                                            <el-input  v-model.number="form1['capital-gain']"></el-input>
-                                                        </el-form-item>
+                                    <!-- ==================== form ======================              -->
 
-                                                        <el-form-item label="资产损失" prop="capital-loss">
-                                                            <el-input v-model.number="form1['capital-loss']"></el-input>
-                                                        </el-form-item>
-                                                    </el-col>
-                                                    <el-col :span="12">
+                                    <!-- 加些格式   -->
+                                    <el-row justify="center">
+                                        <el-col :span="20" :offset="2">
+                                            <div class="task-form">
 
-                                                        <el-form-item label="是否为白人" prop="race_White">
-                                                                <el-select v-model="form1['race_White']" placeholder="是否为白人">
-                                                                <el-option label="白人" value="White"></el-option>
-                                                                <el-option label="非白人" value="Others"></el-option>
-                                                            </el-select>
+                                                <h4 style="margin-top: 0">请任意输入一个起始样本</h4>
+                                                <div class="form-card">
+                                                    <el-form :model="form" :rules="rules" ref="form" label-width="148px"
+                                                        :hide-required-asterisk="true">
+                                                        <div class="form-edit-area">
+                                                            <el-row :gutter="30">
+                                                                <el-col :span="12">
+                                                                    <el-form-item
+                                                                        :label="'年龄 (' + default_scope.age[0] + ',' + default_scope.age[1] + ')'"
+                                                                        prop="age">
+                                                                        <el-input
+                                                                            v-model.number="form['age']"></el-input>
+                                                                    </el-form-item>
 
-                                                        </el-form-item>
-                                                        <el-form-item label="性别" prop="sex_Male">
-                                                            <el-select v-model="form1['sex_Male']" placeholder="请选择性别">
-                                                                <el-option label="男" value="Male"></el-option>
-                                                                <el-option label="女" value="Female"></el-option>
-                                                            </el-select>
-                                                        </el-form-item>
-                                                        <el-form-item label="婚姻状况" prop="marital-status">
-                                                            <el-select v-model="form1['marital-status']" placeholder="请选择">
-                                                                <el-option
-                                                                    v-for="item in filteredMaritalStatus"
-                                                                    :key="item.value"
-                                                                    :label="item.label"
-                                                                    :value="item.value">
-                                                                </el-option>
-                                                                </el-select>
+                                                                    <el-form-item
+                                                                        :label="'每周工作时长 (' + default_scope['hours-per-week'][0] + ',' + default_scope['hours-per-week'][1] + ')'"
+                                                                        prop="hours-per-week">
+                                                                        <el-input
+                                                                            v-model.number="form['hours-per-week']"></el-input>
+                                                                    </el-form-item>
 
-                                                        </el-form-item>
-                                                        <el-form-item label="工作类型" prop="workclass">
-                                                                <el-select v-model="form1['workclass']" placeholder="请选择">
-                                                                <el-option
-                                                                    v-for="item in filteredWorkclass"
-                                                                    :key="item.value"
-                                                                    :label="item.label"
-                                                                    :value="item.value">
-                                                                </el-option>
-                                                                </el-select>
-                                                        </el-form-item>
-                                                    </el-col>
-                                                </el-row>
-                                            </div>
+                                                                    <el-form-item
+                                                                        :label="'受教育时长 (' + default_scope['education-num'][0] + ',' + default_scope['education-num'][1] + ')'"
+                                                                        prop="education-num">
+                                                                        <el-input
+                                                                            v-model.number="form['education-num']"></el-input>
+                                                                    </el-form-item>
 
-                                            <div class="form-submit-area">
-                                                <el-row justify="center" >
-                                                    <el-col :span="14" :offset="10">
-                                                        <div style="float: left;">
-                                                            <span>分类结果为：</span><span :class="result_color1">[[ result1 ]]</span>
+                                                                    <el-form-item
+                                                                        :label="'资产收益 (' + default_scope['capital-gain'][0] + ',' + default_scope['capital-gain'][1] + ')'"
+                                                                        prop="capital-gain">
+                                                                        <el-input
+                                                                            v-model.number="form['capital-gain']"></el-input>
+                                                                    </el-form-item>
+
+                                                                    <el-form-item
+                                                                        :label="'资产损失 (' + default_scope['capital-loss'][0] + ',' + default_scope['capital-loss'][1] + ')'"
+                                                                        prop="capital-loss">
+                                                                        <el-input
+                                                                            v-model.number="form['capital-loss']"></el-input>
+                                                                    </el-form-item>
+                                                                </el-col>
+                                                                <el-col :span="12">
+
+                                                                    <el-form-item label="是否为白人" prop="race_White">
+                                                                        <el-select v-model="form['race_White']"
+                                                                            placeholder="请选择">
+                                                                            <el-option v-for="item in filteredRace"
+                                                                                :key="item.value" :label="item.label"
+                                                                                :value="item.value">
+                                                                            </el-option>
+                                                                        </el-select>
+                                                                    </el-form-item>
+
+                                                                    <el-form-item label="性别" prop="sex_Male">
+                                                                        <el-select v-model="form['sex_Male']"
+                                                                            placeholder="请选择性别">
+                                                                            <el-option v-for="item in filteredSex"
+                                                                                :key="item.value" :label="item.label"
+                                                                                :value="item.value">
+                                                                            </el-option>
+                                                                        </el-select>
+                                                                    </el-form-item>
+
+                                                                    <el-form-item label="婚姻状况" prop="marital-status">
+                                                                        <el-select v-model="form['marital-status']"
+                                                                            placeholder="请选择">
+                                                                            <el-option
+                                                                                v-for="item in filteredMaritalStatus"
+                                                                                :key="item.value" :label="item.label"
+                                                                                :value="item.value">
+                                                                            </el-option>
+                                                                        </el-select>
+                                                                    </el-form-item>
+
+                                                                    <el-form-item label="工作类型" prop="workclass">
+                                                                        <el-select v-model="form['workclass']"
+                                                                            placeholder="请选择">
+                                                                            <el-option v-for="item in filteredWorkclass"
+                                                                                :key="item.value" :label="item.label"
+                                                                                :value="item.value">
+                                                                            </el-option>
+                                                                        </el-select>
+                                                                    </el-form-item>
+                                                                </el-col>
+                                                            </el-row>
                                                         </div>
-                                                    </el-col>
-                                                </el-row>
+
+                                                        <div class="button-area">
+                                                            <el-button type="primary"
+                                                                @click="seekUnfairPair('form')">
+                                                                开始自动化寻找不公平样本
+                                                            </el-button>
+
+                                                        </div>
+                                                    </el-form>
+                                                </div>
                                             </div>
-                                            </el-form>
+                                        </el-col>
+
+                                    </el-row>
+
+                                </div>
+                                <!-- =================== form1 和 form2  ========================    -->
+                                <div class="task-form-area" v-if="isShow" v-loading="loading">
+                                    <el-row :gutter="40">
+                                        <!-- ---------------------- 表1 ---------------------     -->
+                                        <el-col :span="12">
+                                            <h4>样本1</h4>
+                                            <div class="form-card">
+                                                <el-form :model="form1" :disabled="true" :rules="rules2" ref="form1"
+                                                    label-width="96px" :hide-required-asterisk="true">
+                                                    <div class="form-edit-area">
+                                                        <el-row :gutter="30">
+                                                            <el-col :span="12">
+                                                                <el-form-item label="年龄" prop="age">
+                                                                    <el-input :max="90"
+                                                                        v-model.number="form1['age']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="每周工作时长" prop="hours-per-week">
+                                                                    <el-input
+                                                                        v-model.number="form1['hours-per-week']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="受教育时长" prop="education-num">
+                                                                    <el-input
+                                                                        v-model.number="form1['education-num']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="资产收益" prop="capital-gain">
+                                                                    <el-input
+                                                                        v-model.number="form1['capital-gain']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="资产损失" prop="capital-loss">
+                                                                    <el-input
+                                                                        v-model.number="form1['capital-loss']"></el-input>
+                                                                </el-form-item>
+                                                            </el-col>
+                                                            <el-col :span="12">
+
+                                                                <el-form-item label="是否为白人" prop="race_White">
+                                                                    <el-select v-model="form1['race_White']"
+                                                                        placeholder="是否为白人">
+                                                                        <el-option label="白人" value="White"></el-option>
+                                                                        <el-option label="非白人"
+                                                                            value="Others"></el-option>
+                                                                    </el-select>
+
+                                                                </el-form-item>
+                                                                <el-form-item label="性别" prop="sex_Male">
+                                                                    <el-select v-model="form1['sex_Male']"
+                                                                        placeholder="请选择性别">
+                                                                        <el-option label="男" value="Male"></el-option>
+                                                                        <el-option label="女" value="Female"></el-option>
+                                                                    </el-select>
+                                                                </el-form-item>
+                                                                <el-form-item label="婚姻状况" prop="marital-status">
+                                                                    <el-select v-model="form1['marital-status']"
+                                                                        placeholder="请选择">
+                                                                        <el-option v-for="item in filteredMaritalStatus"
+                                                                            :key="item.value" :label="item.label"
+                                                                            :value="item.value">
+                                                                        </el-option>
+                                                                    </el-select>
+
+                                                                </el-form-item>
+                                                                <el-form-item label="工作类型" prop="workclass">
+                                                                    <el-select v-model="form1['workclass']"
+                                                                        placeholder="请选择">
+                                                                        <el-option v-for="item in filteredWorkclass"
+                                                                            :key="item.value" :label="item.label"
+                                                                            :value="item.value">
+                                                                        </el-option>
+                                                                    </el-select>
+                                                                </el-form-item>
+                                                            </el-col>
+                                                        </el-row>
+                                                    </div>
+
+                                                    <div class="form-submit-area">
+                                                        <el-row justify="center">
+                                                            <el-col :span="14" :offset="10">
+                                                                <div style="float: left;">
+                                                                    <span>分类结果为：</span><span :class="result_color1">[[
+                                                                        result1 ]]</span>
+                                                                </div>
+                                                            </el-col>
+                                                        </el-row>
+                                                    </div>
+                                                </el-form>
+                                            </div>
+                                        </el-col>
+                                        <!-- ---------------------- 表2 ---------------------     -->
+                                        <el-col :span="12">
+                                            <h4>样本2</h4>
+                                            <div class="form-card">
+                                                <el-form :model="form2" :disabled="true" :rules="rules2" ref="form2"
+                                                    label-width="96px" :hide-required-asterisk="true">
+                                                    <div class="form-edit-area">
+                                                        <el-row :gutter="30">
+                                                            <el-col :span="12">
+                                                                <el-form-item label="年龄" prop="age">
+                                                                    <el-input v-model.number="form2['age']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="每周工作时长" prop="hours-per-week">
+                                                                    <el-input
+                                                                        v-model.number="form2['hours-per-week']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="受教育时长" prop="education-num">
+                                                                    <el-input
+                                                                        v-model.number="form2['education-num']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="资产收益" prop="capital-gain">
+                                                                    <el-input
+                                                                        v-model.number="form2['capital-gain']"></el-input>
+                                                                </el-form-item>
+
+                                                                <el-form-item label="资产损失" prop="capital-loss">
+                                                                    <el-input
+                                                                        v-model.number="form2['capital-loss']"></el-input>
+                                                                </el-form-item>
+                                                            </el-col>
+                                                            <el-col :span="12">
+
+                                                                <el-form-item label="是否为白人" prop="race_White">
+                                                                    <el-select v-model="form2['race_White']"
+                                                                        placeholder="是否为白人">
+                                                                        <el-option label="白人" value="White"></el-option>
+                                                                        <el-option label="非白人"
+                                                                            value="Others"></el-option>
+                                                                    </el-select>
+
+                                                                </el-form-item>
+                                                                <el-form-item label="性别" prop="sex_Male">
+                                                                    <el-select v-model="form2['sex_Male']"
+                                                                        placeholder="请选择性别">
+                                                                        <el-option label="男" value="Male"></el-option>
+                                                                        <el-option label="女" value="Female"></el-option>
+                                                                    </el-select>
+                                                                </el-form-item>
+                                                                <el-form-item label="婚姻状况" prop="marital-status">
+                                                                    <el-select v-model="form2['marital-status']"
+                                                                        placeholder="请选择">
+                                                                        <el-option v-for="item in filteredMaritalStatus"
+                                                                            :key="item.value" :label="item.label"
+                                                                            :value="item.value">
+                                                                        </el-option>
+                                                                    </el-select>
+
+                                                                </el-form-item>
+                                                                <el-form-item label="工作类型" prop="workclass">
+                                                                    <el-select v-model="form2['workclass']"
+                                                                        placeholder="请选择">
+                                                                        <el-option v-for="item in filteredWorkclass"
+                                                                            :key="item.value" :label="item.label"
+                                                                            :value="item.value">
+                                                                        </el-option>
+                                                                    </el-select>
+                                                                </el-form-item>
+                                                            </el-col>
+                                                        </el-row>
+                                                    </div>
+
+                                                    <div class="form-submit-area">
+                                                        <el-row justify="center">
+
+                                                            <el-col :span="14" :offset="10">
+                                                                <div style="float: left;">
+                                                                    <span>分类结果为：</span><span :class="result_color2">[[
+                                                                        result2 ]]</span>
+                                                                </div>
+                                                            </el-col>
+                                                        </el-row>
+                                                    </div>
+                                                </el-form>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+
+                                    <div class="result-card">
+                                        <div class="result-content" style="width:80%; margin: 0 auto;">
+                                            <p>
+                                                <span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度≥[[ eps
+                                                    ]]</span>
+                                            </p>
+                                            <p>
+                                                <span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2相似度为[[ dx
+                                                    ]]</span><span>[[ ]]</span>
+                                            </p>
+                                            <p>
+                                                <span>判断结果为</span><span>[[ fairness_info ]]</span>
+                                            </p>
+
+                                        </div>
+
                                     </div>
-                                </el-col>
-                                {#---------------------- 表2 ---------------------    #}
-                                <el-col  :span="12">
-                                    <h4>样本2</h4>
-                                    <div class="form-card" >
-                            <el-form :model="form2" :disabled="true" :rules="rules2" ref="form2" label-width="120px" hide-required-asterisk="true">
-                                <div class="form-edit-area">
-                                    <el-row :gutter="30">
-                                        <el-col :span="12">
-                                            <el-form-item label="年龄" prop="age">
-                                                <el-input v-model.number="form2['age']"></el-input>
-                                            </el-form-item>
-
-                                            <el-form-item label="每周工作时长" prop="hours-per-week">
-                                                <el-input v-model.number="form2['hours-per-week']"></el-input>
-                                            </el-form-item>
-
-                                            <el-form-item label="受教育时长" prop="education-num">
-                                                <el-input v-model.number="form2['education-num']"></el-input>
-                                            </el-form-item>
-
-                                            <el-form-item label="资产收益" prop="capital-gain">
-                                                <el-input v-model.number="form2['capital-gain']"></el-input>
-                                            </el-form-item>
-
-                                            <el-form-item label="资产损失" prop="capital-loss">
-                                                <el-input v-model.number="form2['capital-loss']"></el-input>
-                                            </el-form-item>
-                                        </el-col>
-                                        <el-col :span="12">
-
-                                            <el-form-item label="是否为白人" prop="race_White">
-                                                    <el-select v-model="form2['race_White']" placeholder="是否为白人">
-                                                    <el-option label="白人" value="White"></el-option>
-                                                    <el-option label="非白人" value="Others"></el-option>
-                                                </el-select>
-
-                                            </el-form-item>
-                                            <el-form-item label="性别" prop="sex_Male">
-                                                <el-select v-model="form2['sex_Male']" placeholder="请选择性别">
-                                                    <el-option label="男" value="Male"></el-option>
-                                                    <el-option label="女" value="Female"></el-option>
-                                                </el-select>
-                                            </el-form-item>
-                                            <el-form-item label="婚姻状况" prop="marital-status">
-                                                <el-select v-model="form2['marital-status']" placeholder="请选择">
-                                                    <el-option
-                                                        v-for="item in filteredMaritalStatus"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value">
-                                                    </el-option>
-                                                    </el-select>
-
-                                            </el-form-item>
-                                            <el-form-item label="工作类型" prop="workclass">
-                                                    <el-select v-model="form2['workclass']" placeholder="请选择">
-                                                    <el-option
-                                                        v-for="item in filteredWorkclass"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value">
-                                                    </el-option>
-                                                    </el-select>
-                                            </el-form-item>
-                                        </el-col>
-                                    </el-row>
                                 </div>
 
-                                <div class="form-submit-area">
-                                    <el-row justify="center" >
+                                <div class="jump-area">
+                                    <div class="button-area">
+                                        <el-button v-if="isShow" type="warning" @click="goNext">下一步</el-button>
+                                    </div>
+                                </div>
 
-                                        <el-col :span="14" :offset="10">
-                                            <div style="float: left;">
-                                                <span>分类结果为：</span><span :class="result_color2">[[ result2 ]]</span>
-                                            </div>
-                                        </el-col>
-                                    </el-row>
-                                </div>
-                                </el-form>
-                        </div>
-                                </el-col>
-                            </el-row>
-                        
-                            <div class="result-card">
-                                <div class="result-content">
-                                    <span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2相似度≥[[ eps ]]</span>
-                                </div>
-                                <div class="result-content">
-                                    <span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2相似度为[[ dx ]]</span><span>[[  ]]</span>
-                                </div>
-                                <div class="result-content">
-                                    <span>判断结果为</span><span>[[ fairness_info ]]</span>
-                                </div>
+
 
                             </div>
                         </div>
-
-                        <div class="button-area">
-                                <el-button v-if="isShow" type="warning"  @click="goNext">下一步</el-button>
-                        </div>
-
-
                     </div>
                 </div>
-            </div>
-        </el-main>
 
-    </el-container>
+            </el-main>
 
-
+        </el-container>
 
 
-</div>
+
+
+    </div>
 
 
     <!-- 创建Vue对象 -->
-     <script>
-          axios.get('/api/csrf/').then(response => {
-              axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
-            });
+    <script>
+        axios.get('/api/csrf/').then(response => {
+            axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
+        });
         new Vue({
-            el:"#app",
-            delimiters:["[[", "]]"],
+            el: "#app",
+            delimiters: ["[[", "]]"],
             data() {
                 return {
                     sensitive: '',
                     isDisabled:false,
+                    // isDisabled: true,
 
                     isShow:false,
-                    {# 范围表单 #}
+                    // isShow: true,
+                    //  范围表单
                     form: {
-                        "age":'',
-                        "capital-gain":'',
-                        "capital-loss":'',
-                        "education-num":'',
-                        "hours-per-week":'',
-                        "race_White":'',
-                        "sex_Male":'',
-                        "marital-status":[],
-                        "workclass":[],
+                        "age": '',
+                        "capital-gain": '',
+                        "capital-loss": '',
+                        "education-num": '',
+                        "hours-per-week": '',
+                        "race_White": '',
+                        "sex_Male": '',
+                        "marital-status": [],
+                        "workclass": [],
 
                     },
-                    default_scope:{
-                         "age": [17, 90],
-                        "capital-gain":[0, 99999],
+                    default_scope: {
+                        "age": [17, 90],
+                        "capital-gain": [0, 99999],
                         "capital-loss": [0, 4356],
-                        "education-num":[1, 16],
-                        "hours-per-week":[1, 99],
+                        "education-num": [1, 16],
+                        "hours-per-week": [1, 99],
                         "marital-status": [],
-                        "workclass":[],
+                        "workclass": [],
                         "sex_Male": [0, 1],
-                        "race_White":[0, 1],
+                        "race_White": [0, 1],
 
                     },
 
 
                     form1: {
-                        "age":'',
-                        "capital-gain":'',
-                        "capital-loss":'',
-                        "education-num":'',
-                        "hours-per-week":'',
-                        "race_White":'',
-                        "sex_Male":'',
-                        "marital-status":'',
-                        "workclass":'',
+                        "age": '',
+                        "capital-gain": '',
+                        "capital-loss": '',
+                        "education-num": '',
+                        "hours-per-week": '',
+                        "race_White": '',
+                        "sex_Male": '',
+                        "marital-status": '',
+                        "workclass": '',
                     },
                     form2: {
-                        "age":'',
-                        "capital-gain":'',
-                        "capital-loss":'',
-                        "education-num":'',
-                        "hours-per-week":'',
-                        "race_White":'',
-                        "sex_Male":'',
-                        "marital-status":'',
-                        "workclass":'',
+                        "age": '',
+                        "capital-gain": '',
+                        "capital-loss": '',
+                        "education-num": '',
+                        "hours-per-week": '',
+                        "race_White": '',
+                        "sex_Male": '',
+                        "marital-status": '',
+                        "workclass": '',
 
                     },
-                    {# 婚姻状况 #}
-                    marital_status:[
-                        { value: 'Divorced', label: '离异'},
-                        { value: 'Married-AF-spouse', label: '军人家属婚姻'},
-                        { value: 'Married-civ-spouse', label: '普通婚姻'},
-                        { value: 'Married-spouse-absent', label: '已婚但夫妻异地'},
-                        { value: 'Never-married', label: '未婚'},
-                        { value: 'Separated', label: '分居'},
-                        { value: 'Widowed', label: '丧偶'},],
-                    {# 工作类型 #}
-                    workclass:[
-                        { value: 'Federal-gov', label: '联邦政府雇员'},
-                        { value: 'Local-gov', label: '地方政府雇员'},
-                        { value: 'Private', label: '私营企业'},
-                        { value: 'Self-emp-inc', label: '自雇（收入较高）'},
-                        { value: 'Self-emp-not-inc', label: '自雇（收入一般）'},
-                        { value: 'State-gov', label: '州政府雇员'},
-                        { value: 'Without-pay', label: '无报酬'},
+                    //  婚姻状况
+                    marital_status: [
+                        { value: 'Divorced', label: '离异' },
+                        { value: 'Married-AF-spouse', label: '军人家属婚姻' },
+                        { value: 'Married-civ-spouse', label: '普通婚姻' },
+                        { value: 'Married-spouse-absent', label: '已婚但夫妻异地' },
+                        { value: 'Never-married', label: '未婚' },
+                        { value: 'Separated', label: '分居' },
+                        { value: 'Widowed', label: '丧偶' },],
+                    //  工作类型
+                    workclass: [
+                        { value: 'Federal-gov', label: '联邦政府雇员' },
+                        { value: 'Local-gov', label: '地方政府雇员' },
+                        { value: 'Private', label: '私营企业' },
+                        { value: 'Self-emp-inc', label: '自雇（收入较高）' },
+                        { value: 'Self-emp-not-inc', label: '自雇（收入一般）' },
+                        { value: 'State-gov', label: '州政府雇员' },
+                        { value: 'Without-pay', label: '无报酬' },
 
                     ],
                     sex_Male: [
-                        {value: 0, label: '女性'},
-                        {value: 1, label: '男性'},
+                        { value: 0, label: '女性' },
+                        { value: 1, label: '男性' },
 
                     ],
                     race_White: [
-                        {value: 0, label: '非白人'},
-                        {value: 1, label: '白人'},
+                        { value: 0, label: '非白人' },
+                        { value: 1, label: '白人' },
 
                     ],
-                    result:'',
-                    result1:'',
-                    result2:'',
-                    dx:'xxx',
-                    dy:'yyy',
+                    result: '',
+                    result1: '',
+                    result2: '',
+                    dx: 'xxx',
+                    dy: 'yyy',
                     fairness_info: '',
                     // 差异度
                     eps: '',
-                    initialValue:'',
+                    initialValue: '',
                     rules: {},
-                    rules2:{},
+                    rules2: {},
                     result_color1: 'red',
                     result_color2: 'red',
                     loading: false
                 };
             },
-             computed: {
+            computed: {
                 filteredMaritalStatus() {
-                  return this.marital_status.filter(item => this.default_scope['marital-status'].includes(item.value));
+                    return this.marital_status.filter(item => this.default_scope['marital-status'].includes(item.value));
                 },
                 filteredWorkclass() {
-                  return this.workclass.filter(item => this.default_scope.workclass.includes(item.value));
+                    return this.workclass.filter(item => this.default_scope.workclass.includes(item.value));
                 },
                 filteredSex() {
                     return this.sex_Male.filter(item => this.default_scope.sex_Male.includes(item.value));
@@ -501,30 +522,30 @@
                 filteredRace() {
                     return this.race_White.filter(item => this.default_scope.race_White.includes(item.value));
                 },
-                 comparisonSymbol() {
+                comparisonSymbol() {
                     return this.dy == 1 ? '≠' : '=';
                 }
-              },
+            },
             created() {
                 this.fetchData();
             },
 
             methods: {
 
-                 {#初始化时获取数据#}
-                fetchData(){
+                //  初始化时获取数据
+                fetchData() {
                     let _this = this;
-                  axios.get("/api/exp05/?type=get_range").then(resp => {
-                      _this.default_scope = resp.data;
-                      _this.generateRules();
-                      _this.$nextTick(()=>{
-                         _this.$refs.form.resetFields();
-                      });
-                  });
+                    axios.get("/api/exp05/?type=get_range").then(resp => {
+                        _this.default_scope = resp.data;
+                        _this.generateRules();
+                        _this.$nextTick(() => {
+                            _this.$refs.form.resetFields();
+                        });
+                    });
 
                 },
 
-                 {#  初始化时构造规则函数 #}
+                //    初始化时构造规则函数
                 /* initRules() {
                   const attributes = ['age', 'hours-per-week', 'education-num', 'capital-gain', 'capital-loss', 'sex_Male', 'race_White'];
                   attributes.forEach(attr => {
@@ -536,8 +557,8 @@
                     const scope = this.default_scope;
                     this.rules = {
                         age: [
-                            {required: true, message: '请输入年龄', trigger: 'blur'},
-                            {type: 'number', message: '年龄必须是数字值', trigger: 'blur'},
+                            { required: true, message: '请输入年龄', trigger: 'blur' },
+                            { type: 'number', message: '年龄必须是数字值', trigger: 'blur' },
                             {
                                 type: 'number',
                                 min: scope.age[0],
@@ -547,8 +568,8 @@
                             }
                         ],
                         'hours-per-week': [
-                            {required: true, message: '请输入每周工作时长', trigger: 'blur'},
-                            {type: 'number', message: '工作时长必须是数字值', trigger: 'blur'},
+                            { required: true, message: '请输入每周工作时长', trigger: 'blur' },
+                            { type: 'number', message: '工作时长必须是数字值', trigger: 'blur' },
                             {
                                 type: 'number',
                                 min: scope['hours-per-week'][0],
@@ -558,8 +579,8 @@
                             }
                         ],
                         'education-num': [
-                            {required: true, message: '请输入受教育时长', trigger: 'blur'},
-                            {type: 'number', message: '受教育时长必须是数字值', trigger: 'blur'},
+                            { required: true, message: '请输入受教育时长', trigger: 'blur' },
+                            { type: 'number', message: '受教育时长必须是数字值', trigger: 'blur' },
                             {
                                 type: 'number',
                                 min: scope['education-num'][0],
@@ -569,8 +590,8 @@
                             }
                         ],
                         'capital-gain': [
-                            {required: true, message: '请输入资产收益', trigger: 'blur'},
-                            {type: 'number', message: '资产收益必须是数字值', trigger: 'blur'},
+                            { required: true, message: '请输入资产收益', trigger: 'blur' },
+                            { type: 'number', message: '资产收益必须是数字值', trigger: 'blur' },
                             {
                                 type: 'number',
                                 min: scope['capital-gain'][0],
@@ -580,8 +601,8 @@
                             }
                         ],
                         'capital-loss': [
-                            {required: true, message: '请输入资产损失', trigger: 'blur'},
-                            {type: 'number', message: '资产损失必须是数字值', trigger: 'blur'},
+                            { required: true, message: '请输入资产损失', trigger: 'blur' },
+                            { type: 'number', message: '资产损失必须是数字值', trigger: 'blur' },
                             {
                                 type: 'number',
                                 min: scope['capital-loss'][0],
@@ -591,34 +612,34 @@
                             }
                         ],
                         'race_White': [
-                            {required: true, message: '请选择是否为白人', trigger: 'change'}
+                            { required: true, message: '请选择是否为白人', trigger: 'change' }
                         ],
                         'sex_Male': [
-                            {required: true, message: '请选择性别', trigger: 'change'}
+                            { required: true, message: '请选择性别', trigger: 'change' }
                         ],
                         'marital-status': [
-                            {required: true, message: '请选择婚姻状况', trigger: 'change'}
+                            { required: true, message: '请选择婚姻状况', trigger: 'change' }
                         ],
                         'workclass': [
-                            {required: true, message: '请选择工作类型', trigger: 'change'}
+                            { required: true, message: '请选择工作类型', trigger: 'change' }
                         ]
                     };
                 },
 
-                {#form提交，得到不公平对#}
-                seekUnfairPair(formName){
+                // form提交，得到不公平对
+                seekUnfairPair(formName) {
                     this.loading = true;
                     this.$refs[formName].validate((valid) => {
-                        if(valid){
+                        if (valid) {
                             console.log(this.form)
                             let _this = this;
-                            axios.post("/api/exp05/",{action:"seek_unfair_pair",data:this.form})
-                                .then(resp =>{
-                                    _this.isShow=true;
+                            axios.post("/api/exp05/", { action: "seek_unfair_pair", data: this.form })
+                                .then(resp => {
+                                    _this.isShow = true;
                                     _this.form1 = resp.data[0];
                                     _this.form2 = resp.data[1];
                                     axios.post("/api/exp05/", {
-                                        action:"check_unfair_pair", data1:_this.form1, data2:_this.form2
+                                        action: "check_unfair_pair", data1: _this.form1, data2: _this.form2
                                     }).then(response => {
                                         _this.result1 = response.data.result[0];
                                         _this.result2 = response.data.result[1];
@@ -636,25 +657,19 @@
                                         _this.dy = response.data.fair_data.dy;
                                         _this.eps = response.data.fair_data.eps;
                                         let flag = response.data.fair_data.fair_or_not;
-                                        if(flag){
+                                        if (flag) {
                                             _this.fairness_info = "公平";
-                                        }else{
+                                        } else {
                                             _this.fairness_info = "不公平"
                                         }
-
-                                        console.log(response);
                                         this.loading = false;
                                     });
-                                    console.log(resp.data);
-                                    console.log(_this.form1);
-                                    console.log(_this.form2);
-
                                 });
                             _this.$message({
-                                type:'success',
-                                message:'查询完成！'
+                                type: 'success',
+                                message: '查询完成！'
                             })
-                        }else{
+                        } else {
                             this.$message.error('查询失败');
                             console.log('error submit!');
                             return false;
@@ -662,28 +677,28 @@
                     });
                 },
 
-                {#form1 提交#}
+                // form1 提交
                 submitForm1(formName) {
                     this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        axios.post("/api/exp05/",{action: "check_unfair_pair", data})
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
+                        if (valid) {
+                            axios.post("/api/exp05/", { action: "check_unfair_pair", data })
+                            alert('submit!');
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
                     });
                 },
 
-                {#form2提交#}
+                // form2提交
                 submitForm2(formName) {
                     this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
+                        if (valid) {
+                            alert('submit!');
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
                     });
                 },
 
@@ -691,12 +706,12 @@
                 resetForm(formName) {
                     this.$refs[formName].resetFields();
                 },
-                goNext(){
+                goNext() {
                     if (this.isShow) {
                         window.location.href = '/page06/';
-                      } else {
+                    } else {
                         alert('请先测试数据！');
-                      }
+                    }
                 }
 
 
@@ -704,14 +719,15 @@
         })
 
 
-     </script>
+    </script>
     <style>
-    .red {
-        color: red;
-    }
-    .green {
-        color: green;
-    }
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
     </style>
 </body>
 
