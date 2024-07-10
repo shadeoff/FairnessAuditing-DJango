@@ -533,77 +533,77 @@
                 }, */
                 //构造规则
                 generateRules() {
-                const scope = this.default_scope;
-                this.rules = {
-                    age: [
-                        {required: true, message: '请输入年龄', trigger: 'blur'},
-                        {type: 'number', message: '年龄必须是数字值', trigger: 'blur'},
-                        {
-                            type: 'number',
-                            min: scope.age[0],
-                            max: scope.age[1],
-                            message: `年龄必须在${scope.age[0]}到${scope.age[1]}之间`,
-                            trigger: 'blur'
-                        }
-                    ],
-                    'hours-per-week': [
-                        {required: true, message: '请输入每周工作时长', trigger: 'blur'},
-                        {type: 'number', message: '工作时长必须是数字值', trigger: 'blur'},
-                        {
-                            type: 'number',
-                            min: scope['hours-per-week'][0],
-                            max: scope['hours-per-week'][1],
-                            message: `工作时长必须在${scope['hours-per-week'][0]}到${scope['hours-per-week'][1]}之间`,
-                            trigger: 'blur'
-                        }
-                    ],
-                    'education-num': [
-                        {required: true, message: '请输入受教育时长', trigger: 'blur'},
-                        {type: 'number', message: '受教育时长必须是数字值', trigger: 'blur'},
-                        {
-                            type: 'number',
-                            min: scope['education-num'][0],
-                            max: scope['education-num'][1],
-                            message: `受教育时长必须在${scope['education-num'][0]}到${scope['education-num'][1]}之间`,
-                            trigger: 'blur'
-                        }
-                    ],
-                    'capital-gain': [
-                        {required: true, message: '请输入资产收益', trigger: 'blur'},
-                        {type: 'number', message: '资产收益必须是数字值', trigger: 'blur'},
-                        {
-                            type: 'number',
-                            min: scope['capital-gain'][0],
-                            max: scope['capital-gain'][1],
-                            message: `资产收益必须在${scope['capital-gain'][0]}到${scope['capital-gain'][1]}之间`,
-                            trigger: 'blur'
-                        }
-                    ],
-                    'capital-loss': [
-                        {required: true, message: '请输入资产损失', trigger: 'blur'},
-                        {type: 'number', message: '资产损失必须是数字值', trigger: 'blur'},
-                        {
-                            type: 'number',
-                            min: scope['capital-loss'][0],
-                            max: scope['capital-loss'][1],
-                            message: `资产损失必须在${scope['capital-loss'][0]}到${scope['capital-loss'][1]}之间`,
-                            trigger: 'blur'
-                        }
-                    ],
-                    'race_White': [
-                        {required: true, message: '请选择是否为白人', trigger: 'change'}
-                    ],
-                    'sex_Male': [
-                        {required: true, message: '请选择性别', trigger: 'change'}
-                    ],
-                    'marital-status': [
-                        {required: true, message: '请选择婚姻状况', trigger: 'change'}
-                    ],
-                    'workclass': [
-                        {required: true, message: '请选择工作类型', trigger: 'change'}
-                    ]
-                };
-            },
+                    const scope = this.default_scope;
+                    this.rules = {
+                        age: [
+                            {required: true, message: '请输入年龄', trigger: 'blur'},
+                            {type: 'number', message: '年龄必须是数字值', trigger: 'blur'},
+                            {
+                                type: 'number',
+                                min: scope.age[0],
+                                max: scope.age[1],
+                                message: `年龄必须在${scope.age[0]}到${scope.age[1]}之间`,
+                                trigger: 'blur'
+                            }
+                        ],
+                        'hours-per-week': [
+                            {required: true, message: '请输入每周工作时长', trigger: 'blur'},
+                            {type: 'number', message: '工作时长必须是数字值', trigger: 'blur'},
+                            {
+                                type: 'number',
+                                min: scope['hours-per-week'][0],
+                                max: scope['hours-per-week'][1],
+                                message: `工作时长必须在${scope['hours-per-week'][0]}到${scope['hours-per-week'][1]}之间`,
+                                trigger: 'blur'
+                            }
+                        ],
+                        'education-num': [
+                            {required: true, message: '请输入受教育时长', trigger: 'blur'},
+                            {type: 'number', message: '受教育时长必须是数字值', trigger: 'blur'},
+                            {
+                                type: 'number',
+                                min: scope['education-num'][0],
+                                max: scope['education-num'][1],
+                                message: `受教育时长必须在${scope['education-num'][0]}到${scope['education-num'][1]}之间`,
+                                trigger: 'blur'
+                            }
+                        ],
+                        'capital-gain': [
+                            {required: true, message: '请输入资产收益', trigger: 'blur'},
+                            {type: 'number', message: '资产收益必须是数字值', trigger: 'blur'},
+                            {
+                                type: 'number',
+                                min: scope['capital-gain'][0],
+                                max: scope['capital-gain'][1],
+                                message: `资产收益必须在${scope['capital-gain'][0]}到${scope['capital-gain'][1]}之间`,
+                                trigger: 'blur'
+                            }
+                        ],
+                        'capital-loss': [
+                            {required: true, message: '请输入资产损失', trigger: 'blur'},
+                            {type: 'number', message: '资产损失必须是数字值', trigger: 'blur'},
+                            {
+                                type: 'number',
+                                min: scope['capital-loss'][0],
+                                max: scope['capital-loss'][1],
+                                message: `资产损失必须在${scope['capital-loss'][0]}到${scope['capital-loss'][1]}之间`,
+                                trigger: 'blur'
+                            }
+                        ],
+                        'race_White': [
+                            {required: true, message: '请选择是否为白人', trigger: 'change'}
+                        ],
+                        'sex_Male': [
+                            {required: true, message: '请选择性别', trigger: 'change'}
+                        ],
+                        'marital-status': [
+                            {required: true, message: '请选择婚姻状况', trigger: 'change'}
+                        ],
+                        'workclass': [
+                            {required: true, message: '请选择工作类型', trigger: 'change'}
+                        ]
+                    };
+                },
 
                 {#form提交，得到不公平对#}
                 seekUnfairPair(formName){
