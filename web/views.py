@@ -36,7 +36,6 @@ def create_user(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class Exp01View(APIView):
     permission_classes = [AllowAny]
 
@@ -76,6 +75,7 @@ class Exp01View(APIView):
     # 预处理
     def process_data(self, data):
         pass
+    
     def get_train_accuracy(self):
         """
         注意：初始化模型时dataloader默认为None，需要先定义好dataloader才能调用后面的函数
@@ -171,9 +171,6 @@ class Exp02View(APIView):
             filtered_data_dict[key] = scope_value
 
         return filtered_data_dict
-
-
-
 
 
 class Exp03View(APIView):
@@ -354,23 +351,27 @@ class Exp06View(APIView):
                                    fw.local_individual_fairmess_metric(new_model, unfair_pair[1])) / 2
         print(f"individual_fairness is {individual_fairness}")
         print(f"new_individual_fairness is {new_individual_fairness}")
+
+        # 另外需要返回敏感属性，数据范围、衡量准则、eps
+        sensitive_attr = '种族' if fw.sensitive_attr[0] == 'race_White' else '性别'
+        data_range = fw.get_data_range()
+        eps = fw.unfair_metric.epsilon
+        dx_measure = fw.dx_measure
+
         # 汇总
         result = {
             "unfair_pair": unfair_pair,
             "individual_fairness": individual_fairness,
-            "new_individual_fairness": new_individual_fairness
+            "new_individual_fairness": new_individual_fairness,
+            "sensitive_attr": sensitive_attr,
+            "data_range": data_range,
+            "eps": eps,
+            "dx_measure": dx_measure
         }
 
 
         return Response(result, status=status.HTTP_200_OK)
 
-
     def post(self, request, *args, **kwargs):
         print(request.data)
         pass
-
-
-
-
-
-

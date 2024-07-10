@@ -1,0 +1,6 @@
+*.pyc
+.ipynb_checkpoints
+*.log
+.idea
+data/adult_short.py
+*copy*
