@@ -44,6 +44,9 @@ class AuditingFramework:
 
         # unfair pair
         self.unfair_pair = None
+        self.unfair_pair_judge = None
+
+        self.optimized_model = None
 
     def _tensor2dict(self, data_tensor):
         data_df = self.data_gen.feature_dataframe(data=data_tensor)
@@ -183,12 +186,11 @@ class AuditingFramework:
         return self.range_dict
 
     def set_individual_fairness_metric(self, dx, eps):
+        print(f'set individual fairness metric: dx={dx}, eps={eps}')
         assert dx in ['LR', 'Eu']
         assert self.dataset != None
         assert self.range_dict != None
 
-        print(f"type(dx) is {type(dx)}")
-        print(f"type(eps) is {type(eps)}")
         self.dx_measure = dx
         if dx == 'LR':
             distance_x = LogisticRegSensitiveSubspace()
@@ -228,6 +230,10 @@ class AuditingFramework:
         # print(n_query)
         unfair_pair = self._tensor2dict(pair)
         self.unfair_pair = unfair_pair
+
+        # reset the optimized model to be None
+        self.optimized_model = None
+
         return unfair_pair
 
     def get_unfair_pair(self):
@@ -235,6 +241,8 @@ class AuditingFramework:
         return self.unfair_pair
 
     def optimize(self, model, unfair_pair):
+        if self.optimized_model != None:
+            return self.optimized_model
         unfair_pair = self._dict2tensor(unfair_pair)
 
         num_retrain_samples = 100
@@ -252,6 +260,7 @@ class AuditingFramework:
 
         trainer = STDTrainer(optimized_model, gen_train_dl, self.test_dl, device='cpu', epochs=1000, lr=1e-3)
         trainer.train()
+        self.optimized_model = optimized_model
 
         return optimized_model
 

@@ -49,69 +49,73 @@
                     <div class="task-area">
                         <div class="task-title">
 
-                        </div>
-                        <div class="task-content">
-                            <div class="task-content-form">
-                                <div class="task-form-area">
-                                    <el-row>
-                                        <el-col :span="18">
-                                            <div class="task-form-title">
-                                                <h2 style="margin-top: 0;">审计报告</h2>
-                                            </div>
-                                            <div class="form-card" v-loading="loading" element-loading-text="正在生成审计报告，大概需要一分钟~"
-                                            element-loading-spinner="el-icon-loading"
-                                            element-loading-background="rgba(255, 255, 255, 0.4)">
-                                                <p>在xxx数据范围中，根据[[xxx]]的公平性准则，发现不公平样本如下：</p>
-                                                <div class="card-text">
-                                                     <!-- <div v-if="inFairnessPairs.length === 0">没有不公平的样本对</div> -->
-                                                    <div>
-                                                        <el-row>
-                                                            <el-col :span="12">
-                                                                <el-descriptions title="数据1" :column="2">
-                                                                    <el-descriptions-item v-for="(value, key) in form1"
-                                                                        :key="key" :label="getLabel(key)">
-                                                                        [[ formatValue(key,value) ]]
-                                                                    </el-descriptions-item>
-                                                                </el-descriptions>
-                                                            </el-col>
-                                                            <el-col :span="12">
-                                                                <el-descriptions title="数据2" :column="2">
-                                                                    <el-descriptions-item v-for="(value, key) in form2"
-                                                                        :key="key" :label="getLabel(key)">
-                                                                        [[ formatValue(key,value) ]]
-                                                                    </el-descriptions-item>
-                                                                </el-descriptions>
-                                                            </el-col>
-                                                        </el-row>
-
-                                                    </div>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-content-form">
+                            <div class="task-form-area">
+                                <el-row>
+                                    <el-col :span="18">
+                                        <div class="task-form-title">
+                                            <h2>审计报告</h2>
+                                        </div>
+                                        <div class="form-card" v-loading="loading" element-loading-text="正在生成审计报告，大概需要一分钟~"
+                                        element-loading-spinner="el-icon-loading"
+                                        element-loading-background="rgba(255, 255, 255, 0.4)">
+                                            <p>本次个体公平审计对象为美国成年人收入预测分类模型，审计主要关注不同[[ sensitive_attr ]]的个人是否被模型公平对待。</p>
+                                            <p>本次审计关注以下范围内的样本：</p>
+                                            <div>
+                                                <div>
+                                                    <el-row>
+                                                        <el-col>
+                                                            <el-descriptions :column="1">
+                                                                <el-descriptions-item v-for="(value, key) in data_range"
+                                                                    :key="key" :label="getLabel(key)">
+                                                                    [[ rangeFormat(key, value) ]]
+                                                                </el-descriptions-item>
+                                                            </el-descriptions>
+                                                        </el-col>
+                                                    </el-row>
                                                 </div>
-                                                <div class="task-content">
-                                                    <div class="task-content-description">
-                                                        <p>经进一步审计,该对样本附近,模型的个体公平性为
-                                                            <b>
-                                                            [[ old_individual_fairness]]
-                                                            </b>
-                                                            ，低于模型在总体数据上的公平性表现
-                                                            <b>
-                                                                [[ globalFairness ]]
-                                                            </b>
-
-                                                        </p>
-
-                                                        <p>模型优化建议：采用
-                                                            <b>[[optimization]]</b>
-                                                            的优化方法
-                                                        </p>
-                                                        <br>
-                                                        <p>优化完成后预计的公平性表现预计为：
-                                                            <b>[[ new_individual_fairness ]]</b>
-                                                        </p>
-                                                    </div>
-                                                </div>
-
                                             </div>
-                                        </el-col>
+                                            <p>在上述数据范围中，发现不公平样本如下：</p>
+                                            <div class="card-text">
+                                                {# <div v-if="inFairnessPairs.length === 0">没有不公平的样本对</div>#}
+                                                <div>
+                                                    <el-row>
+                                                        <el-col :span="12">
+                                                            <el-descriptions title="样本1" :column="2">
+                                                                <el-descriptions-item v-for="(value, key) in form1"
+                                                                    :key="key" :label="getLabel(key)">
+                                                                    [[ formatValue(key,value) ]]
+                                                                </el-descriptions-item>
+                                                                <el-descriptions-item label="分类结果">
+                                                                    [[ unfair_pair_judge.result[0] ]]
+                                                                </el-descriptions-item>
+                                                            </el-descriptions>
+                                                        </el-col>
+                                                        <el-col :span="12">
+                                                            <el-descriptions title="样本2" :column="2">
+                                                                <el-descriptions-item v-for="(value, key) in form2"
+                                                                    :key="key" :label="getLabel(key)">
+                                                                    [[ formatValue(key,value) ]]
+                                                                </el-descriptions-item>
+                                                                <el-descriptions-item label="分类结果">
+                                                                    [[ unfair_pair_judge.result[1] ]]
+                                                                </el-descriptions-item>
+                                                            </el-descriptions>
+                                                        </el-col>
+                                                    </el-row>
+                                                </div>
+                                            </div>
+                                            <p>按照个体公平性要求，相似样本（基于[[ dx_measure ]]距离的差异≤[[ parameter_c ]]）的分类结果应当相同。而上述两样本差异为[[ unfair_pair_judge.fair_data.dx ]]，且模型对其分类结果不同。因而认定模型对这对样本的分类结果不公平。</p>
+                                            <!-- <p>经进一步审计,该对样本附近,模型的个体公平性为[[ old_individual_fairness
+                                                ]]，低于模型在总体数据上的公平性表现[[ globalFairness ]]</p>
+
+                                            <p>模型优化建议：采用[[optimization]]的优化方法</p>
+                                            <br>
+                                            <p>优化完成后预计的公平性表现预计为：[[ new_individual_fairness ]]</p> -->
+                                        </div>
+                                    </el-col>
 
                                         <el-col :span="6">
 
@@ -180,14 +184,14 @@
                     },
                     labels: {
                         'age': '年龄',
-                        'capital-gain': '资本收益',
-                        'capital-loss': '资本损失',
+                        'capital-gain': '资产收益',
+                        'capital-loss': '资产损失',
                         'education-num': '受教育时间',
                         'hours-per-week': '每周工作时间',
                         'race_White': '种族',
                         'sex_Male': '性别',
                         'marital-status': '婚姻情况',
-                        'workclass': '工作场所'
+                        'workclass': '工作类型'
                     },
                     maritalStatusOptions: [
                         { value: 'Divorced', label: '离异' },
@@ -206,7 +210,20 @@
                         { value: 'Self-emp-not-inc', label: '自雇（收入一般）' },
                         { value: 'State-gov', label: '州政府雇员' },
                         { value: 'Without-pay', label: '无报酬' }
-                    ]
+                    ],
+                    sensitive_attr: '',
+                    data_range: '',
+                    parameter_c: '',
+                    dx_measure: '',
+                    unfair_pair_judge: {
+                        result: ['', ''],
+                        fair_data: {
+                            fair_or_not: '',
+                            dx: '',
+                            dy: '',
+                            eps: ''
+                        }
+                    }
                 };
             },
             created() {
@@ -221,9 +238,9 @@
                 },
                 formatValue(key, value) {
                     if (key === "race_White") {
-                        return value === 1 ? '白人' : '非白人';
+                        return value === 'Others' ? '非白人' : '白人';
                     } else if (key === 'sex_Male') {
-                        return value === 1 ? '男性' : '女性';
+                        return value === 'Male' ? '男性' : '女性';
                     } else if (key === 'marital-status') {
                         return this.getOptionLabel(this.maritalStatusOptions, value);
                     } else if (key === 'workclass') {
@@ -231,6 +248,32 @@
                     } else {
                         return value;
                     }
+                },
+                rangeFormat(key, value) {
+                    if (key === "race_White") {
+                        value = value.map(item => {
+                            return item === 0 ? '非白人' : '白人';
+                        })
+                        return value.join(', ');
+                    } else if (key === 'sex_Male') {
+                        value = value.map(item => {
+                            return item === 1 ? '男性' : '女性';
+                        })
+                        return value.join(', ');
+                    } else if (key === 'marital-status') {
+                        value = value.map(item => {
+                            return this.getOptionLabel(this.maritalStatusOptions, item);
+                        })
+                        return value.join(', ');
+                    } else if (key === 'workclass') {
+                        value = value.map(item => {
+                            return this.getOptionLabel(this.workclassOptions, item);
+                        })
+                        return value.join(', ')
+                    } else {
+                        return value.join(' ~ ');
+                    }
+                    
                 },
                 getOptionLabel(options, value) {
                     const option = options.find(option => option.value === value);
@@ -242,10 +285,16 @@
                     axios.get("/api/exp06/").then(response => {
                         this.form1 = response.data.unfair_pair[0];
                         this.form2 = response.data.unfair_pair[1];
+                        console.log(this.form1)
+                        console.log(this.form2)
                         this.old_individual_fairness = response.data.individual_fairness.toFixed(4);
                         this.new_individual_fairness = response.data.new_individual_fairness.toFixed(4);
-                        console.log(this.old_individual_fairness);
-                        console.log(this.new_individual_fairness);
+                        this.sensitive_attr = response.data.sensitive_attr;
+                        this.data_range = response.data.data_range;
+                        this.parameter_c = (1/response.data.eps).toExponential(4);
+                        this.dx_measure = response.data.dx_measure
+                        this.unfair_pair_judge = response.data.unfair_pair_judge
+                        this.unfair_pair_judge.fair_data.dx = this.unfair_pair_judge.fair_data.dx === 0 ? 0 : (this.unfair_pair_judge.fair_data.dx).toExponential(4)
                         this.globalFairness = 0.6773
                         this.loading = false;
                         console.log('加载完成，loading = ' + this.loading);

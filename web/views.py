@@ -237,7 +237,7 @@ class Exp04View(APIView):
             eps = fw.unfair_metric.epsilon
             result = {
                 "fair_or_not": fair_or_not,
-                "dx": '∞' if dx==0 else 1/dx,
+                "dx": dx,
                 "dy": dy,
                 "eps": eps
             }
@@ -295,7 +295,7 @@ class Exp05View(APIView):
             eps = fw.unfair_metric.epsilon
             fair_data = {
                 "fair_or_not": fair_or_not,
-                "dx": '∞' if dx==0 else 1/dx,
+                "dx": dx,
                 "dy": dy,
                 "eps": eps
             }
@@ -303,6 +303,7 @@ class Exp05View(APIView):
                 "result": result,
                 "fair_data": fair_data
             }
+            fw.unfair_pair_judge = data
             return Response(data, status=status.HTTP_200_OK)
 
         else:
@@ -352,11 +353,21 @@ class Exp06View(APIView):
         print(f"individual_fairness is {individual_fairness}")
         print(f"new_individual_fairness is {new_individual_fairness}")
 
-        # 另外需要返回敏感属性，数据范围、衡量准则、eps
+        # 另外需要返回敏感属性，数据范围、衡量准则、eps、找到的样本的判别情况
         sensitive_attr = '种族' if fw.sensitive_attr[0] == 'race_White' else '性别'
         data_range = fw.get_data_range()
         eps = fw.unfair_metric.epsilon
         dx_measure = fw.dx_measure
+        unfair_pair_judge = fw.unfair_pair_judge
+        # the structure of unfair_pair_judge:
+        # {   "result": [result1, result2],
+        #     "fair_data": {
+        #         "fair_or_not": fair_or_not,
+        #         "dx": dx,
+        #         "dy": dy,
+        #         "eps": eps
+        #      }
+        # }
 
         # 汇总
         result = {
@@ -366,9 +377,9 @@ class Exp06View(APIView):
             "sensitive_attr": sensitive_attr,
             "data_range": data_range,
             "eps": eps,
-            "dx_measure": dx_measure
+            "dx_measure": dx_measure,
+            "unfair_pair_judge": unfair_pair_judge
         }
-
 
         return Response(result, status=status.HTTP_200_OK)
 

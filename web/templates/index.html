@@ -52,9 +52,12 @@
                             <el-tabs v-model="expInfoActiveNum" @tab-click="handleClick">
                                 <el-tab-pane label="实验目的" name="first">
                                     <div class="text-content">
-                                        <p>背景：人工智能系统决定人类权益，且存在公平性问题，有危害</p>
-                                        <p>目的：本研究设计了一种审计人工智能个体公平的框架，能够xxx</p>
-
+                                        <p>人工智能模型已经广泛参与人类的生活，例如一些模型可以依据人的特征，判断求职者是否符合要求，或判断贷款申请者是否可以获得贷款。可以说，<b>人工智能模型的判别结果已经与人类的权益息息相关</b>。然而我们是否可以真的信任这些模型左右权益的分配？模型的判别结果<b>是否公平</b>？模型之中是否潜藏着对特定人等的<b>歧视</b>？</p>
+                                        <p>针对上述疑问，我们设计了一种对模型公平性审计的框架，希望能够证实并定位模型中存在的对特定个体的歧视现象。该审计框架<b>规定了审计人员实施公平性审计的基本流程</b>，同时，框架中整合了基于模型黑盒访问<b>自动化算法</b>以辅助审计人员更好地定位歧视现象现象。</p>
+                                        <div class="red">
+                                            <p>在本次实验中，您将扮演<b>审计人员</b>的角色，使用上述框架对我们提供的模型进行审计。</p>
+                                            <p>在实验过程中，您可以随时没有顾虑的提出任何关于实验设置、实验过程等方面的问题，我们期待得到您在实验过程中的任何反馈。</p>
+                                        </div>
                                     </div>
                                 </el-tab-pane>
                                 <el-tab-pane label="伦理声明" name="second">
@@ -64,16 +67,19 @@
                                         <p>您的参与对我们的研究至关重要，但请您放心，您的个人身份信息将被严格保密，并且在研究结果中将进行匿名处理。我们将尽最大努力确保您的隐私和数据安全。</p>
                                         <p>您有权随时退出研究，而不会受到任何负面影响。如果您有任何疑问或担忧，请随时与我们联系。</p>
                                         <p>再次感谢您的参与，您的支持对我们的研究具有重要意义。</p>
-
                                     </div>
 
                                 </el-tab-pane>
                                 <el-tab-pane label="实验入门介绍" name="third">
                                     <div class="text-content">
-                                        <p>算法公平性是什么</p>
-                                        <p>个人公平的定义</p>
-                                        <p>个体公平审计：目的、难点</p>
-
+                                        <p><b>什么是人工智能模型的“不公平”/“歧视”？</b></p>
+                                        <p>人工智能模型可能会对特定的人群或个人产生偏见性的结果，这被称为人工智能模型的歧视现象。比如：模型倾向于将白人分类为富人，而将有色人种分类为穷人（尽管他们可能实际收入类似）。这样的分类结果可能会进一步导致商业投资或福利政策的偏向性，进而加剧社会不平等。</p>
+                                        <p>本次实验我们希望对模型的<b class="red">个体公平</b>进行审计。个体公平是一类常见的公平性定义，它关注<b>每个个体之间是否存在歧视现象</b>（而非不同人群在统计意义上是否公平）。</p>
+                                        <p>个体公平的基本思想是：<b class="red">模型对相似的个体应当给出相似的结果</b>。在我们的审计框架中您将逐步明确个体公平性的具体判定方法。</p>
+                                        <br>
+                                        <!-- <p><b>什么是对模型公平性的审计？</b></p>
+                                        <p>公平性审计指的是评估、验证模型的公平性是否达到其宣称的水准或是否符合相关规定的要求。</p>
+                                        <p>个体公平性是定义在每对模型输入样本上的细粒度公平性，因此与准确性等模型全局性质不同，对个体公平性的审计更关注不公平现象的定位。</p> -->
                                     </div>
 
                                 </el-tab-pane>
@@ -86,7 +92,7 @@
                     <div class="person-info-card grid-content bg-purple-light">
                         <!-- 个人信息采集 -->
                         <div class="task-title">
-                            <h1 >个人信息采集</h1>
+                            <h1 >实验志愿者信息采集</h1>
                           </div>
 
                         <div class="person-info-collect">
@@ -120,21 +126,21 @@
                                 </el-form-item>
 
 
-                                <el-form-item label="是否接触过人工智能系统（推荐、检索等）" prop="isKnowAI">
+                                <el-form-item label="此前是否接触过人工智能系统（推荐、检索等）" prop="isKnowAI">
                                     <el-radio-group v-model="form.isKnowAI">
                                     <el-radio label="1" :value="1">是</el-radio>
                                     <el-radio label="0" :value="0">否</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
 
-                                <el-form-item label="是否接触过公平性概念" prop="isKnowFairness">
+                                <el-form-item label="此前是否接触过公平性概念" prop="isKnowFairness">
                                     <el-radio-group v-model="form.isKnowFairness">
                                     <el-radio :label="1">是</el-radio>
                                     <el-radio :label="0">否</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
 
-                                <el-form-item label="是否是审计相关行业" prop="career">
+                                <el-form-item label="是否从事审计相关工作" prop="career">
                                     <el-radio-group v-model="form.career">
                                     <el-radio label="0" :value="0">审计工作者</el-radio>
                                     <el-radio label="1" :value="1">模型开发/研究人员</el-radio>
@@ -143,7 +149,7 @@
                                 </el-form-item>
                                 <br>
                                 <el-form-item>
-                                <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+                                <el-button type="primary" @click="onSubmit('form')">提交</el-button>
                                 <el-button>取消</el-button>
                                 </el-form-item>
                             </el-form>
@@ -260,4 +266,9 @@
 
 
     </script>
+    <style>
+        .red {
+            color: red;
+        }
+    </style>
 </html>
