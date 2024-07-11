@@ -25,11 +25,11 @@ def index(request):
 # Create your views here.
 @api_view(['POST'])
 def create_user(request):
-    print(request.data)
+
     serializer = UserSerializer(data=request.data)
-    print(serializer.is_valid())
+
     if serializer.is_valid():
-        print("进入该方法")
+
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     print(serializer.errors)
@@ -41,9 +41,9 @@ class Exp01View(APIView):
 
     def get(self, request, *args, **kwargs):
         request_type = request.query_params.get('type')
-        print(request_type)
+
         if request_type == 'get_features':
-            print(request.query_params)
+
             data = self.get_features()
             return data
         elif request_type == 'get_train_accuracy':
@@ -83,7 +83,6 @@ class Exp01View(APIView):
 
         :return:
         """
-        print("进入该方法")
         # 得到全局对象模型
         singleton_instance = SingletonModel()
         fw = singleton_instance.auditing_framework
@@ -101,7 +100,6 @@ class Exp01View(APIView):
             在方法中，是先设置了敏感属性，然后才显示得到了loader
         :return:
         """
-        print("进入该方法")
 
         # 得到全局对象模型
         singleton_instance = SingletonModel()
@@ -123,7 +121,7 @@ class Exp01View(APIView):
         :param kwargs:
         :return:
         """
-        print(request.data)
+        # print(request.data)
         data_sample = request.data
 
         # 得到全局对象模型
@@ -157,7 +155,7 @@ class Exp02View(APIView):
         elif action == 'set_range':
             range_dict = self.filter_json_data(data)
             fw.set_data_range(range_dict)
-            print(range_dict)
+            # print(range_dict)
             return Response(fw.range_dict, status=status.HTTP_200_OK)
 
         else:
@@ -180,7 +178,7 @@ class Exp03View(APIView):
         fw = singleton_instance.auditing_framework
         dx = data.get('dx')
         eps = data.get('eps')
-        print(dx, eps)
+        # print(dx, eps)
         # eps换成float
         eps = float(eps)
         fw.set_individual_fairness_metric(dx, eps)
@@ -194,7 +192,7 @@ class Exp04View(APIView):
         fw = singleton_instance.auditing_framework
         range_dict = fw.get_data_range()
         sensitive_attr = fw.sensitive_attr
-        print(sensitive_attr, range_dict)
+        # print(sensitive_attr, range_dict)
         result = {
             "range": range_dict,
             "sensitive_attr": sensitive_attr
@@ -220,7 +218,7 @@ class Exp04View(APIView):
         fw = singleton_instance.auditing_framework
 
         if action == 'check_result':
-            print(request.data)
+            # print(request.data)
             data_sample = request.data['data']
             result = ''
             probability = fw.query_model(data_sample)
@@ -248,11 +246,10 @@ class Exp04View(APIView):
 class Exp05View(APIView):
     def get(self, request, *args, **kwargs):
         request_type = request.query_params.get('type')
-        print(request_type)
         singleton_instance = SingletonModel()
         fw = singleton_instance.auditing_framework
         if request_type == 'get_range':
-            print(request.query_params)
+            # print(request.query_params)
             range_dict = fw.get_data_range()
             return Response(fw.range_dict, status=status.HTTP_200_OK)
 
@@ -271,7 +268,7 @@ class Exp05View(APIView):
             # 寻找不公平对并返回
             random_sample = [random_sample]
             unfair_pair = fw.seek_unfair_pair(random_sample)
-            print(unfair_pair)
+            # print(unfair_pair)
             return Response(unfair_pair, status=status.HTTP_200_OK)
         elif action == 'check_unfair_pair':
             data_sample1 = request.data['data1']
@@ -350,8 +347,8 @@ class Exp06View(APIView):
 
         new_individual_fairness = (fw.local_individual_fairmess_metric(new_model, unfair_pair[0]) +
                                    fw.local_individual_fairmess_metric(new_model, unfair_pair[1])) / 2
-        print(f"individual_fairness is {individual_fairness}")
-        print(f"new_individual_fairness is {new_individual_fairness}")
+        # print(f"individual_fairness is {individual_fairness}")
+        # print(f"new_individual_fairness is {new_individual_fairness}")
 
         # 另外需要返回敏感属性，数据范围、衡量准则、eps、找到的样本的判别情况
         sensitive_attr = '种族' if fw.sensitive_attr[0] == 'race_White' else '性别'

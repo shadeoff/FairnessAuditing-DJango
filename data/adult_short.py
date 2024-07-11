@@ -155,8 +155,8 @@ class Generator(DataGenerator):
         for i in range(len(self.continuous_columns)):
             key = self.feature_name[i]
             idx = self.continuous_columns[i]
-            print(f"continuous_range[key][1] is {continuous_range[key]}")
-            print(f"continuous_range[key][1].type is {type(continuous_range[key])}")
+            # print(f"continuous_range[key][1] is {continuous_range[key]}")
+            # print(f"continuous_range[key][1].type is {type(continuous_range[key])}")
             lower[idx] = continuous_range[key][0]
 
 
