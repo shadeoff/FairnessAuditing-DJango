@@ -63,13 +63,13 @@
                                         <ul>
                                              <li v-for="(range, feature) in features" :key="feature">
                                               [[ getFeatureDescription(feature, range) ]]
-                                              <el-tooltip class="item" effect="light" v-if="getFeatureNote(feature)!=null" :content="getFeatureNote(feature)" placement="right-start"><i class="el-icon-question"/></i></el-tooltip>
+                                              <el-tooltip class="item" effect="light" v-if="getFeatureNote(feature)!=null" :content="getFeatureNote(feature)" placement="right-start"><i class="el-icon-question"></i></el-tooltip>
                                              </li>
                                         </ul>
                                     </el-descriptions-item>
                                     <el-descriptions-item label="待预测标签">
                                         一年内的货币收入 - 待预测，是否高于$50K
-                                        <el-tooltip class="item" effect="light" content="人口普查货币收入被定义为在支付个人所得税、社会保障、工会会费、医疗保险扣除额等之前定期收到的收入(不包括某些货币收入，如资本收益)。" placement="right-start"><i class="el-icon-question"/></i></el-tooltip>
+                                        <el-tooltip class="item" effect="light" content="人口普查货币收入被定义为在支付个人所得税、社会保障、工会会费、医疗保险扣除额等之前定期收到的收入(不包括某些货币收入，如资本收益)。" placement="right-start"><i class="el-icon-question"></i></el-tooltip>
                                     </el-descriptions-item>
                                     <el-descriptions-item label="训练集样本数">36,177</el-descriptions-item>
                                     <el-descriptions-item label="模型类型">四层神经网络模型，隐层维度为64</el-descriptions-item>

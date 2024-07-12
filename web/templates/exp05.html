@@ -213,40 +213,24 @@
                                                             </el-col>
                                                             <el-col :span="12">
 
-                                                                <el-form-item label="是否为白人" prop="race_White">
-                                                                    <el-select v-model="form1['race_White']"
-                                                                        placeholder="是否为白人">
-                                                                        <el-option label="白人" value="White"></el-option>
-                                                                        <el-option label="非白人"
-                                                                            value="Others"></el-option>
-                                                                    </el-select>
 
+                                                                <el-form-item label="是否为白人">
+                                                                    <el-input v-model="getCNLabel(form1['race_White'], 'race_White')" readonly></el-input>
                                                                 </el-form-item>
-                                                                <el-form-item label="性别" prop="sex_Male">
-                                                                    <el-select v-model="form1['sex_Male']"
-                                                                        placeholder="请选择性别">
-                                                                        <el-option label="男" value="Male"></el-option>
-                                                                        <el-option label="女" value="Female"></el-option>
-                                                                    </el-select>
-                                                                </el-form-item>
-                                                                <el-form-item label="婚姻状况" prop="marital-status">
-                                                                    <el-select v-model="form1['marital-status']"
-                                                                        placeholder="请选择">
-                                                                        <el-option v-for="item in filteredMaritalStatus"
-                                                                            :key="item.value" :label="item.label"
-                                                                            :value="item.value">
-                                                                        </el-option>
-                                                                    </el-select>
 
+
+                                                                <el-form-item label="性别">
+                                                                    <el-input v-model="getCNLabel(form1['sex_Male'], 'sex_Male')" readonly></el-input>
                                                                 </el-form-item>
-                                                                <el-form-item label="工作类型" prop="workclass">
-                                                                    <el-select v-model="form1['workclass']"
-                                                                        placeholder="请选择">
-                                                                        <el-option v-for="item in filteredWorkclass"
-                                                                            :key="item.value" :label="item.label"
-                                                                            :value="item.value">
-                                                                        </el-option>
-                                                                    </el-select>
+
+
+                                                                <el-form-item label="婚姻状况">
+                                                                    <el-input v-model="getCNLabel(form1['marital-status'], 'marital-status')" readonly></el-input>
+                                                                </el-form-item>
+
+
+                                                                <el-form-item label="工作类型">
+                                                                    <el-input v-model="getCNLabel(form1['workclass'], 'workclass')" readonly></el-input>
                                                                 </el-form-item>
                                                             </el-col>
                                                         </el-row>
@@ -300,41 +284,27 @@
                                                             </el-col>
                                                             <el-col :span="12">
 
-                                                                <el-form-item label="是否为白人" prop="race_White">
-                                                                    <el-select v-model="form2['race_White']"
-                                                                        placeholder="是否为白人">
-                                                                        <el-option label="白人" value="White"></el-option>
-                                                                        <el-option label="非白人"
-                                                                            value="Others"></el-option>
-                                                                    </el-select>
 
+                                                                <el-form-item label="是否为白人">
+                                                                    <el-input v-model="getCNLabel(form2['race_White'], 'race_White')" readonly></el-input>
                                                                 </el-form-item>
-                                                                <el-form-item label="性别" prop="sex_Male">
-                                                                    <el-select v-model="form2['sex_Male']"
-                                                                        placeholder="请选择性别">
-                                                                        <el-option label="男" value="Male"></el-option>
-                                                                        <el-option label="女" value="Female"></el-option>
-                                                                    </el-select>
-                                                                </el-form-item>
-                                                                <el-form-item label="婚姻状况" prop="marital-status">
-                                                                    <el-select v-model="form2['marital-status']"
-                                                                        placeholder="请选择">
-                                                                        <el-option v-for="item in filteredMaritalStatus"
-                                                                            :key="item.value" :label="item.label"
-                                                                            :value="item.value">
-                                                                        </el-option>
-                                                                    </el-select>
 
+
+                                                                <el-form-item label="性别">
+                                                                    <el-input v-model="getCNLabel(form2['sex_Male'], 'sex_Male')" readonly></el-input>
                                                                 </el-form-item>
-                                                                <el-form-item label="工作类型" prop="workclass">
-                                                                    <el-select v-model="form2['workclass']"
-                                                                        placeholder="请选择">
-                                                                        <el-option v-for="item in filteredWorkclass"
-                                                                            :key="item.value" :label="item.label"
-                                                                            :value="item.value">
-                                                                        </el-option>
-                                                                    </el-select>
+
+
+                                                                <el-form-item label="婚姻状况">
+                                                                    <el-input v-model="getCNLabel(form2['marital-status'], 'marital-status')" readonly></el-input>
                                                                 </el-form-item>
+
+
+                                                                <el-form-item label="工作类型">
+                                                                    <el-input v-model="getCNLabel(form2['workclass'], 'workclass')" readonly></el-input>
+                                                                </el-form-item>
+
+
                                                             </el-col>
                                                         </el-row>
                                                     </div>
@@ -358,7 +328,7 @@
                                     <div class="result-card">
                                         <div class="result-content" style="width:80%; margin: 0 auto;">
                                             <p><span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2差异≤[[ parameter_c ]]</span></p>
-                                            <p><span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2差异为[[ dx ]]</span></p>
+                                            <p><span>当前输入样本：</span><span :class="compare_standard1_class">①分类结果1[[ comparisonSymbol ]]</span>分类结果2； <span :class="compare_standard2_class">②样本1与样本2差异为[[ dx ]]</span></p>
                                             <p><span>判断模型对两个样本的分类结果为</span><span><b>[[ fairness_info ]]</b></span></p>
 
                                         </div>
@@ -475,6 +445,20 @@
                         { value: 'Without-pay', label: '无报酬' },
 
                     ],
+
+                    // 种族和性别中文标签
+                    CN_sex_Male: [
+                        { value: 'Female', label: '女性' },
+                        { value: 'Male', label: '男性' },
+
+                    ],
+                    CN_race_White: [
+                        { value: "Others", label: '非白人' },
+                        { value: "White", label: '白人' },
+
+                    ],
+
+
                     sex_Male: [
                         { value: 0, label: '女性' },
                         { value: 1, label: '男性' },
@@ -498,7 +482,10 @@
                     rules2: {},
                     result_color1: 'red',
                     result_color2: 'red',
-                    loading: false
+                    loading: false,
+                    // 控制显示的两个对比结果的颜色
+                    compare_standard1_class:'',
+                    compare_standard2_class:'red',
                 };
             },
             computed: {
@@ -515,8 +502,14 @@
                     return this.race_White.filter(item => this.default_scope.race_White.includes(item.value));
                 },
                 comparisonSymbol() {
-                    return this.dy == 1 ? '≠' : '=';
+                if(this.dy == 1){
+                    this.compare_standard1_class = '';
+                    return '≠';
+                }else{
+                    this.compare_standard1_class = 'red';
+                    return '=';
                 }
+            }
             },
             created() {
                 this.fetchData();
@@ -536,14 +529,6 @@
                     });
 
                 },
-
-                //    初始化时构造规则函数
-                /* initRules() {
-                  const attributes = ['age', 'hours-per-week', 'education-num', 'capital-gain', 'capital-loss', 'sex_Male', 'race_White'];
-                  attributes.forEach(attr => {
-                    this.rules[attr] = this.generateRules(attr);
-                  });
-                }, */
                 //构造规则
                 generateRules() {
                     const scope = this.default_scope;
@@ -630,6 +615,7 @@
                                     _this.isShow = true;
                                     _this.form1 = resp.data[0];
                                     _this.form2 = resp.data[1];
+                                    console.log(resp.data)
                                     axios.post("/api/exp05/", {
                                         action: "check_unfair_pair", data1: _this.form1, data2: _this.form2
                                     }).then(response => {
@@ -648,6 +634,20 @@
                                         _this.dx = response.data.fair_data.dx === 0 ? 0 : (response.data.fair_data.dx).toExponential(4);
                                         _this.dy = response.data.fair_data.dy;
                                         _this.parameter_c = (1/response.data.fair_data.eps).toExponential(4);
+
+                                        // 转换为数字，避免发生字符串比较
+                                        const dxNumeric = Number(_this.dx);
+                                        const parameterCNumeric = Number(_this.parameter_c);
+
+                                        //判断显示的颜色
+                                        if(dxNumeric > parameterCNumeric){
+                                            console.log("进入>: dx is " + _this.dx + ", c is " + _this.parameter_c);
+                                            _this.compare_standard2_class = 'red';
+                                        }else{
+                                            console.log("进入<=: dx is " + _this.dx + ", c is " + _this.parameter_c);
+                                            _this.compare_standard2_class = '';
+                                        }
+
                                         let flag = response.data.fair_data.fair_or_not;
                                         if (flag) {
                                             _this.fairness_info = "公平";
@@ -668,36 +668,42 @@
                         }
                     });
                 },
-
-                // form1 提交
-                submitForm1(formName) {
-                    this.$refs[formName].validate((valid) => {
-                        if (valid) {
-                            axios.post("/api/exp05/", { action: "check_unfair_pair", data })
-                            alert('submit!');
-                        } else {
-                            console.log('error submit!!');
-                            return false;
-                        }
-                    });
+                // 获取中文label
+                getMaritalStatusLabel(value) {
+                  const status = this.marital_status.find(item => item.value === value);
+                  return status ? status.label : value;
+                },
+                getWorkclassLabel(value) {
+                  const status = this.workclass.find(item => item.value === value);
+                  return status ? status.label : value;
+                },
+                getRaceLabel(value) {
+                  const status = this.CN_race_White.find(item => item.value === value);
+                  return status ? status.label : value;
+                },
+                getSexLabel(value) {
+                  const status = this.CN_sex_Male.find(item => item.value === value);
+                  return status ? status.label : value;
+                },
+                getCNLabel(value, feature){
+                    if(feature === 'marital-status'){
+                        const status = this.marital_status.find(item => item.value === value);
+                        return status ? status.label : value;
+                    }
+                    if(feature === 'workclass'){
+                        const status = this.workclass.find(item => item.value === value);
+                        return status ? status.label : value;
+                    }
+                    if(feature === 'race_White'){
+                        const status = this.CN_race_White.find(item => item.value === value);
+                        return status ? status.label : value;
+                    }
+                    if(feature === 'sex_Male'){
+                       const status = this.CN_sex_Male.find(item => item.value === value);
+                       return status ? status.label : value;
+                    }
                 },
 
-                // form2提交
-                submitForm2(formName) {
-                    this.$refs[formName].validate((valid) => {
-                        if (valid) {
-                            alert('submit!');
-                        } else {
-                            console.log('error submit!!');
-                            return false;
-                        }
-                    });
-                },
-
-
-                resetForm(formName) {
-                    this.$refs[formName].resetFields();
-                },
                 goNext() {
                     if (this.isShow) {
                         window.location.href = '/page06/';

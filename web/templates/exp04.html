@@ -250,7 +250,7 @@
                                         <el-row :gutter="10">
                                             <el-col :span="12">
                                                 <el-form-item>
-                                                    <el-button type="primary" @click="submitForm2('form1')">查询
+                                                    <el-button type="primary" @click="submitForm2('form2')">查询
                                                     </el-button>
                                                 </el-form-item>
                                             </el-col>
@@ -287,7 +287,7 @@
                 <div class="result-card" v-if="show_result && isFormSubmitted" style="margin: 0 auto;">
                     <div class="result-content">
                         <p><span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2差异≤[[ parameter_c ]]</span></p>
-                        <p><span>当前输入样本：①分类结果1[[ comparisonSymbol ]]分类结果2； ②样本1与样本2差异为[[ dx ]]</span></p>
+                        <p><span >当前输入样本：</span><span :class="compare_standard1_class">①分类结果1[[ comparisonSymbol ]]分类结果2；</span><span :class="compare_standard2_class"> ②样本1与样本2差异为[[ dx ]]</span></p>
                         <p><span>判断模型对两个样本的分类结果为</span><span><b>[[ fairness_info ]]</b></span></p>
                     </div>
                 </div>
@@ -400,7 +400,7 @@
                 result1: ' ',
                 result2: ' ',
                 dx: ' ',
-                dy: ' ',
+                dy: 1,
                 fairness_info: ' ',
                 // 差异度
                 parameter_c: ' ',
@@ -410,6 +410,9 @@
                 loading2: false,
                 result_color2: 'red',
                 show_result: false,
+                // 控制显示的两个对比结果的颜色
+                compare_standard1_class:'',
+                compare_standard2_class:'red',
             };
         },
         computed: {
@@ -433,8 +436,14 @@
                 return this.isFormSubmitted ? "查询" : "请先输入样本对信息";
             },
             comparisonSymbol() {
-                return this.dy == 1 ? '≠' : '=';
-            }
+                if(this.dy == 1){
+                    this.compare_standard1_class = '';
+                    return '≠';
+                }else{
+                    this.compare_standard1_class = 'red';
+                    return '=';
+                }
+            },
 
         },
 
@@ -616,6 +625,21 @@
                             _this.dx = response.data.dx === 0 ? 0 : (response.data.dx).toExponential(4);
                             _this.dy = response.data.dy;
                             _this.parameter_c = (1/response.data.eps).toExponential(4);
+
+                            // 转换为数字，避免发生字符串比较
+                            const dxNumeric = Number(_this.dx);
+                            const parameterCNumeric = Number(_this.parameter_c);
+
+
+                            //判断显示的颜色
+                            if(dxNumeric > parameterCNumeric){
+                                console.log("进入>: dx is " + _this.dx + ", c is " + _this.parameter_c);
+                                _this.compare_standard2_class = 'red';
+                            }else{
+                                console.log("进入<=: dx is " + _this.dx + ", c is " + _this.parameter_c);
+                                _this.compare_standard2_class = '';
+                            }
+
                             if (response.data.fair_or_not) {
                                 _this.fairness_info = "公平";
                             } else {

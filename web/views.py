@@ -192,6 +192,7 @@ class Exp04View(APIView):
         fw = singleton_instance.auditing_framework
         range_dict = fw.get_data_range()
         sensitive_attr = fw.sensitive_attr
+
         # print(sensitive_attr, range_dict)
         result = {
             "range": range_dict,

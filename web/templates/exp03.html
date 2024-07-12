@@ -60,11 +60,11 @@
                         <p>衡量样本差异的指标应该满足如下特点：仅有敏感属性不同的一对样本可以认为<b>没有差异</b>。据此，我们提供了两类常用的衡量样本差异的指标：</p>
                     </div>
                     <div class="task-form-description">
-                        <el-radio v-model="metric" label="LR">LR距离
-                            <el-tooltip class="item" effect="light" content="Yurochkin M, Bower A, Sun Y. Training individually fair ML models with sensitive subspace robustness[J]. 2020." placement="right-start"><i class="el-icon-question"/></i></el-tooltip>
+                        <el-radio v-model="form.metric" label="LR">LR距离
+                            <el-tooltip class="item" effect="light" content="Yurochkin M, Bower A, Sun Y. Training individually fair ML models with sensitive subspace robustness[J]. 2020." placement="right-start"><i class="el-icon-question"></i></el-tooltip>
                             ：敏感属性不决定样本间差异，与敏感属性相关性越低的特征越能决定样本间差异大小。
                         </el-radio>
-                        <el-radio v-model="metric" label="Eu">欧氏距离：敏感属性不决定样本间差异，其他特征对样本间差异的影响是相同的。</el-radio>
+                        <el-radio v-model="form.metric" label="Eu">欧氏距离：敏感属性不决定样本间差异，其他特征对样本间差异的影响是相同的。</el-radio>
                     </div>
                     <div class="task-form-description">
                         <p>对同样的一对样本，基于两种距离运算结果会有细微差别。作为审计人员，若您对二者无偏好，则<b>建议选择LR距离</b>，因为它能够更好地刻画与敏感属性相关的特征给样本带来的变化。</p>
@@ -82,11 +82,15 @@
                         <p>基于前面选择的样本相似度指标，我们可以对两个样本分类结果是否公平做出如下判断：</p>
                         <p>如果两个样本得到的分类结果不同，当这两个样本<b>差异足够小</b>（距离≤c）时，我们可以判定模型分类结果不公平。</p>
                         <p>这里的参数c决定了审计的严格程度，c的值越小，审计对于不公平分类结果的界定越严格，即：越难以找到模型的不公平分类结果。</p>
-                        <p>为了使审计结果更具有说服力，审计人员应当设置一个较小的c值。</p>
+                        <p>
+                            为了使审计结果更具有说服力，审计人员应当设置一个较小的c值。
+                            <el-tooltip class="item" effect="light" content="推荐采用科学计数法表示形式，如：1e-2 = 0.01" placement="top-end"><i class="el-icon-question"></i></el-tooltip>
+
+                        </p>
                     </div>
-                    <el-form>
-                        <el-form-item label="请您设定c的值（默认为10^-8）：">
-                            <el-input v-model="parameter_c"></el-input>
+                    <el-form :model="form" :rules="rules" ref="form">
+                        <el-form-item label="请您设定c的值（默认为10^-8）：" prop="parameter_c">
+                            <el-input v-model="form.parameter_c" placeholder="请输入值（建议小于10e-5）"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -98,7 +102,7 @@
                 <div class="jump-area">
                     <div class="button-area">
 
-                        <el-button type="warning" @click="onSubmit">下一步</el-button>
+                        <el-button type="warning" @click="onSubmit('form')">下一步</el-button>
 
                     </div>
                 </div>
@@ -126,22 +130,71 @@
             el:"#app",
             data(){
                 return{
+                    form:{
+                        metric:'LR',
+                        parameter_c:1E-8,
+                    },
+
                     metric:'LR',
-                    parameter_c:1E-8
+                    parameter_c:1E-8,
+                    rules:{
+                        parameter_c:[
+                            { required: true, message: '请输入值', trigger: 'blur' },
+                            { validator: this.validateScientific, trigger: 'blur' },
+                            { validator: this.validatePositive, trigger: 'blur' },
+                            { validator: this.validateSuggestion, trigger: 'blur' },
+                        ],
+                    }
                 };
             },
             methods:{
+                // 配置科学计数法
+                validateScientific(rule, value, callback) {
+                    const scientificNotationRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+                    const normalNumberRegex = /^[+-]?\d+(\.\d+)?$/;
+                    if (scientificNotationRegex.test(value) || normalNumberRegex.test(value)) {
+                        callback();
+                    } else {
+                        callback(new Error('请输入一个有效的数字或科学计数法表示的数字'));
+                    }
+                },
+                validatePositive(rule, value, callback) {
+                    if (parseFloat(value) > 0) {
+                        callback();
+                    } else {
+                        callback(new Error('请输入一个大于0的数值'));
+                    }
+                },
+                validateSuggestion(rule, value, callback) {
+                    if (parseFloat(value) > 1e-5) {
+                        this.$message({
+                            message: '建议设置的值小于1e-5',
+                            type: 'warning'
+                        });
+                        callback();
+                    } else {
+                        callback();
+                    }
+                },
 
 
                 onSubmit(){
-                    console.log(this.metric)
-                    axios.post("/api/exp03/",{dx: this.metric, eps: 1/this.parameter_c}).then(resp =>{
-                        console.log(resp.data);
-                        window.location.href = '/page04/';
-                    }).error(err =>{
-                        alert("发生错误")
-                    })
-                    alert("submit!")
+                    this.$refs.form.validate((valid) => {
+                        if(valid){
+                            let parameter_c_value = parseFloat(this.form.parameter_c);
+                            console.log(this.form.metric)
+                            axios.post("/api/exp03/",{dx: this.form.metric, eps: 1/ parameter_c_value}).then(resp =>{
+                                console.log(resp.data);
+                                window.location.href = '/page04/';
+                            }).catch(err =>{
+                                alert("发生错误")
+                            });
+                        }else{
+                            console.log('表单验证失败');
+                            return false;
+                        }
+                    });
+
                 }
             }
         })
