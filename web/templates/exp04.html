@@ -294,7 +294,7 @@
                 <div class="result-card" v-if="show_result && isFormSubmitted" style="margin: 0 auto;">
                     <div class="result-content">
                         <p><span>判断两个样本被不公平对待的标准：①.分类结果1≠分类结果2；</span><span>②.样本1与样本2差异≤[[ parameter_c ]]</span></p>
-                        <p><span >当前输入样本：</span><span :class="compare_standard1_class">①分类结果1[[ comparisonSymbol ]]分类结果2；</span><span :class="compare_standard2_class"> ②样本1与样本2差异为[[ dx ]]</span></p>
+                        <p><span >当前输入样本：</span><span :class="compare_standard1_class">①分类结果1[[ comparisonSymbol ]]分类结果2（[[compare_standard1_description]]）；</span><span :class="compare_standard2_class"> ②样本1与样本2差异为[[ dx ]]（[[compare_standard2_description]]）</span></p>
                         <p><span>判断模型对两个样本的分类结果为</span><span><b>[[ fairness_info ]]</b></span></p>
                     </div>
                 </div>
@@ -419,7 +419,9 @@
                 show_result: false,
                 // 控制显示的两个对比结果的颜色
                 compare_standard1_class:'',
-                compare_standard2_class:'red',
+                compare_standard2_class:'',
+                compare_standard1_description: '',
+                compare_standard2_description: '',
             };
         },
         computed: {
@@ -445,9 +447,11 @@
             comparisonSymbol() {
                 if(this.dy == 1){
                     this.compare_standard1_class = '';
+                    this.compare_standard1_description = '符合条件'
                     return '≠';
                 }else{
                     this.compare_standard1_class = 'red';
+                    this.compare_standard1_description = '不符合条件';
                     return '=';
                 }
             },
@@ -642,9 +646,11 @@
                             if(dxNumeric > parameterCNumeric){
                                 console.log("进入>: dx is " + _this.dx + ", c is " + _this.parameter_c);
                                 _this.compare_standard2_class = 'red';
+                                _this.compare_standard2_description = '不符合条件'
                             }else{
                                 console.log("进入<=: dx is " + _this.dx + ", c is " + _this.parameter_c);
                                 _this.compare_standard2_class = '';
+                                _this.compare_standard2_description = '符合条件'
                             }
 
                             if (response.data.fair_or_not) {
