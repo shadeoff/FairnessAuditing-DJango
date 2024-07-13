@@ -57,15 +57,18 @@
                     <div class="task-form-description">
                         <p>当 ① <b>两个样本特征差异足够小</b>，且 ② <b>模型对他们的分类结果不同</b>时，</p>
                         <p>我们认为模型的分类结果不公平。因此，为了判断模型分类结果是否公平，我们需要一个指标来<b>量化两个样本间的特征差异</b>。</p>
-                        <p>衡量样本差异的指标应该满足如下特点：仅有敏感属性不同的一对样本可以认为<b>没有差异</b>。据此，我们提供了两类常用的衡量样本差异的指标：</p>
+                        <p>衡量样本差异的指标应该满足如下特点：仅有敏感属性不同的一对样本可以认为<b>没有差异</b>。据此，我们提供了两类常用的衡量样本差异的指标，请您根据描述，选择您希望使用的指标：</p>
                     </div>
-                    <div class="task-form-description">
+                    <div class="form-card">
+                        <div class="task-form-description">
                         <el-radio v-model="form.metric" label="LR">LR距离
                             <el-tooltip class="item" effect="light" content="Yurochkin M, Bower A, Sun Y. Training individually fair ML models with sensitive subspace robustness[J]. 2020." placement="right-start"><i class="el-icon-question"></i></el-tooltip>
                             ：敏感属性不决定样本间差异，与敏感属性相关性越低的特征越能决定样本间差异大小。
                         </el-radio>
                         <el-radio v-model="form.metric" label="Eu">欧氏距离：敏感属性不决定样本间差异，其他特征对样本间差异的影响是相同的。</el-radio>
                     </div>
+                    </div>
+
                     <div class="task-form-description">
                         <p>对同样的一对样本，基于两种距离运算结果会有细微差别。作为审计人员，若您对二者无偏好，则<b>建议选择LR距离</b>，因为它能够更好地刻画与敏感属性相关的特征给样本带来的变化。</p>
                     </div>

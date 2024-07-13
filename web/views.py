@@ -121,7 +121,7 @@ class Exp01View(APIView):
         :param kwargs:
         :return:
         """
-        # print(request.data)
+        print(f"在page1，得到的表单数据为：{request.data}")
         data_sample = request.data
 
         # 得到全局对象模型
@@ -222,7 +222,10 @@ class Exp04View(APIView):
             # print(request.data)
             data_sample = request.data['data']
             result = ''
+            print(f"在page4，得到的表单数据为：{data_sample}")
+
             probability = fw.query_model(data_sample)
+
             if probability >= 0.5:
                 result = "年收入高于50K"
             else:
@@ -269,7 +272,7 @@ class Exp05View(APIView):
             # 寻找不公平对并返回
             random_sample = [random_sample]
             unfair_pair = fw.seek_unfair_pair(random_sample)
-            # print(unfair_pair)
+            print(f"在page05，得到的样本对数据为：{unfair_pair}")
             return Response(unfair_pair, status=status.HTTP_200_OK)
         elif action == 'check_unfair_pair':
             data_sample1 = request.data['data1']
