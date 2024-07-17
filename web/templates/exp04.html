@@ -50,7 +50,9 @@
 
                 <div class="task-content" style="margin-left: 50px">
                     <div class="task-content-description">
-                    <p>任务描述......</p>
+                        <p>在此前的步骤中，您已经设定了“判定一对样本受到不公平对待”的标准，即：①.模型对他们分类结果不同；②.两个样本差异≤[[ parameter_c ]]</p>
+                        <p>接下来，在本步骤中您可以在下方输入两个样本并得到模型对他们的分类结果。</p>
+                        <p>您可以多次输入并修改这两个样本，目标是找到两个被<b>不公平</b>对待的样本。</p>
                     </div>
                   </div>
 
@@ -462,13 +464,16 @@
             this.fetchData();
         },
         mounted() {
-
+            axios.get("/api/exp04/?type=get_eps").then(resp => {
+                console.log(resp)
+                this.parameter_c = (1/resp.data.eps).toExponential(4);
+            })
         },
         methods: {
             //初始化时获取数据
             fetchData() {
                 let _this = this;
-                axios.get("/api/exp04/").then(resp => {
+                axios.get("/api/exp04/?type=get_range").then(resp => {
 
                     _this.default_scope = resp.data.range;
                     _this.sensitive = resp.data.sensitive_attr;

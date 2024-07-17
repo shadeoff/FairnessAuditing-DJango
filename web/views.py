@@ -188,17 +188,21 @@ class Exp03View(APIView):
 
 class Exp04View(APIView):
     def get(self, request, *args, **kwargs):
+        request_type = request.query_params.get('type')
         singleton_instance = SingletonModel()
         fw = singleton_instance.auditing_framework
-        range_dict = fw.get_data_range()
-        sensitive_attr = fw.sensitive_attr
+        if request_type == 'get_range':
+            range_dict = fw.get_data_range()
+            sensitive_attr = fw.sensitive_attr
 
-        # print(sensitive_attr, range_dict)
-        result = {
-            "range": range_dict,
-            "sensitive_attr": sensitive_attr
-        }
-        return Response(result, status=status.HTTP_200_OK)
+            # print(sensitive_attr, range_dict)
+            result = {
+                "range": range_dict,
+                "sensitive_attr": sensitive_attr
+            }
+            return Response(result, status=status.HTTP_200_OK)
+        elif request_type == 'get_eps':
+            return Response({'eps': fw.unfair_metric.epsilon}, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         """
