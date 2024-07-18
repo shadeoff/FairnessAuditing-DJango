@@ -54,10 +54,13 @@ line-height: 320px;
 }
 
 .main-contanier{
-    width: 1240px;
+    width: 1196px;
     margin:0 auto;
 }
-
+.collapse-title{
+    font-size: 16px;
+    font-weight: bold;
+}
 
 
 .info .card-h1{
@@ -255,5 +258,31 @@ line-height: 320px;
 
 .jump-area{
     margin: 20px 0;
-    padding: 20px; 
+    padding: 20px;
+}
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.responsive-image {
+    max-width: 500px;
+    max-height: 500px;
+    width: auto;
+    height: auto;
+}
+
+/*显示结果样式*/
+.result-less-50k{
+    color: orange;
+}
+.result-greater-50k{
+    color: blue;
+}
+.compare-standard-true{
+    color:green;
+}
+.compare-standard-false{
+    color: red;
 }

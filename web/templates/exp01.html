@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>收入预测分类</title>
 
-  <!-- Mobile Specific Metas
-================================================== -->
+    <!-- Mobile Specific Metas
+  ================================================== -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Construction Html5 Template">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -19,7 +19,7 @@
     <!-- element-ui 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
-        <!-- ============== js ================= -->
+    <!-- ============== js ================= -->
     <!-- vue.js -->
     <script src="../static/js/vue.js"></script>
 
@@ -29,12 +29,12 @@
     <!-- element-ui 组件库 -->
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    
+
 </head>
 
 <body>
 <div class="body-inner" id="app">
-    
+
     <el-container>
         <!-- Header -->
         <header class="fixed-header">
@@ -44,9 +44,9 @@
         <!-- Main -->
         <el-main>
             <div class="main-contanier">
-              <div class="task-title">
-                <h1>待审计模型：美国成年人收入预测分类</h1>
-              </div>
+                <div class="task-title">
+                    <h1>待审计模型：美国成年人收入预测分类</h1>
+                </div>
 
                 <el-row :gutter="60">
                     <!-- 信息显示 -->
@@ -57,25 +57,51 @@
                                 <h3>模型信息</h3>
 
                                 <el-descriptions :column="1">
-                                    <el-descriptions-item label="模型介绍">待审计模型为基于美国1994年人口普查数据训练的收入预测分类模型。预测任务为分类一个人的年收入是否达到$50,000。</el-descriptions-item>
-                                    <el-descriptions-item label="训练数据集">训练数据由巴里·贝克尔从1994年美国人口普查数据库中提取。（https://archive.ics.uci.edu/dataset/2/adult）。</el-descriptions-item>
+                                    <el-descriptions-item label="模型介绍">
+                                        待审计模型为基于美国1994年人口普查数据训练的收入预测分类模型。预测任务为分类一个人的年收入是否达到$50,000。
+                                    </el-descriptions-item>
                                     <el-descriptions-item label="特征取值范围">
                                         <ul>
-                                             <li v-for="(range, feature) in features" :key="feature">
-                                              [[ getFeatureDescription(feature, range) ]]
-                                              <el-tooltip class="item" effect="light" v-if="getFeatureNote(feature)!=null" :content="getFeatureNote(feature)" placement="right-start"><i class="el-icon-question"></i></el-tooltip>
-                                             </li>
+                                            <li v-for="(range, feature) in features" :key="feature">
+                                                [[ getFeatureDescription(feature, range) ]]
+                                                <el-tooltip class="item" effect="light"
+                                                            v-if="getFeatureNote(feature)!=null"
+                                                            :content="getFeatureNote(feature)" placement="right-start">
+                                                    <i class="el-icon-question"></i></el-tooltip>
+                                            </li>
                                         </ul>
                                     </el-descriptions-item>
                                     <el-descriptions-item label="待预测标签">
                                         一年内的货币收入 - 待预测，是否高于$50K
-                                        <el-tooltip class="item" effect="light" content="人口普查货币收入被定义为在支付个人所得税、社会保障、工会会费、医疗保险扣除额等之前定期收到的收入(不包括某些货币收入，如资本收益)。" placement="right-start"><i class="el-icon-question"></i></el-tooltip>
+                                        <el-tooltip class="item" effect="light"
+                                                    content="人口普查货币收入被定义为在支付个人所得税、社会保障、工会会费、医疗保险扣除额等之前定期收到的收入(不包括某些货币收入，如资本收益)。"
+                                                    placement="right-start"><i class="el-icon-question"></i>
+                                        </el-tooltip>
                                     </el-descriptions-item>
-                                    <el-descriptions-item label="训练集样本数">36,177</el-descriptions-item>
-                                    <el-descriptions-item label="模型类型">四层神经网络模型，隐层维度为64</el-descriptions-item>
-                                    <el-descriptions-item label="训练集准确率" >[[ train_accuracy ]]</el-descriptions-item>
-                                    <el-descriptions-item label="测试集准确率">[[ test_accuracy ]]</el-descriptions-item>
+
                                 </el-descriptions>
+                                <el-collapse v-model="description_active" accordion>
+
+                                    <el-collapse-item name="1">
+                                        <template slot="title" >
+                                            <span class="collapse-title">点击显示更多信息<i class="header-icon el-icon-info"></i></span>
+                                        </template>
+                                        <el-descriptions :column="1">
+                                            <el-descriptions-item label="训练数据集">
+                                                训练数据由巴里·贝克尔从1994年美国人口普查数据库中提取。（https://archive.ics.uci.edu/dataset/2/adult）。
+                                            </el-descriptions-item>
+
+                                            <el-descriptions-item label="训练集样本数">36,177</el-descriptions-item>
+                                            <el-descriptions-item label="模型类型">四层神经网络模型，隐层维度为64
+                                            </el-descriptions-item>
+                                            <el-descriptions-item label="训练集准确率">[[ train_accuracy ]]
+                                            </el-descriptions-item>
+                                            <el-descriptions-item label="测试集准确率">[[ test_accuracy ]]
+                                            </el-descriptions-item>
+                                        </el-descriptions>
+                                    </el-collapse-item>
+                                </el-collapse>
+
 
                             </div>
                         </div>
@@ -85,72 +111,84 @@
                     <el-col :span="14">
                         <h3>输入待分类的样本信息，获得模型分类结果</h3>
                         <div class="task-content">
-                          <div class="task-content-description">
-                              <p>您可以通过下方的输入框尝试访问待审计的模型。</p>
-                              <p>输入一个人的各项特征值，点击查询按钮后，您可以得到模型对这个人的分类结果（年收入是否大于$50K）。</p>
-                              <p><b>该模型的判别结果可能会影响到相关人群的社会福利等权益分配。</b></p>
-                          </div>
+                            <div class="task-content-description">
+                                <p>您可以通过下方的输入框尝试访问待审计的模型。</p>
+                                <p>
+                                    输入一个人的各项特征值，点击查询按钮后，您可以得到模型对这个人的分类结果（年收入是否大于$50K）。</p>
+                                <p><b>该模型的判别结果可能会影响到相关人群的社会福利等权益分配。</b></p>
+                            </div>
                         </div>
                         <div class="form-card">
-                            <el-form :model="form" :rules="rules" ref="form" label-width="145px" :hide-required-asterisk="true">
+                            <el-form :model="form" :rules="rules" ref="form" label-width="145px"
+                                     :hide-required-asterisk="true">
                                 <div class="form-edit-area">
                                     <el-row :gutter="30">
                                         <el-col :span="12">
-                                            <el-form-item :label="'年龄 (' + default_scope.age[0] + '~' + default_scope.age[1] + ')'" prop="age">
+                                            <el-form-item
+                                                    :label="'年龄 (' + default_scope.age[0] + '~' + default_scope.age[1] + ')'"
+                                                    prop="age">
                                                 <el-input v-model.number="form['age']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item :label="'每周工作时长 (' + default_scope['hours-per-week'][0] + '~' + default_scope['hours-per-week'][1] + ')'" prop="hours-per-week">
-                                                <el-input  v-model.number="form['hours-per-week']"></el-input>
+                                            <el-form-item
+                                                    :label="'每周工作时长 (' + default_scope['hours-per-week'][0] + '~' + default_scope['hours-per-week'][1] + ')'"
+                                                    prop="hours-per-week">
+                                                <el-input v-model.number="form['hours-per-week']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item :label="'受教育时长 (' + default_scope['education-num'][0] + '~' + default_scope['education-num'][1] + ')'" prop="education-num">
+                                            <el-form-item
+                                                    :label="'受教育时长 (' + default_scope['education-num'][0] + '~' + default_scope['education-num'][1] + ')'"
+                                                    prop="education-num">
                                                 <el-input v-model.number="form['education-num']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item :label="'资产收益 (' + default_scope['capital-gain'][0] + '~' + default_scope['capital-gain'][1] + ')'" prop="capital-gain">
+                                            <el-form-item
+                                                    :label="'资产收益 (' + default_scope['capital-gain'][0] + '~' + default_scope['capital-gain'][1] + ')'"
+                                                    prop="capital-gain">
                                                 <el-input v-model.number="form['capital-gain']"></el-input>
                                             </el-form-item>
 
-                                            <el-form-item :label="'资产损失 (' + default_scope['capital-loss'][0] + '~' + default_scope['capital-loss'][1] + ')'" prop="capital-loss">
+                                            <el-form-item
+                                                    :label="'资产损失 (' + default_scope['capital-loss'][0] + '~' + default_scope['capital-loss'][1] + ')'"
+                                                    prop="capital-loss">
                                                 <el-input v-model.number="form['capital-loss']"></el-input>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="12">
 
                                             <el-form-item label="种族" prop="race_White">
-                                                 <el-select v-model="form['race_White']" placeholder="是否为白人">
-                                                  <el-option label="白人" value="1"></el-option>
-                                                  <el-option label="非白人" value="0"></el-option>
+                                                <el-select v-model="form['race_White']" placeholder="是否为白人">
+                                                    <el-option label="白人" value="1"></el-option>
+                                                    <el-option label="非白人" value="0"></el-option>
                                                 </el-select>
 
                                             </el-form-item>
                                             <el-form-item label="性别" prop="sex_Male">
                                                 <el-select v-model="form['sex_Male']" placeholder="男性或女性">
-                                                  <el-option label="男性" value="1"></el-option>
-                                                  <el-option label="女性" value="0"></el-option>
+                                                    <el-option label="男性" value="1"></el-option>
+                                                    <el-option label="女性" value="0"></el-option>
                                                 </el-select>
                                             </el-form-item>
                                             <el-form-item label="婚姻状况" prop="marital-status">
                                                 <el-select v-model="form['marital-status']" placeholder="请选择">
                                                     <el-option
-                                                      v-for="item in marital_status"
-                                                      :key="item.value"
-                                                      :label="item.label"
-                                                      :value="item.value">
+                                                            v-for="item in marital_status"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value">
                                                     </el-option>
-                                                  </el-select>
+                                                </el-select>
 
                                             </el-form-item>
                                             <el-form-item label="工作类型" prop="workclass">
-                                                 <el-select v-model="form['workclass']" placeholder="请选择">
+                                                <el-select v-model="form['workclass']" placeholder="请选择">
                                                     <el-option
-                                                      v-for="item in workclass"
-                                                      :key="item.value"
-                                                      :label="item.label"
-                                                      :value="item.value">
+                                                            v-for="item in workclass"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value">
                                                     </el-option>
-                                                  </el-select>
+                                                </el-select>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -159,38 +197,38 @@
                                 <div class="form-submit-area">
                                     <el-row :gutter="10">
                                         <el-col :span="12">
-                                          <div class="button-area">
-                                            <el-button type="primary" @click="submitForm('form')" >查询</el-button>
-                                          </div>
+                                            <div class="button-area">
+                                                <el-button type="primary" @click="submitForm('form')">查询</el-button>
+                                            </div>
                                         </el-col>
 
                                         <el-col :span="12">
                                             <div>
-                                                <span>分类结果为：</span><span v-loading="loading" :class="result_color">[[ result ]]</span>
+                                                <span>分类结果为：</span><span v-loading="loading" :class="result_color">[[ result
+                                                ]]</span>
                                             </div>
                                         </el-col>
                                     </el-row>
                                 </div>
 
 
-                              </el-form>
+                            </el-form>
 
 
                         </div>
                     </el-col>
 
-                  </el-row>
-                         <!-- 实验入口 -->
-                          <div class="jump-area">
-                            <div class="button-area">
-                              <a href="/page02/">
-                                  <el-button type="warning">下一步</el-button>
-                              </a>
-                          </div>
-                          </div>
+                </el-row>
+                <!-- 实验入口 -->
+                <div class="jump-area">
+                    <div class="button-area">
+                        <a href="/page02/">
+                            <el-button type="warning">下一步</el-button>
+                        </a>
+                    </div>
+                </div>
 
             </div>
-
 
 
         </el-main>
@@ -199,109 +237,108 @@
     </el-container>
 
 
-
-
 </div>
 
-    <!-- 创建Vue对象 -->
-     <script>
-         axios.get('/api/csrf/').then(response => {
-              axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
-            });
-        new Vue({
-            el:"#app",
-            delimiters:["[[", "]]"],
-            data() {
-                return {
-                    features: {},
-                    form: {
-                        "age":'',
-                        "capital-gain":'',
-                        "capital-loss":'',
-                        "education-num":'',
-                        "hours-per-week":'',
-                        "race_White":'',
-                        "sex_Male":'',
-                        "marital-status":'',
-                        "workclass":'',
+<!-- 创建Vue对象 -->
+<script>
+    axios.get('/api/csrf/').then(response => {
+        axios.defaults.headers.common['X-CSRFToken'] = response.data.csrfToken;
+    });
+    new Vue({
+        el: "#app",
+        delimiters: ["[[", "]]"],
+        data() {
+            return {
+                description_active: '',
+                features: {},
+                form: {
+                    "age": '',
+                    "capital-gain": '',
+                    "capital-loss": '',
+                    "education-num": '',
+                    "hours-per-week": '',
+                    "race_White": '',
+                    "sex_Male": '',
+                    "marital-status": '',
+                    "workclass": '',
 
-                    },
-                    default_scope:{
-                         "age": [17, 90],
-                        "capital-gain":[0, 99999],
-                        "capital-loss": [0, 4356],
-                        "education-num":[1, 16],
-                        "hours-per-week":[1, 99],
-                        "marital-status": [],
-                        "workclass":[],
-                        "sex_Male": [0, 1],
-                        "race_White":[0, 1],
+                },
+                default_scope: {
+                    "age": [17, 90],
+                    "capital-gain": [0, 99999],
+                    "capital-loss": [0, 4356],
+                    "education-num": [1, 16],
+                    "hours-per-week": [1, 99],
+                    "marital-status": [],
+                    "workclass": [],
+                    "sex_Male": [0, 1],
+                    "race_White": [0, 1],
 
-                    },
-                    // 婚姻状况
-                    marital_status:[
-                        { value: 'Divorced', label: '离异'},
-                        { value: 'Married-AF-spouse', label: '军人家属婚姻'},
-                        { value: 'Married-civ-spouse', label: '普通婚姻'},
-                        { value: 'Married-spouse-absent', label: '已婚但夫妻异地'},
-                        { value: 'Never-married', label: '未婚'},
-                        { value: 'Separated', label: '分居'},
-                        { value: 'Widowed', label: '丧偶'},],
-                    // 工作类型
-                    workclass:[
-                        { value: 'Federal-gov', label: '联邦政府雇员'},
-                        { value: 'Local-gov', label: '地方政府雇员'},
-                        { value: 'Private', label: '私营企业'},
-                        { value: 'Self-emp-inc', label: '自雇（收入较高）'},
-                        { value: 'Self-emp-not-inc', label: '自雇（收入一般）'},
-                        { value: 'State-gov', label: '州政府雇员'},
-                        { value: 'Without-pay', label: '无报酬'},
+                },
+                // 婚姻状况
+                marital_status: [
+                    {value: 'Divorced', label: '离异'},
+                    {value: 'Married-AF-spouse', label: '军人家属婚姻'},
+                    {value: 'Married-civ-spouse', label: '普通婚姻'},
+                    {value: 'Married-spouse-absent', label: '已婚但夫妻异地'},
+                    {value: 'Never-married', label: '未婚'},
+                    {value: 'Separated', label: '分居'},
+                    {value: 'Widowed', label: '丧偶'},],
+                // 工作类型
+                workclass: [
+                    {value: 'Federal-gov', label: '联邦政府雇员'},
+                    {value: 'Local-gov', label: '地方政府雇员'},
+                    {value: 'Private', label: '私营企业'},
+                    {value: 'Self-emp-inc', label: '自雇（收入较高）'},
+                    {value: 'Self-emp-not-inc', label: '自雇（收入一般）'},
+                    {value: 'State-gov', label: '州政府雇员'},
+                    {value: 'Without-pay', label: '无报酬'},
 
-                    ],
-                    // 用于映射字段
-                    marital_status_map: {
-                      'Divorced': '离异',
-                      'Married-AF-spouse': '军人家属婚姻',
-                      'Married-civ-spouse': '普通婚姻',
-                      'Married-spouse-absent': '已婚但夫妻异地',
-                      'Never-married': '未婚',
-                      'Separated': '分居',
-                      'Widowed': '丧偶'
-                    },
-                    workclass_map: {
-                      'Federal-gov': '联邦政府雇员',
-                      'Local-gov': '地方政府雇员',
-                      'Private': '私营企业',
-                      'Self-emp-inc': '自雇（收入较高）',
-                      'Self-emp-not-inc': '自雇（收入一般）',
-                      'State-gov': '州政府雇员',
-                      'Without-pay': '无报酬'
-                    },
-                    // 准确率
-                    train_accuracy:'0.8440',
-                    test_accuracy:'0.8387',
-                    result:'',
-                    rules: {},
-                    loading: false,
-                    result_color: 'red',
-                };
-            },
-            methods: {
-                //  提交表单
-                submitForm(formName) {
-                  this.loading = true;
-                  setTimeout(() => {
+                ],
+                // 用于映射字段
+                marital_status_map: {
+                    'Divorced': '离异',
+                    'Married-AF-spouse': '军人家属婚姻',
+                    'Married-civ-spouse': '普通婚姻',
+                    'Married-spouse-absent': '已婚但夫妻异地',
+                    'Never-married': '未婚',
+                    'Separated': '分居',
+                    'Widowed': '丧偶'
+                },
+                workclass_map: {
+                    'Federal-gov': '联邦政府雇员',
+                    'Local-gov': '地方政府雇员',
+                    'Private': '私营企业',
+                    'Self-emp-inc': '自雇（收入较高）',
+                    'Self-emp-not-inc': '自雇（收入一般）',
+                    'State-gov': '州政府雇员',
+                    'Without-pay': '无报酬'
+                },
+                // 准确率
+                train_accuracy: '0.8440',
+                test_accuracy: '0.8387',
+                result: '',
+                rules: {},
+                loading: false,
+                result_color: 'red',
+            };
+        },
+        methods: {
+            //  提交表单
+            submitForm(formName) {
+                this.loading = true;
+                setTimeout(() => {
                     this.loading = false;
-                  }, 200);
-                    this.$refs[formName].validate((valid) => {
+                }, 200);
+                this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let form = this.form;
-                        axios.post("/api/exp01/", form).then(response =>{
+                        axios.post("/api/exp01/", form).then(response => {
                             this.result = response.data
                             if (this.result == '年收入低于50K') {
-                              this.result_color = 'red'
+                                this.result_color = 'red'
                             } else {
-                              this.result_color = 'green'
+                                this.result_color = 'green'
                             }
                         })
                         // console.log(JSON.stringify(this.form))
@@ -310,22 +347,22 @@
                         console.log('error submit!!');
                         return false;
                     }
-                    });
-                },
+                });
+            },
 
-                // 获取特征
-                getFeature() {
-                    console.log()
-                  axios.get('/api/exp01/?type=get_features').then(response => {
-                      console.log(response.data)
-                      this.features = response.data;
-                    }).catch(error => {
-                      console.error("There was an error!", error);
-                    });
-                },
-                //  获取文字说明
-                getFeatureDescription(feature, range) {
-                  const descriptions = {
+            // 获取特征
+            getFeature() {
+                console.log()
+                axios.get('/api/exp01/?type=get_features').then(response => {
+                    console.log(response.data)
+                    this.features = response.data;
+                }).catch(error => {
+                    console.error("There was an error!", error);
+                });
+            },
+            //  获取文字说明
+            getFeatureDescription(feature, range) {
+                const descriptions = {
                     'age': `年龄 - ${range[0]}~${range[1]}岁`,
                     'capital-gain': `资产收益 - $${range[0]} ~ $${range[1]}`,
                     'capital-loss': `资产损失 - $${range[0]} ~ $${range[1]}`,
@@ -335,11 +372,11 @@
                     'sex_Male': `性别 - 男性、女性 `,
                     'marital-status': `婚姻状况 - ${range.map(status => this.marital_status_map[status] || status).join('，')}`,
                     'workclass': `工作类型 - ${range.map(classType => this.workclass_map[classType] || classType).join('，')}`
-                  };
-                  return descriptions[feature] || `${feature} - ${range}`;
-                },
-                getFeatureNote(feature) {
-                  const note = {
+                };
+                return descriptions[feature] || `${feature} - ${range}`;
+            },
+            getFeatureNote(feature) {
+                const note = {
                     'age': null,
                     'capital-gain': '通过资产销售的方式获得的利润，不计入待预测的“收入”之内',
                     'capital-loss': '在资产销售过程中产生的损失，不计入待预测的“收入”之内',
@@ -349,89 +386,120 @@
                     'sex-Male': null,
                     'marital-status': null,
                     'workclass': null,
-                  };
-                  return note[feature];
-                },
-                generateRules() {
-                      const scope = this.default_scope;
-                      this.rules = {
-                        age: [
-                          { required: true, message: '请输入年龄', trigger: 'blur' },
-                          { type: 'number', message: '年龄必须是数字值', trigger: 'blur' },
-                          { type: 'number', min: scope.age[0], max: scope.age[1], message: `年龄必须在${scope.age[0]}到${scope.age[1]}之间`, trigger: 'blur' }
-                        ],
-                        'hours-per-week': [
-                          { required: true, message: '请输入每周工作时长', trigger: 'blur' },
-                          { type: 'number', message: '工作时长必须是数字值', trigger: 'blur' },
-                          { type: 'number', min: scope['hours-per-week'][0], max: scope['hours-per-week'][1], message: `工作时长必须在${scope['hours-per-week'][0]}到${scope['hours-per-week'][1]}之间`, trigger: 'blur' }
-                        ],
-                        'education-num': [
-                          { required: true, message: '请输入受教育时长', trigger: 'blur' },
-                          { type: 'number', message: '受教育时长必须是数字值', trigger: 'blur' },
-                          { type: 'number', min: scope['education-num'][0], max: scope['education-num'][1], message: `受教育时长必须在${scope['education-num'][0]}到${scope['education-num'][1]}之间`, trigger: 'blur' }
-                        ],
-                        'capital-gain': [
-                          { required: true, message: '请输入资产收益', trigger: 'blur' },
-                          { type: 'number', message: '资产收益必须是数字值', trigger: 'blur' },
-                          { type: 'number', min: scope['capital-gain'][0], max: scope['capital-gain'][1], message: `资产收益必须在${scope['capital-gain'][0]}到${scope['capital-gain'][1]}之间`, trigger: 'blur' }
-                        ],
-                        'capital-loss': [
-                          { required: true, message: '请输入资产损失', trigger: 'blur' },
-                          { type: 'number', message: '资产损失必须是数字值', trigger: 'blur' },
-                          { type: 'number', min: scope['capital-loss'][0], max: scope['capital-loss'][1], message: `资产损失必须在${scope['capital-loss'][0]}到${scope['capital-loss'][1]}之间`, trigger: 'blur' }
-                        ],
-                        'race_White': [
-                          { required: true, message: '请选择种族', trigger: 'change' }
-                        ],
-                        'sex_Male': [
-                          { required: true, message: '请选择性别', trigger: 'change' }
-                        ],
-                        'marital-status': [
-                          { required: true, message: '请选择婚姻状况', trigger: 'change' }
-                        ],
-                        'workclass': [
-                          { required: true, message: '请选择工作类型', trigger: 'change' }
-                        ]
-                      };
-                    },
-                // getTrainAccuracy(){
-                //     axios.get('/api/exp01/?type=get_train_accuracy').then(response => {
-                //         this.train_accuracy = response.data;
-                //     }).catch(error => {
-                //       console.error("There was an error!", error);
-                //     });
-                // },
-                // getTestAccuracy(){
-                //     axios.get('/api/exp01/?type=get_test_accuracy').then(response => {
-                //         this.test_accuracy = response.data;
-                //     }).catch(error => {
-                //       console.error("There was an error!", error);
-                //     });
-                // }
+                };
+                return note[feature];
             },
-            created(){
-              this.generateRules();
-              this.getFeature();
+            generateRules() {
+                const scope = this.default_scope;
+                this.rules = {
+                    age: [
+                        {required: true, message: '请输入年龄', trigger: 'blur'},
+                        {type: 'number', message: '年龄必须是数字值', trigger: 'blur'},
+                        {
+                            type: 'number',
+                            min: scope.age[0],
+                            max: scope.age[1],
+                            message: `年龄必须在${scope.age[0]}到${scope.age[1]}之间`,
+                            trigger: 'blur'
+                        }
+                    ],
+                    'hours-per-week': [
+                        {required: true, message: '请输入每周工作时长', trigger: 'blur'},
+                        {type: 'number', message: '工作时长必须是数字值', trigger: 'blur'},
+                        {
+                            type: 'number',
+                            min: scope['hours-per-week'][0],
+                            max: scope['hours-per-week'][1],
+                            message: `工作时长必须在${scope['hours-per-week'][0]}到${scope['hours-per-week'][1]}之间`,
+                            trigger: 'blur'
+                        }
+                    ],
+                    'education-num': [
+                        {required: true, message: '请输入受教育时长', trigger: 'blur'},
+                        {type: 'number', message: '受教育时长必须是数字值', trigger: 'blur'},
+                        {
+                            type: 'number',
+                            min: scope['education-num'][0],
+                            max: scope['education-num'][1],
+                            message: `受教育时长必须在${scope['education-num'][0]}到${scope['education-num'][1]}之间`,
+                            trigger: 'blur'
+                        }
+                    ],
+                    'capital-gain': [
+                        {required: true, message: '请输入资产收益', trigger: 'blur'},
+                        {type: 'number', message: '资产收益必须是数字值', trigger: 'blur'},
+                        {
+                            type: 'number',
+                            min: scope['capital-gain'][0],
+                            max: scope['capital-gain'][1],
+                            message: `资产收益必须在${scope['capital-gain'][0]}到${scope['capital-gain'][1]}之间`,
+                            trigger: 'blur'
+                        }
+                    ],
+                    'capital-loss': [
+                        {required: true, message: '请输入资产损失', trigger: 'blur'},
+                        {type: 'number', message: '资产损失必须是数字值', trigger: 'blur'},
+                        {
+                            type: 'number',
+                            min: scope['capital-loss'][0],
+                            max: scope['capital-loss'][1],
+                            message: `资产损失必须在${scope['capital-loss'][0]}到${scope['capital-loss'][1]}之间`,
+                            trigger: 'blur'
+                        }
+                    ],
+                    'race_White': [
+                        {required: true, message: '请选择种族', trigger: 'change'}
+                    ],
+                    'sex_Male': [
+                        {required: true, message: '请选择性别', trigger: 'change'}
+                    ],
+                    'marital-status': [
+                        {required: true, message: '请选择婚姻状况', trigger: 'change'}
+                    ],
+                    'workclass': [
+                        {required: true, message: '请选择工作类型', trigger: 'change'}
+                    ]
+                };
             },
-            mounted() {
+            // getTrainAccuracy(){
+            //     axios.get('/api/exp01/?type=get_train_accuracy').then(response => {
+            //         this.train_accuracy = response.data;
+            //     }).catch(error => {
+            //       console.error("There was an error!", error);
+            //     });
+            // },
+            // getTestAccuracy(){
+            //     axios.get('/api/exp01/?type=get_test_accuracy').then(response => {
+            //         this.test_accuracy = response.data;
+            //     }).catch(error => {
+            //       console.error("There was an error!", error);
+            //     });
+            // }
+        },
+        created() {
+            this.generateRules();
+            this.getFeature();
+        },
+        mounted() {
 
 
-                // this.getTrainAccuracy();
-                // this.getTestAccuracy();
-              }
-        })
+            // this.getTrainAccuracy();
+            // this.getTestAccuracy();
+        }
+    })
 
 
-     </script>
+</script>
 
-     <style>
-      .red {
+<style>
+    .red {
         color: red;
-      }
-      .green {
+    }
+
+    .green {
         color: green;
-      }
-     </style>
+    }
+</style>
 
 </body>
 
