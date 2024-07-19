@@ -50,20 +50,20 @@
                     <div class="task-title">
                         <h1>设定审计指标</h1>
                     </div>
-                    <div class="task-content" >
+                    <div class="task-content">
                         <div class="task-content-description">
-                            <p>描述....</p>
+                            <!-- <p>描述....</p> -->
                             <!-- 调用metric和parameter -->
-                            <p>......准则： [[metric]]</p>
+                            <!-- <p>......准则： [[metric]]</p>
                             <p>......参数c： [[parameter_c]]</p>
 
 
                             <div class="block image-container">
                                 <el-image src="../static/images/standard.jpg" class="responsive-image"></el-image>
-                            </div>
+                            </div> -->
 
                             <!-- 选择适合的形式 -->
-                            <hr>
+                            <!-- <hr> -->
                             <el-row :gutter="30">
                                 <el-col :span="12">
                                     <div class="block image-container">
@@ -72,12 +72,35 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <div style="margin-top: 50px;">
-                                        <p>描述....</p>
-
+                                        <p>当 ① <b>两个样本特征差异足够小</b>，且 ② <b>模型对他们的分类结果不同</b>时，我们认为模型的分类结果不公平。</p>
+                                        <p>在这一步骤中，审计人员需要指定审计时判定样本是否相似的指标。具体来说，这包含<b class="red">一个衡量样本特征差异的指标</b>，以及<b class="red">一个代表审计严格程度的参数c</b>。如左图所示，当样本差异≤c时判定两个样本相似。</p>
+                                        <p>
+                                            为了降低实验复杂性，本次试验中我们将代替您完成审计指标的选择：使用基于LR距离
+                                            <el-tooltip class="item" effect="dark" placement="bottom">
+                                                <i class="el-icon-question"></i>
+                                                <template v-slot:content>
+                                                    <div>
+                                                        该距离对敏感属性子空间具有鲁棒性，即敏感属性和相关特征几乎不影响样本间差异。<br>
+                                                        Yurochkin M, Bower A, Sun Y. 
+                                                        Training individually fair ML models with sensitive subspace robustness[J]. 2020.
+                                                    </div>
+                                                </template> 
+                                            </el-tooltip>
+                                            的样本差异度量，设置c=1e-8
+                                            <el-tooltip class="item" effect="dark" placement="bottom">
+                                                <i class="el-icon-question"></i>
+                                                <template v-slot:content>
+                                                    <div>
+                                                        这是一个足够小的c值，意味着审计人员找到的不公平样本需要非常相似，足够说明模型真正存在值得关注的歧视现象。
+                                                    </div>
+                                                </template> 
+                                            </el-tooltip>
+                                            。
+                                        </p>
                                     </div>
                                 </el-col>
                             </el-row>
-                            <p>描述.......</p>
+                            <!-- <p>描述.......</p> -->
                         </div>
                     </div>
                 </div>
@@ -203,6 +226,11 @@
 
 
      </script>
+     <style>
+        .red {
+            color: red;
+        }
+    </style>
 </body>
 
 </html>
