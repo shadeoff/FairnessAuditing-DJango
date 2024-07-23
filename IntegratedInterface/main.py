@@ -1,3 +1,6 @@
+import pickle
+from django.core.cache import cache
+
 import numpy as np
 import pandas as pd
 import torch
@@ -47,6 +50,30 @@ class AuditingFramework:
         self.unfair_pair_judge = None
 
         self.optimized_model = None
+
+    # 添加序列化和反序列化方法
+    def to_dict(self):
+        return {
+            'sensitive_attr': self.sensitive_attr,
+            'range_dict': self.range_dict,
+            'unfair_metric': pickle.dumps(self.unfair_metric) if self.unfair_metric else None,
+            'dx_measure': self.dx_measure,
+            'unfair_pair': self.unfair_pair,
+            'unfair_pair_judge': self.unfair_pair_judge,
+         }
+
+    @classmethod
+    def from_dict(cls, state_dict):
+        """从字典状态恢复对象"""
+        obj = cls()
+        obj.sensitive_attr = state_dict.get('sensitive_attr')
+        obj.range_dict = state_dict.get('range_dict')
+        obj.unfair_metric = pickle.loads(state_dict.get('unfair_metric')) if state_dict.get('unfair_metric') else None
+        obj.dx_measure = state_dict.get('dx_measure')
+        obj.unfair_pair = state_dict.get('unfair_pair')
+        obj.unfair_pair_judge = state_dict.get('unfair_pair_judge')
+        return obj
+
 
     def _tensor2dict(self, data_tensor):
         data_df = self.data_gen.feature_dataframe(data=data_tensor)
@@ -170,9 +197,7 @@ class AuditingFramework:
 
     def set_sensitive_attr(self, sensitive_attr):
         assert sensitive_attr in ['sex', 'race']
-
         self.sensitive_attr = ['sex_Male'] if sensitive_attr == 'sex' else ['race_White']
-
         self.dataset, self.train_dl, self.test_dl = get_data(self.data, 0, self.sensitive_attr)
         self.dataset.use_sensitive_attr = True
         self.data_gen = self.data.Generator(include_sensitive_feature=True, sensitive_vars=self.sensitive_attr,
@@ -186,7 +211,7 @@ class AuditingFramework:
         return self.range_dict
 
     def set_individual_fairness_metric(self, dx, eps):
-        print(f'set individual fairness metric: dx={dx}, eps={eps}')
+        # print(f' set individual fairness metric: dx={dx}, eps={eps}')
         assert dx in ['LR', 'Eu']
         assert self.dataset != None
         assert self.range_dict != None

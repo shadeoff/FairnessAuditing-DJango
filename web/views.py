@@ -1,4 +1,7 @@
 import json
+import pickle
+import uuid
+from django.core.cache import cache
 
 from django.shortcuts import render
 from django.http.response import JsonResponse, HttpResponse
@@ -15,7 +18,31 @@ from .models import User
 from .serializer import UserSerializer
 
 from IntegratedInterface.main import AuditingFramework
-from .singleton_model import SingletonModel
+# from .singleton_model import SingletonModel
+
+# 获得session
+SESSION_KEY = 'auditing_framework'
+USER_ID_KEY = 'user_id'
+
+# 存储所有用户的 AuditingFramework 实例
+FRAMEWORK_STORE = {}
+
+def get_random_user_id(request):
+    if USER_ID_KEY not in request.session:
+        request.session[USER_ID_KEY] = str(uuid.uuid4())
+    return request.session[USER_ID_KEY]
+
+def get_auditing_framework(request):
+    user_id = get_random_user_id(request)
+    if user_id not in FRAMEWORK_STORE:
+        FRAMEWORK_STORE[user_id] = AuditingFramework()
+    return FRAMEWORK_STORE[user_id]
+
+
+def save_auditing_framework(request, auditing_framework):
+    user_id = get_random_user_id(request)
+    request.session[f"{SESSION_KEY}_{user_id}"] = auditing_framework.to_dict()
+    print(f"Session saved for user {user_id}: {request.session[f'{SESSION_KEY}_{user_id}']}")
 
 
 def index(request):
@@ -25,9 +52,7 @@ def index(request):
 # Create your views here.
 @api_view(['POST'])
 def create_user(request):
-
     serializer = UserSerializer(data=request.data)
-
     if serializer.is_valid():
 
         serializer.save()
@@ -47,11 +72,11 @@ class Exp01View(APIView):
             data = self.get_features()
             return data
         elif request_type == 'get_train_accuracy':
-            data = self.get_train_accuracy()
+            data = self.get_train_accuracy(request)
             return data
 
         elif request_type == 'get_test_accuracy':
-            data = self.get_test_accuracy()
+            data = self.get_test_accuracy(request)
             return data
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -76,7 +101,7 @@ class Exp01View(APIView):
     def process_data(self, data):
         pass
     
-    def get_train_accuracy(self):
+    def get_train_accuracy(self, request):
         """
         注意：初始化模型时dataloader默认为None，需要先定义好dataloader才能调用后面的函数
             在方法中，是先设置了敏感属性，然后才显示得到了loader
@@ -84,8 +109,11 @@ class Exp01View(APIView):
         :return:
         """
         # 得到全局对象模型
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        # 得到session对象
+        fw = get_auditing_framework(request)
 
         fw.get_model_info()
         # 不严谨，默认了敏感属性为种族
@@ -94,7 +122,7 @@ class Exp01View(APIView):
         train_accuracy = fw.accuracy(fw.model, whether_training_set=True).item()
         return Response(train_accuracy, status=status.HTTP_200_OK)
 
-    def get_test_accuracy(self):
+    def get_test_accuracy(self, request):
         """
         注意：初始化模型时dataloader默认为None，需要先定义好dataloader才能调用后面的函数
             在方法中，是先设置了敏感属性，然后才显示得到了loader
@@ -102,8 +130,10 @@ class Exp01View(APIView):
         """
 
         # 得到全局对象模型
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        fw = get_auditing_framework(request)
 
         fw.get_model_info()
         # 不严谨，默认了敏感属性为种族
@@ -121,12 +151,14 @@ class Exp01View(APIView):
         :param kwargs:
         :return:
         """
-        print(f"在page1，得到的表单数据为：{request.data}")
+        # print(f"在page1，得到的表单数据为：{request.data}")
         data_sample = request.data
 
         # 得到全局对象模型
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        fw = get_auditing_framework(request)
 
         # fw.set_sensitive_attr('race')
         # fw.set_individual_fairness_metric(dx='LR', eps=fw.get_default_eps())
@@ -140,11 +172,16 @@ class Exp01View(APIView):
 
 
 class Exp02View(APIView):
+
     def post(self, request, *args, **kwargs):
+        user_id = get_random_user_id(request)
+        print(f"Exp02View - User ID: {user_id}")
+
         data = request.data
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        fw = get_auditing_framework(request)
+
         action = request.data['action']
+
         # print(request.data)
 
         if action == 'set_sensitive_attr':
@@ -155,7 +192,6 @@ class Exp02View(APIView):
         elif action == 'set_range':
             range_dict = self.filter_json_data(data)
             fw.set_data_range(range_dict)
-            # print(range_dict)
             return Response(fw.range_dict, status=status.HTTP_200_OK)
 
         else:
@@ -173,14 +209,18 @@ class Exp02View(APIView):
 
 class Exp03View(APIView):
     def post(self, request, *args, **kwargs):
+        # 检测session——id
+        user_id = get_random_user_id(request)
+        print(f"Exp03View - User ID: {user_id}")
+
         data = request.data
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+
+        fw = get_auditing_framework(request)
         dx = data.get('dx')
         eps = data.get('eps')
-        # print(dx, eps)
         # eps换成float
         eps = float(eps)
+
         fw.set_individual_fairness_metric(dx, eps)
 
         return Response("success",status=status.HTTP_200_OK)
@@ -189,8 +229,14 @@ class Exp03View(APIView):
 class Exp04View(APIView):
     def get(self, request, *args, **kwargs):
         request_type = request.query_params.get('type')
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        # 测试一个单例对象的内存占用
+        # memory_usage = singleton_instance.get_memory_usage()
+        # print(f'Current memory usage of AuditingFramework instance: {memory_usage} bytes')
+
+        fw = get_auditing_framework(request)
         if request_type == 'get_range':
             range_dict = fw.get_data_range()
             sensitive_attr = fw.sensitive_attr
@@ -219,8 +265,10 @@ class Exp04View(APIView):
         # print(request.data)
 
         # 得到全局对象模型
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        fw = get_auditing_framework(request)
 
         if action == 'check_result':
             # print(request.data)
@@ -254,8 +302,11 @@ class Exp04View(APIView):
 class Exp05View(APIView):
     def get(self, request, *args, **kwargs):
         request_type = request.query_params.get('type')
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        fw = get_auditing_framework(request)
+
         if request_type == 'get_range':
             # print(request.query_params)
             range_dict = fw.get_data_range()
@@ -264,8 +315,11 @@ class Exp05View(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, *args, **kwargs):
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        fw = get_auditing_framework(request)
+
         action = request.data['action']
         # print(request.data)
         if action == 'seek_unfair_pair':
@@ -341,8 +395,10 @@ class Exp05View(APIView):
 class Exp06View(APIView):
     def get(self, request, *args, **kwargs):
         # 初始化了一个main中AuditingFramework的单例
-        singleton_instance = SingletonModel()
-        fw = singleton_instance.auditing_framework
+        # singleton_instance = SingletonModel()
+        # fw = singleton_instance.auditing_framework
+
+        fw = get_auditing_framework(request)
 
         # 获取不公平数据对
         unfair_pair = fw.get_unfair_pair()

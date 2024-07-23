@@ -1,5 +1,5 @@
 from IntegratedInterface.main import AuditingFramework
-
+from pympler import asizeof
 
 class SingletonModel(AuditingFramework):
     _instance = None
@@ -12,3 +12,6 @@ class SingletonModel(AuditingFramework):
 
     def _setup(self, *args, **kwargs):
         self.auditing_framework = AuditingFramework()
+
+    def get_memory_usage(self):
+        return asizeof.asizeof(self.auditing_framework)
