@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from functorch import vmap
+from torch import vmap
 from distances.distance import Distance
 
 class BinaryDistance(Distance):
