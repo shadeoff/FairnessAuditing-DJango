@@ -64,18 +64,26 @@
                                         <ul>
                                             <li v-for="(range, feature) in features" :key="feature">
                                                 [[ getFeatureDescription(feature, range) ]]
-                                                <el-tooltip class="item" effect="light"
-                                                            v-if="getFeatureNote(feature)!=null"
-                                                            :content="getFeatureNote(feature)" placement="right-start">
-                                                    <i class="el-icon-question"></i></el-tooltip>
+                                                <el-tooltip class="item" effect="dark" placement="right-start" v-if="getFeatureNote(feature)!=null">
+                                                    <i class="el-icon-question"></i>
+                                                    <template v-slot:content>
+                                                        <div style="width: 200px;">
+                                                            [[ getFeatureNote(feature) ]]
+                                                        </div>
+                                                    </template> 
+                                                </el-tooltip>
                                             </li>
                                         </ul>
                                     </el-descriptions-item>
                                     <el-descriptions-item label="待预测标签">
                                         一年内的货币收入 - 待预测，是否高于$50K
-                                        <el-tooltip class="item" effect="light"
-                                                    content="人口普查货币收入被定义为在支付个人所得税、社会保障、工会会费、医疗保险扣除额等之前定期收到的收入(不包括某些货币收入，如资本收益)。"
-                                                    placement="right-start"><i class="el-icon-question"></i>
+                                        <el-tooltip class="item" effect="dark" placement="right-start">
+                                            <i class="el-icon-question"></i>
+                                            <template v-slot:content>
+                                                <div style="width: 300px;">
+                                                    人口普查货币收入被定义为在支付个人所得税、社会保障、工会会费、医疗保险扣除额等之前定期收到的收入(不包括某些货币收入，如资本收益)。
+                                                </div>
+                                            </template> 
                                         </el-tooltip>
                                     </el-descriptions-item>
 
@@ -84,7 +92,7 @@
 
                                     <el-collapse-item name="1">
                                         <template slot="title" >
-                                            <span class="collapse-title">点击显示更多信息<i class="header-icon el-icon-info"></i></span>
+                                            <span class="collapse-title">点击显示更多信息</span>
                                         </template>
                                         <el-descriptions :column="1">
                                             <el-descriptions-item label="训练数据集">
@@ -325,12 +333,9 @@
         },
         methods: {
             //  提交表单
-            submitForm(formName) {
-                this.loading = true;
-                setTimeout(() => {
-                    this.loading = false;
-                }, 200);
-                this.$refs[formName].validate((valid) => {
+                submitForm(formName) {
+                  this.loading = true;
+                    this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let form = this.form;
                         axios.post("/api/exp01/", form).then(response => {
@@ -340,6 +345,7 @@
                             } else {
                                 this.result_color = 'green'
                             }
+                            this.loading = false;
                         })
                         // console.log(JSON.stringify(this.form))
                     } else {
@@ -378,8 +384,8 @@
             getFeatureNote(feature) {
                 const note = {
                     'age': null,
-                    'capital-gain': '通过资产销售的方式获得的利润，不计入待预测的“收入”之内',
-                    'capital-loss': '在资产销售过程中产生的损失，不计入待预测的“收入”之内',
+                    'capital-gain': '通过资产销售的方式获得的利润，不计入待预测的“收入”之内。',
+                    'capital-loss': '在资产销售过程中产生的损失，不计入待预测的“收入”之内。',
                     'education-num': null,
                     'hours-per-week': null,
                     'race-White': null,
@@ -491,15 +497,14 @@
 
 </script>
 
-<style>
-    .red {
-        color: red;
-    }
-
-    .green {
-        color: green;
-    }
-</style>
+     <style>
+      .red {
+        color: #8c642a;
+      }
+      .green {
+        color: #1296db;
+      }
+     </style>
 
 </body>
 

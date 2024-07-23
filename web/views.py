@@ -351,10 +351,10 @@ class Exp06View(APIView):
 
         # global_fairness = '' 待定
         # 得到新模型
-        new_model = fw.optimize(fw.model, unfair_pair)
+        # new_model = fw.optimize(fw.model, unfair_pair)
 
-        new_individual_fairness = (fw.local_individual_fairmess_metric(new_model, unfair_pair[0]) +
-                                   fw.local_individual_fairmess_metric(new_model, unfair_pair[1])) / 2
+        # new_individual_fairness = (fw.local_individual_fairmess_metric(new_model, unfair_pair[0]) +
+        #                            fw.local_individual_fairmess_metric(new_model, unfair_pair[1])) / 2
         # print(f"individual_fairness is {individual_fairness}")
         # print(f"new_individual_fairness is {new_individual_fairness}")
 
@@ -378,7 +378,7 @@ class Exp06View(APIView):
         result = {
             "unfair_pair": unfair_pair,
             "individual_fairness": individual_fairness,
-            "new_individual_fairness": new_individual_fairness,
+            "new_individual_fairness": None,
             "sensitive_attr": sensitive_attr,
             "data_range": data_range,
             "eps": eps,

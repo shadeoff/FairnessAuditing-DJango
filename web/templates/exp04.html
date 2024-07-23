@@ -322,7 +322,9 @@
                         <p><span>当前输入样本：</span><span :class="compare_standard1_class">①分类结果1[[ comparisonSymbol ]]分类结果2（[[compare_standard1_description]]）；</span><span
                                 :class="compare_standard2_class"> ②样本1与样本2差异为[[ dx ]]（[[compare_standard2_description]]）</span>
                         </p>
-                        <p><span>判断模型对两个样本的分类结果：</span><span><b>[[ fairness_info ]]</b></span></p>
+                        <p>
+                            <span>判定结果：</span><span><b>[[ fairness_info ]]</b></span>
+                        </p>
                     </div>
                 </div>
 
@@ -438,8 +440,8 @@
                 // 公平信息
                 fairness_info: '',
                 fairness_info_dict: {
-                    "condition2_not_met": "未找到不公平样本，原因：两样本差异过大，样本分类结果不可比较",
-                    "condition2_met_but_condition1_not_met": "未找到不公平样本，原因：模型对这两个相似样本分类结果相同，表现公平",
+                    "condition2_not_met": "未找到不公平样本，原因：两样本差异过大，样本分类结果不可比较。建议输入更相似的样本。",
+                    "condition2_met_but_condition1_not_met": "未找到不公平样本，原因：模型对这两个相似样本分类结果相同，表现公平。",
                 },
                 // 差异度
                 parameter_c: ' ',
@@ -717,11 +719,11 @@
                                 } else if (_this.compare_standard2 && !_this.compare_standard1) {
                                     _this.fairness_info = _this.fairness_info_dict.condition2_met_but_condition1_not_met;
                                 } else {
-                                    _this.fairness_info = "这是啥情况，，，，，，"
+                                    _this.fairness_info = "出了点问题，请让程序员来debug"
                                 }
 
                             } else {
-                                _this.fairness_info = "不公平";
+                                _this.fairness_info = "成功找到不公平样本！";
 
                             }
 
