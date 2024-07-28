@@ -54,7 +54,7 @@
                         <div class="task-content-form">
                             <div class="task-form-area">
                                 <el-row>
-                                    <el-col :span="18">
+                                    <el-col :span="20">
                                         <div class="task-form-title">
                                             <h2>审计报告</h2>
                                         </div>
@@ -66,7 +66,7 @@
                                             <div>
                                                 <div>
                                                     <el-row>
-                                                        <el-col>
+                                                        <el-col :span="21" :offset="1">
                                                             <el-descriptions :column="1">
                                                                 <el-descriptions-item v-for="(value, key) in data_range"
                                                                     :key="key" :label="getLabel(key)">
@@ -81,25 +81,25 @@
                                             <div class="card-text">
                                                 {# <div v-if="inFairnessPairs.length === 0">没有不公平的样本对</div>#}
                                                 <div>
-                                                    <el-row>
+                                                    <el-row :gutter="20">
                                                         <el-col :span="12">
-                                                            <el-descriptions title="样本1" :column="2">
+                                                            <el-descriptions title="Sample 1" :column="2">
                                                                 <el-descriptions-item v-for="(value, key) in form1"
                                                                     :key="key" :label="getLabel(key)">
                                                                     [[ formatValue(key,value) ]]
                                                                 </el-descriptions-item>
-                                                                <el-descriptions-item label="分类结果">
+                                                                <el-descriptions-item label="result">
                                                                     [[ unfair_pair_judge.result[0] ]]
                                                                 </el-descriptions-item>
                                                             </el-descriptions>
                                                         </el-col>
                                                         <el-col :span="12">
-                                                            <el-descriptions title="样本2" :column="2">
+                                                            <el-descriptions title="Sample 2" :column="2">
                                                                 <el-descriptions-item v-for="(value, key) in form2"
                                                                     :key="key" :label="getLabel(key)">
                                                                     [[ formatValue(key,value) ]]
                                                                 </el-descriptions-item>
-                                                                <el-descriptions-item label="分类结果">
+                                                                <el-descriptions-item label="result">
                                                                     [[ unfair_pair_judge.result[1] ]]
                                                                 </el-descriptions-item>
                                                             </el-descriptions>
@@ -118,7 +118,7 @@
                                         </div>
                                     </el-col>
 
-                                        <el-col :span="6">
+                                        <el-col :span="4">
 
                                         </el-col>
                                     </el-row>
@@ -129,7 +129,7 @@
                         <div class="jump-area">
                             <div class="button-area">
                                 <a href="/">
-                                    <el-button type="warning" @click="exit">结束</el-button>
+                                    <el-button type="warning" @click="exit">End</el-button>
                                 </a>
                             </div>
                         </div>
@@ -184,33 +184,33 @@
                         'workclass': ''
                     },
                     labels: {
-                        'age': '年龄',
-                        'capital-gain': '资产收益',
-                        'capital-loss': '资产损失',
-                        'education-num': '受教育时间',
-                        'hours-per-week': '每周工作时间',
-                        'race_White': '种族',
-                        'sex_Male': '性别',
-                        'marital-status': '婚姻情况',
-                        'workclass': '工作类型'
+                        'age': 'age',
+                        'capital-gain': 'Capital Gain',
+                        'capital-loss': 'Capital Loss',
+                        'education-num': 'Education Time',
+                        'hours-per-week': 'Weekly Hours',
+                        'race_White': 'Race',
+                        'sex_Male': 'Gender',
+                        'marital-status': 'Marital Status',
+                        'workclass': 'Work Class'
                     },
                     maritalStatusOptions: [
-                        { value: 'Divorced', label: '离异' },
-                        { value: 'Married-AF-spouse', label: '军人家属婚姻' },
-                        { value: 'Married-civ-spouse', label: '普通婚姻' },
-                        { value: 'Married-spouse-absent', label: '已婚但夫妻异地' },
-                        { value: 'Never-married', label: '未婚' },
-                        { value: 'Separated', label: '分居' },
-                        { value: 'Widowed', label: '丧偶' }
+                        {value: 'Divorced', label: 'Divorced'},
+                        {value: 'Married-AF-spouse', label: 'Married-AF-spouse'},
+                        {value: 'Married-civ-spouse', label: 'Married-civ-spouse'},
+                        {value: 'Married-spouse-absent', label: 'Married-spouse-absent'},
+                        {value: 'Never-married', label: 'Never-married'},
+                        {value: 'Separated', label: 'Separated'},
+                        {value: 'Widowed', label: 'Widowed'},
                     ],
                     workclassOptions: [
-                        { value: 'Federal-gov', label: '联邦政府雇员' },
-                        { value: 'Local-gov', label: '地方政府雇员' },
-                        { value: 'Private', label: '私营企业' },
-                        { value: 'Self-emp-inc', label: '自雇（收入较高）' },
-                        { value: 'Self-emp-not-inc', label: '自雇（收入一般）' },
-                        { value: 'State-gov', label: '州政府雇员' },
-                        { value: 'Without-pay', label: '无报酬' }
+                        {value: 'Federal-gov', label: 'Federal-gov'},
+                        {value: 'Local-gov', label: 'Local-gov'},
+                        {value: 'Private', label: 'Private'},
+                        {value: 'Self-emp-inc', label: 'Self-emp-inc'},
+                        {value: 'Self-emp-not-inc', label: 'Self-emp-not-inc'},
+                        {value: 'State-gov', label: 'State-gov'},
+                        {value: 'Without-pay', label: 'Without-pay'},
                     ],
                     sensitive_attr: '',
                     data_range: '',
@@ -239,9 +239,9 @@
                 },
                 formatValue(key, value) {
                     if (key === "race_White") {
-                        return value === 'Others' ? '非白人' : '白人';
+                        return value === 'Others' ? 'Others' : 'White';
                     } else if (key === 'sex_Male') {
-                        return value === 'Male' ? '男性' : '女性';
+                        return value === 'Male' ? 'Male' : 'Female';
                     } else if (key === 'marital-status') {
                         return this.getOptionLabel(this.maritalStatusOptions, value);
                     } else if (key === 'workclass') {
@@ -253,12 +253,12 @@
                 rangeFormat(key, value) {
                     if (key === "race_White") {
                         value = value.map(item => {
-                            return item === 0 ? '非白人' : '白人';
+                            return item === 0 ? 'Others' : 'White';
                         })
                         return value.join(', ');
                     } else if (key === 'sex_Male') {
                         value = value.map(item => {
-                            return item === 1 ? '男性' : '女性';
+                            return item === 1 ? 'Male' : 'Female';
                         })
                         return value.join(', ');
                     } else if (key === 'marital-status') {
@@ -288,8 +288,8 @@
                         this.form2 = response.data.unfair_pair[1];
                         console.log(this.form1)
                         console.log(this.form2)
-                        this.old_individual_fairness = response.data.individual_fairness.toFixed(4);
-                        this.new_individual_fairness = response.data.new_individual_fairness.toFixed(4);
+                        // this.old_individual_fairness = response.data.individual_fairness.toFixed(4);
+                        // this.new_individual_fairness = response.data.new_individual_fairness.toFixed(4);
                         this.sensitive_attr = response.data.sensitive_attr;
                         this.data_range = response.data.data_range;
                         this.parameter_c = (1/response.data.eps).toExponential(4);

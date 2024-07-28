@@ -37,6 +37,10 @@ line-height: 200px;
 
 }
 
+body {
+     font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
 body > .el-container {
 margin-bottom: 40px;
 }
@@ -152,6 +156,11 @@ line-height: 320px;
 .result-content {
     font-size: 16px;
     color:#606266;
+}
+
+.result-content .result-content-item p{
+    margin-left: 32px;
+    line-height: 1.2em;
 }
 
   /* =========task.css ===========*/
@@ -275,14 +284,25 @@ line-height: 320px;
 
 /*显示结果样式*/
 .result-less-50k{
-    color: orange;
+    color: #8c642a;
 }
 .result-greater-50k{
-    color: blue;
+    color: #1296db;
 }
 .compare-standard-true{
     color:green;
 }
 .compare-standard-false{
     color: red;
+}
+.contain-number-label{
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+    line-height: 1.6;
+}
+.contain-number-label span{
+    font-size: 12px;
+    color: #606266;
+
 }

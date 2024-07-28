@@ -108,7 +108,7 @@
                 <div class="jump-area">
                     <div class="button-area">
 
-                        <el-button type="warning" @click="onSubmit">下一步</el-button>
+                        <el-button type="warning" @click="onSubmit">Next</el-button>
 
                     </div>
                 </div>
@@ -155,8 +155,11 @@
                 };
             },
             methods:{
+                /*
                 // 配置科学计数法
+
                 validateScientific(rule, value, callback) {
+
                     const scientificNotationRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
                     const normalNumberRegex = /^[+-]?\d+(\.\d+)?$/;
                     if (scientificNotationRegex.test(value) || normalNumberRegex.test(value)) {
@@ -165,6 +168,8 @@
                         callback(new Error('请输入一个有效的数字或科学计数法表示的数字'));
                     }
                 },
+                */
+                /*
                 validatePositive(rule, value, callback) {
                     if (parseFloat(value) > 0) {
                         callback();
@@ -172,6 +177,9 @@
                         callback(new Error('请输入一个大于0的数值'));
                     }
                 },
+
+                 */
+                /*
                 validateSuggestion(rule, value, callback) {
                     if (parseFloat(value) > 1e-5) {
                         this.$message({
@@ -183,6 +191,8 @@
                         callback();
                     }
                 },
+
+                 */
 
                 /*
                 onSubmit(){

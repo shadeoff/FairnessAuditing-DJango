@@ -133,9 +133,9 @@ class Exp01View(APIView):
         result = ''
         probability = fw.query_model(data_sample)
         if probability >= 0.5:
-            result = "年收入高于50K"
+            result = "Annual income is more than 50K"
         else:
-            result = "年收入低于50K"
+            result = "Annual income less than 50K"
         return Response(result, status=status.HTTP_200_OK)
 
 
@@ -231,9 +231,9 @@ class Exp04View(APIView):
             probability = fw.query_model(data_sample)
 
             if probability >= 0.5:
-                result = "年收入高于50K"
+                result = "Annual income is more than 50K"
             else:
-                result = "年收入低于50K"
+                result = "Annual income less than 50K"
             return Response(result, status=status.HTTP_200_OK)
         elif action == 'check_fair':
             data_sample1 = request.data['data1']
@@ -285,13 +285,13 @@ class Exp05View(APIView):
             probability1 = fw.query_model(data_sample1)
             probability2 = fw.query_model(data_sample2)
             if probability1 >= 0.5:
-                result1 = "年收入高于50K"
+                result1 = "Annual income is more than 50K"
             else:
-                result1 = "年收入低于50K"
+                result1 = "Annual income less than 50K"
             if probability2 >= 0.5:
-                result2 = "年收入高于50K"
+                result2 = "Annual income is more than 50K"
             else:
-                result2 = "年收入低于50K"
+                result2 = "Annual income less than 50K"
             result = [result1, result2]
 
             # 获取评测数据
